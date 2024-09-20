@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.unieventos.ui.screens.HomeScreen
 import com.example.unieventos.ui.screens.LoginScreen
+import com.example.unieventos.ui.screens.NewLoginScreen
 import com.example.unieventos.ui.theme.UniEventosTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
                 if (isAuthenticated) {
                     HomeScreen()
                 } else {
-                    LoginScreen(onLoginSuccess = { isAuthenticated = true })
+                    NewLoginScreen()
                 }
             }
 

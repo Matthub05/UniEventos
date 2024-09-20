@@ -23,17 +23,17 @@ fun HomeScreen() {
         ) {
 
             ItemEvento(
-                nombre = "Concierto de Switchfoot",
+                nombre = "Concierto banda rock",
                 ciudad = "Bogota",
             )
 
             ItemEvento(
-                nombre = "Charla motivacional de Juliana",
+                nombre = "Charla triste",
                 ciudad = "Armenia"
             )
 
             ItemEvento(
-                nombre = "Stand up de Carmen",
+                nombre = "Charla feliz",
                 ciudad = "La Tebaida"
             )
 
