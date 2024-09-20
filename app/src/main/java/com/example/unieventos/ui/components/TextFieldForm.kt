@@ -4,6 +4,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -44,9 +48,7 @@ fun TextFieldForm(
         },
         visualTransformation = if(isPassword && isHidden){ PasswordVisualTransformation() } else { VisualTransformation.None },
         keyboardOptions = keyboardOptions,
-        label = {
-            Text(text = label)
-        },
+        label = { Text(text = label) },
         onValueChange = {
             onValueChange(it)
             isError = onValidate(it)
@@ -63,4 +65,49 @@ fun TextFieldForm(
             }
         }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownMenuForm(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    items: List<String>,
+) {
+
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+
+        OutlinedTextField(
+            modifier = modifier.menuAnchor(),
+            value = value,
+            onValueChange = { },
+            readOnly = true,
+            label = { Text(text = label) },
+            singleLine = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            items.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = item) },
+                    onClick = {
+                        expanded = false
+                        onValueChange(item)
+                    }
+                )
+            }
+        }
+
+    }
 }
