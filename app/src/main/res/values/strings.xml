@@ -20,4 +20,13 @@
     <string name="label_confirmar_contrasenia">Confirmar contraseña</string>">
     <string name="label_confirmar_contrasenia_invalida">La confirmación de la contraseña no coincide</string>
     <string name="titulo_registrarse">Registrate en UniEventos</string>
+    <string name="label_confirmacion">Código de confirmación</string>
+    <string name="placeholder_codigo">Código</string>
+    <string name="err_codigo">El código no es válido</string>
+    <string name="label_nueva_contrasenia">Nueva contraseña</string>
+    <string name="err_nueva_contrasenia">La nueva contraseña no es válida</string>
+    <string name="btn_recuperar">Recuperar contraseña</string>
+    <string name="btn_confirmar_contrasenia">Confirmar contraseña</string>
+    <string name="adv_enviar_codigo">Se enviará un mensaje al correo asociado a esta cuenta. Ingrese el código para establecer una nueva contraseña.</string>
+    <string name="btn_enviar_codigo">Enviar código</string>
 </resources>
