@@ -5,10 +5,18 @@ import android.util.Patterns
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,17 +25,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import com.example.unieventos.R
 import com.example.unieventos.ui.components.TextFieldForm
+import com.example.unieventos.ui.components.TopBarComponent
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    onNavigateToLogin: () -> Unit,
+    onNavigateToHome: () -> Unit
+) {
 
     val context = LocalContext.current
 
-    Scaffold { paddingValues ->
+    Scaffold (
+        topBar = {
+            TopBarComponent(
+                text = stringResource(id = R.string.titulo_registrarse),
+                onClick = { onNavigateToLogin() },
+            ) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+            }
+        }
+    ) { paddingValues ->
 
-        SignUpForm(paddingValues, context)
+        SignUpForm(paddingValues, context, onNavigateToHome)
 
     }
 
@@ -36,7 +60,8 @@ fun SignUpScreen() {
 @Composable
 fun SignUpForm(
     padding: PaddingValues,
-    context: Context
+    context: Context,
+    onNavigateToHome: () -> Unit
 ) {
 
     var cedula by rememberSaveable { mutableStateOf("") }
@@ -58,8 +83,8 @@ fun SignUpForm(
         TextFieldForm(
             value = cedula,
             onValueChange = { cedula = it },
-            supportingText = "La cédula no es válida",
-            label = "Cédula",
+            supportingText = stringResource(id = R.string.label_cedula_invalida),
+            label = stringResource(id = R.string.label_cedula),
             onValidate = { it.isEmpty() || it.toIntOrNull() == null },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
@@ -67,8 +92,8 @@ fun SignUpForm(
         TextFieldForm(
             value = nombre,
             onValueChange = { nombre = it },
-            supportingText = "El nombre no es válido",
-            label = "Nombre completo",
+            supportingText = stringResource(id = R.string.label_nombre_invalido),
+            label = stringResource(id = R.string.label_nombre),
             onValidate = { it.isEmpty() },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         )
@@ -76,8 +101,8 @@ fun SignUpForm(
         TextFieldForm(
             value = direccion,
             onValueChange = { direccion = it },
-            supportingText = "La dirección no es válida",
-            label = "Dirección",
+            supportingText = stringResource(id = R.string.label_direccion_invalida),
+            label = stringResource(id = R.string.label_direccion),
             onValidate = { it.isEmpty() },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         )
@@ -85,8 +110,8 @@ fun SignUpForm(
         TextFieldForm(
             value = telefono,
             onValueChange = { telefono = it },
-            supportingText = "El teléfono no es válido",
-            label = "Teléfono",
+            supportingText = stringResource(id = R.string.label_telefono_invalido),
+            label = stringResource(id = R.string.label_telefono),
             onValidate = { it.isEmpty() || it.toIntOrNull() == null },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         )
@@ -94,8 +119,8 @@ fun SignUpForm(
         TextFieldForm(
             value = correo,
             onValueChange = { correo = it },
-            supportingText = "El correo no es válido",
-            label = "Correo electrónico",
+            supportingText = stringResource(id = R.string.label_correo_invalido),
+            label = stringResource(id = R.string.label_correo),
             onValidate = { !Patterns.EMAIL_ADDRESS.matcher(it).matches() },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         )
@@ -103,8 +128,8 @@ fun SignUpForm(
         TextFieldForm(
             value = contrasena,
             onValueChange = { contrasena = it },
-            supportingText = "La contraseña no es válida",
-            label = "Contraseña",
+            supportingText = stringResource(id = R.string.label_contrasenia_invalida),
+            label = stringResource(id = R.string.label_contrasenia),
             onValidate = { it.isEmpty() },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             isPassword = true
@@ -113,12 +138,17 @@ fun SignUpForm(
         TextFieldForm(
             value = contrasenaConfirmacion,
             onValueChange = { contrasenaConfirmacion = it },
-            supportingText = "La confirmación de la contraseña no coincide",
-            label = "Confirmar contraseña",
+            supportingText = stringResource(id = R.string.label_confirmar_contrasenia_invalida),
+            label = stringResource(id = R.string.label_confirmar_contrasenia),
             onValidate = { it != contrasena },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             isPassword = true
         )
 
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Button(onClick = { onNavigateToHome() }) {
+            Text(text = stringResource(id = R.string.label_boton_registrarse))
+        }
     }
 }

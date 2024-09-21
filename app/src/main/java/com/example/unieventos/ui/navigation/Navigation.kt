@@ -32,11 +32,16 @@ fun Navigation() {
         }
 
         composable<RouteScreen.SignUp> {
-            SignUpScreen()
+            SignUpScreen(
+                onNavigateToLogin = { navController.navigate(RouteScreen.Login) },
+                onNavigateToHome = { navController.navigate(RouteScreen.Home) }
+            )
         }
 
         composable<RouteScreen.ForgotPassword> {
-            ForgotPasswordScreen()
+            ForgotPasswordScreen(
+                onNavigateToLogin = { navController.navigate(RouteScreen.Login) }
+            )
         }
 
     }
