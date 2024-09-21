@@ -10,11 +10,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.unieventos.R
 import com.example.unieventos.ui.components.ItemEvento
 
 @Composable
 fun HomeScreen(
-    onNavigateToProfileEdit: () -> Unit
+    onNavigateToProfileEdit: () -> Unit,
+    onNavigateToCreateEvent: () -> Unit
 ) {
 
     Scaffold { paddingValues ->
@@ -41,7 +44,11 @@ fun HomeScreen(
             )
 
             Button(onClick = { onNavigateToProfileEdit() }) {
-                Text(text = "Editar perfil")
+                Text(text = stringResource(id = R.string.btn_editar_perfil))
+            }
+
+            Button(onClick = { onNavigateToCreateEvent() }) {
+                Text(text = stringResource(id = R.string.btn_crear_evento))
             }
         }
     }

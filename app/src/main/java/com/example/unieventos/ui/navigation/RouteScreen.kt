@@ -19,4 +19,7 @@ sealed class RouteScreen {
     @Serializable
     data object ProfileEdit : RouteScreen()
 
+    @Serializable
+    data object CreateEventScreen : RouteScreen()
+
 }
