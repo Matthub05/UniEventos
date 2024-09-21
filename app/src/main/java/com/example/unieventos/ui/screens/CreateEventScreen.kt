@@ -44,8 +44,14 @@ fun CreateEventScreen(
     onNavigateToHome: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-    var codigo by rememberSaveable { mutableStateOf("") }
+    var titulo by rememberSaveable { mutableStateOf("") }
+    var descripcion by rememberSaveable { mutableStateOf("") }
+    var artista by rememberSaveable { mutableStateOf("") }
+    var categoria by rememberSaveable { mutableStateOf("") }
     var fecha by rememberSaveable { mutableStateOf("") }
+    var nombre by rememberSaveable { mutableStateOf("") }
+    var aforo by rememberSaveable { mutableStateOf("") }
+    var ubicacion by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -67,7 +73,7 @@ fun CreateEventScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(15.dp))
 
             Text(
                 modifier = Modifier.align(Alignment.Start),
@@ -76,44 +82,46 @@ fun CreateEventScreen(
                 text = "Detalles generales"
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             TextFieldForm(
                 modifier = Modifier.fillMaxWidth(),
-                value = codigo,
-                onValueChange = { codigo = it },
-                supportingText = stringResource(id = R.string.err_codigo),
-                label = stringResource(id = R.string.placeholder_codigo),
+                value = titulo,
+                onValueChange = { titulo = it },
+                supportingText = "",
+                label = stringResource(id = R.string.placeholder_titulo),
                 onValidate = { it.isEmpty() || it.toIntOrNull() == null },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             TextFieldForm(
                 modifier = Modifier.fillMaxWidth(),
-                value = codigo,
-                onValueChange = { codigo = it },
-                supportingText = stringResource(id = R.string.err_codigo),
-                label = stringResource(id = R.string.placeholder_codigo),
+                value = descripcion,
+                onValueChange = { descripcion = it },
+                supportingText = "",
+                label = stringResource(id = R.string.placeholder_descripcion),
                 onValidate = { it.isEmpty() || it.toIntOrNull() == null },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             TextFieldForm(
                 modifier = Modifier.fillMaxWidth(),
-                value = codigo,
-                onValueChange = { codigo = it },
-                supportingText = stringResource(id = R.string.err_codigo),
-                label = stringResource(id = R.string.placeholder_codigo),
+                value = artista,
+                onValueChange = { artista = it },
+                supportingText = "",
+                label = stringResource(id = R.string.placeholder_artista),
                 onValidate = { it.isEmpty() || it.toIntOrNull() == null },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             TextFieldForm(
                 modifier = Modifier.fillMaxWidth(),
-                value = codigo,
-                onValueChange = { codigo = it },
-                supportingText = stringResource(id = R.string.err_codigo),
-                label = stringResource(id = R.string.placeholder_codigo),
+                value = categoria,
+                onValueChange = { categoria = it },
+                supportingText = "",
+                label = stringResource(id = R.string.placeholder_categoria),
                 onValidate = { it.isEmpty() || it.toIntOrNull() == null },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             DatePickerForm(
@@ -123,6 +131,8 @@ fun CreateEventScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             Text(
                 modifier = Modifier.align(Alignment.Start),
                 fontWeight = FontWeight.Bold,
@@ -130,34 +140,36 @@ fun CreateEventScreen(
                 text = "Recinto"
             )
 
+            Spacer(modifier = Modifier.height(15.dp))
+
             TextFieldForm(
                 modifier = Modifier.fillMaxWidth(),
-                value = codigo,
-                onValueChange = { codigo = it },
-                supportingText = stringResource(id = R.string.err_codigo),
-                label = stringResource(id = R.string.placeholder_codigo),
+                value = nombre,
+                onValueChange = { nombre = it },
+                supportingText = "",
+                label = stringResource(id = R.string.placeholder_nombre_recinto),
+                onValidate = { it.isEmpty() || it.toIntOrNull() == null },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            )
+
+            TextFieldForm(
+                modifier = Modifier.fillMaxWidth(),
+                value = aforo,
+                onValueChange = { aforo = it },
+                supportingText = "",
+                label = stringResource(id = R.string.placeholder_aforo),
                 onValidate = { it.isEmpty() || it.toIntOrNull() == null },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
             TextFieldForm(
                 modifier = Modifier.fillMaxWidth(),
-                value = codigo,
-                onValueChange = { codigo = it },
-                supportingText = stringResource(id = R.string.err_codigo),
-                label = stringResource(id = R.string.placeholder_codigo),
+                value = ubicacion,
+                onValueChange = { ubicacion = it },
+                supportingText = "",
+                label = stringResource(id = R.string.placeholder_ubicacion),
                 onValidate = { it.isEmpty() || it.toIntOrNull() == null },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-
-            TextFieldForm(
-                modifier = Modifier.fillMaxWidth(),
-                value = codigo,
-                onValueChange = { codigo = it },
-                supportingText = stringResource(id = R.string.err_codigo),
-                label = stringResource(id = R.string.placeholder_codigo),
-                onValidate = { it.isEmpty() || it.toIntOrNull() == null },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             Text(

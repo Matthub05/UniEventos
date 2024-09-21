@@ -35,4 +35,11 @@
     <string name="btn_crear_evento">Crear evento</string>
     <string name="title_registrar_evento">Registrar evento</string>
     <string name="titulo_evento">Evento</string>
+    <string name="placeholder_titulo">Título</string>
+    <string name="placeholder_descripcion">Descripcíon</string>
+    <string name="placeholder_artista">Artista</string>
+    <string name="placeholder_categoria">Categoría</string>
+    <string name="placeholder_nombre_recinto">Nombre</string>
+    <string name="placeholder_aforo">Aforo máximo</string>
+    <string name="placeholder_ubicacion">Ubicación</string>
 </resources>

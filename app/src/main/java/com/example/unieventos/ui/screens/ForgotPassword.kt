@@ -37,6 +37,7 @@ fun ForgotPasswordScreen(
     onNavigateToLogin: () -> Unit
 ) {
     var codigo by rememberSaveable { mutableStateOf("") }
+    var contrasenia by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -90,12 +91,12 @@ fun ForgotPasswordScreen(
 
             TextFieldForm(
                 modifier = Modifier.fillMaxWidth(),
-                value = codigo,
-                onValueChange = { codigo = it },
+                value = contrasenia,
+                onValueChange = { contrasenia = it },
                 supportingText = stringResource(id = R.string.err_nueva_contrasenia),
                 label = stringResource(id = R.string.label_contrasenia),
                 onValidate = { it.isEmpty() || it.toIntOrNull() == null },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             Button(
