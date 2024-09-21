@@ -29,4 +29,6 @@
     <string name="btn_confirmar_contrasenia">Confirmar contraseña</string>
     <string name="adv_enviar_codigo">Se enviará un mensaje al correo asociado a esta cuenta. Ingrese el código para establecer una nueva contraseña.</string>
     <string name="btn_enviar_codigo">Enviar código</string>
+    <string name="titulo_editar_cuenta">Editar cuenta</string>
+    <string name="btn_cerrar_cuenta">Cerrar cuenta</string>
 </resources>

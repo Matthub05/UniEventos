@@ -1,7 +1,6 @@
 package com.example.unieventos.ui.screens
 
 import android.content.Context
-import android.util.Patterns
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +14,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,8 +35,7 @@ import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
 
 @Composable
-fun SignUpScreen(
-    onNavigateToLogin: () -> Unit,
+fun ProfileEditScreen(
     onNavigateToHome: () -> Unit
 ) {
 
@@ -44,34 +44,29 @@ fun SignUpScreen(
     Scaffold (
         topBar = {
             TopBarComponent(
-                text = stringResource(id = R.string.titulo_registrarse),
-                onClick = { onNavigateToLogin() },
+                text = stringResource(id = R.string.titulo_editar_cuenta),
+                onClick = { onNavigateToHome() },
             ) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Back")
             }
         }
     ) { paddingValues ->
 
-        SignUpForm(paddingValues, context, onNavigateToHome)
+        ProfileEditForm(paddingValues, onNavigateToHome)
 
     }
 
 }
 
 @Composable
-fun SignUpForm(
+fun ProfileEditForm(
     padding: PaddingValues,
-    context: Context,
     onNavigateToHome: () -> Unit
 ) {
 
-    var cedula by rememberSaveable { mutableStateOf("") }
     var nombre by rememberSaveable { mutableStateOf("") }
     var direccion by rememberSaveable { mutableStateOf("") }
     var telefono by rememberSaveable { mutableStateOf("") }
-    var correo by rememberSaveable { mutableStateOf("") }
-    var contrasena by rememberSaveable { mutableStateOf("") }
-    var contrasenaConfirmacion by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -83,16 +78,6 @@ fun SignUpForm(
         verticalArrangement = Arrangement.Center
     ) {
         Spacer(modifier = Modifier.height(20.dp))
-
-        TextFieldForm(
-            modifier = Modifier.fillMaxWidth(),
-            value = cedula,
-            onValueChange = { cedula = it },
-            supportingText = stringResource(id = R.string.label_cedula_invalida),
-            label = stringResource(id = R.string.label_cedula),
-            onValidate = { it.isEmpty() || it.toIntOrNull() == null },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        )
 
         TextFieldForm(
             modifier = Modifier.fillMaxWidth(),
@@ -124,39 +109,20 @@ fun SignUpForm(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         )
 
-        TextFieldForm(
-            modifier = Modifier.fillMaxWidth(),
-            value = correo,
-            onValueChange = { correo = it },
-            supportingText = stringResource(id = R.string.label_correo_invalido),
-            label = stringResource(id = R.string.label_correo),
-            onValidate = { !Patterns.EMAIL_ADDRESS.matcher(it).matches() },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        )
-
-        TextFieldForm(
-            modifier = Modifier.fillMaxWidth(),
-            value = contrasena,
-            onValueChange = { contrasena = it },
-            supportingText = stringResource(id = R.string.label_contrasenia_invalida),
-            label = stringResource(id = R.string.label_contrasenia),
-            onValidate = { it.isEmpty() },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            isPassword = true
-        )
-
-        TextFieldForm(
-            modifier = Modifier.fillMaxWidth(),
-            value = contrasenaConfirmacion,
-            onValueChange = { contrasenaConfirmacion = it },
-            supportingText = stringResource(id = R.string.label_confirmar_contrasenia_invalida),
-            label = stringResource(id = R.string.label_confirmar_contrasenia),
-            onValidate = { it != contrasena },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            isPassword = true
-        )
-
         Spacer(modifier = Modifier.height(10.dp))
+
+        Button(
+            onClick = { onNavigateToHome() },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonColors(
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                disabledContainerColor = MaterialTheme.colorScheme.tertiary,
+                disabledContentColor = MaterialTheme.colorScheme.tertiaryContainer
+            )
+        ) {
+            Text(text = stringResource(id = R.string.btn_cerrar_cuenta))
+        }
 
         Button(onClick = { onNavigateToHome() }, modifier = Modifier.fillMaxWidth()) {
             Text(text = stringResource(id = R.string.label_boton_registrarse))

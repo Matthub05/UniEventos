@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.ui.screens.ForgotPasswordScreen
 import com.example.unieventos.ui.screens.HomeScreen
 import com.example.unieventos.ui.screens.NewLoginScreen
+import com.example.unieventos.ui.screens.ProfileEditScreen
 import com.example.unieventos.ui.screens.SignUpScreen
 
 @Composable
@@ -28,7 +29,9 @@ fun Navigation() {
         }
 
         composable<RouteScreen.Home> {
-            HomeScreen()
+            HomeScreen(
+                onNavigateToProfileEdit = { navController.navigate(RouteScreen.ProfileEdit) }
+            )
         }
 
         composable<RouteScreen.SignUp> {
@@ -41,6 +44,12 @@ fun Navigation() {
         composable<RouteScreen.ForgotPassword> {
             ForgotPasswordScreen(
                 onNavigateToLogin = { navController.navigate(RouteScreen.Login) }
+            )
+        }
+
+        composable<RouteScreen.ProfileEdit> {
+            ProfileEditScreen(
+                onNavigateToHome = { navController.navigate(RouteScreen.Home) }
             )
         }
 
