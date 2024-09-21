@@ -1,6 +1,7 @@
 package com.example.unieventos.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +26,8 @@ import androidx.compose.ui.unit.sp
 fun ItemEvento(
     nombre: String,
     ciudad: String,
-    color: Color = MaterialTheme.colorScheme.secondary
+    color: Color = MaterialTheme.colorScheme.secondary,
+    onNavigateToEventDetail: (String) -> Unit
 ) {
 
     Surface (
@@ -38,7 +40,8 @@ fun ItemEvento(
     ) {
 
         Row (
-            modifier = Modifier.padding(10.dp),
+            modifier = Modifier.padding(10.dp)
+                .clickable { onNavigateToEventDetail(nombre) },
             verticalAlignment = Alignment.CenterVertically
         ) {
 

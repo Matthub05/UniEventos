@@ -22,4 +22,7 @@ sealed class RouteScreen {
     @Serializable
     data object CreateEventScreen : RouteScreen()
 
+    @Serializable
+    data class EventDetailScreen(val eventId: String) : RouteScreen()
+
 }

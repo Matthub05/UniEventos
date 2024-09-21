@@ -17,7 +17,8 @@ import com.example.unieventos.ui.components.ItemEvento
 @Composable
 fun HomeScreen(
     onNavigateToProfileEdit: () -> Unit,
-    onNavigateToCreateEvent: () -> Unit
+    onNavigateToCreateEvent: () -> Unit,
+    onNavigateToEventDetail: (String) -> Unit
 ) {
 
     Scaffold { paddingValues ->
@@ -31,16 +32,19 @@ fun HomeScreen(
             ItemEvento(
                 nombre = "Concierto banda rock",
                 ciudad = "Bogota",
+                onNavigateToEventDetail = onNavigateToEventDetail
             )
 
             ItemEvento(
                 nombre = "Charla triste",
-                ciudad = "Armenia"
+                ciudad = "Armenia",
+                onNavigateToEventDetail = onNavigateToEventDetail
             )
 
             ItemEvento(
                 nombre = "Charla feliz",
-                ciudad = "La Tebaida"
+                ciudad = "La Tebaida",
+                onNavigateToEventDetail = onNavigateToEventDetail
             )
 
             Button(onClick = { onNavigateToProfileEdit() }) {
