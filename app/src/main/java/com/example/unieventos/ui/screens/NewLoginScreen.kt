@@ -1,19 +1,23 @@
 package com.example.unieventos.ui.screens
 
+import android.content.Context
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,15 +31,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.ui.components.TextFieldForm
 
 @Composable
-fun NewLoginScreen(){
+fun NewLoginScreen(
+    onNavigateToHome: () -> Unit,
+    onNavigateToSignUp: () -> Unit,
+    onNavigateToForgotPassword: () -> Unit
+){
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     val context = LocalContext.current
 
     Scaffold { padding ->
@@ -44,57 +51,8 @@ fun NewLoginScreen(){
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .offset(y = (-90).dp)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
 
-                Logo()
-
-                OutlinedTextField(
-                    value = email,
-                    singleLine = true,
-                    label = {
-                        Text(text = stringResource(id = R.string.label_correo))
-                    },
-                    onValueChange = {
-                        email = it
-                    })
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                OutlinedTextField(
-                    value = password,
-                    singleLine = true,
-                    isError = password.length > 6,
-                    visualTransformation = PasswordVisualTransformation(),
-                    label = {
-                        Text(text = stringResource(id = R.string.label_contrasenia))
-                    },
-                    onValueChange = {
-                        password = it
-                    })
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Button(
-                    onClick = {
-                        if (email == "nicolas" && password == "123") {
-                            // Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
-                        } else {
-                            // Toast.makeText(context, "Incorrecto", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                ) {
-                    Text(text = stringResource(id = R.string.label_boton_login))
-                }
-
-
-            }
+            LoginForm(padding, context, onNavigateToHome, onNavigateToSignUp)
 
             Text(
                 text = stringResource(id = R.string.label_recuperar_contrasenia),
@@ -103,12 +61,80 @@ fun NewLoginScreen(){
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 25.dp)
                     .clickable {
-                        Toast
-                            .makeText(context, "lmfao", Toast.LENGTH_SHORT)
-                            .show()
+                        onNavigateToForgotPassword()
                     }
             )
         }
+
+    }
+
+}
+
+@Composable
+fun LoginForm(
+    padding: PaddingValues,
+    context: Context,
+    onNavigateToHome: () -> Unit,
+    onNavigateToSignUp: () -> Unit
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .padding(padding)
+            .offset(y = (-90).dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        Logo()
+
+        TextFieldForm(
+            value = email,
+            onValueChange = { email = it },
+            supportingText = stringResource(id = R.string.label_correo_invalido),
+            label = stringResource(id = R.string.label_correo),
+            onValidate = { !Patterns.EMAIL_ADDRESS.matcher(it).matches() },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        )
+
+        TextFieldForm(
+            value = password,
+            onValueChange = { password = it },
+            supportingText = stringResource(id = R.string.label_contrasenia_invalida),
+            label = stringResource(id = R.string.label_contrasenia),
+            onValidate = { it.isEmpty() },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            isPassword = true
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Button(
+            modifier = Modifier.width(200.dp),
+            onClick = {
+                if (email == "root" && password == "root") {
+                    onNavigateToHome()
+                } else {
+                    Toast.makeText(context, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+                }
+            }
+        ) {
+            Text(text = stringResource(id = R.string.label_boton_login))
+        }
+
+        Button(
+            modifier = Modifier.width(200.dp),
+            onClick = {
+                onNavigateToSignUp()
+            }
+        ) {
+            Text(text = stringResource(id = R.string.label_boton_registrarse))
+        }
+
+
     }
 
 }

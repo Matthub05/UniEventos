@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">UniEventos</string>
     <string name="label_correo">Correo</string>
+    <string name="label_correo_invalido">El correo no es válido</string>
     <string name="label_contrasenia">Contraseña</string>
+    <string name="label_contrasenia_invalida">La contraseña no es válida</string>
     <string name="label_boton_login">Iniciar sesión</string>
+    <string name="info_credenciales_incorrectas">Credenciales incorrectas</string>
     <string name="label_recuperar_contrasenia">¿Olvidó su contraseña?</string>
+    <string name="label_boton_registrarse">Registrarse</string>
 </resources>
