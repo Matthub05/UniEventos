@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
@@ -58,7 +59,7 @@ fun NewLoginScreen(){
                     value = email,
                     singleLine = true,
                     label = {
-                        Text(text = "Correo")
+                        Text(text = stringResource(id = R.string.label_correo))
                     },
                     onValueChange = {
                         email = it
@@ -72,7 +73,7 @@ fun NewLoginScreen(){
                     isError = password.length > 6,
                     visualTransformation = PasswordVisualTransformation(),
                     label = {
-                        Text(text = "Contraseña")
+                        Text(text = stringResource(id = R.string.label_contrasenia))
                     },
                     onValueChange = {
                         password = it
@@ -83,26 +84,28 @@ fun NewLoginScreen(){
                 Button(
                     onClick = {
                         if (email == "nicolas" && password == "123") {
-                            Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
+                            // Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(context, "Incorrecto", Toast.LENGTH_SHORT).show()
+                            // Toast.makeText(context, "Incorrecto", Toast.LENGTH_SHORT).show()
                         }
                     }
                 ) {
-                    Text(text = "Iniciar sesión")
+                    Text(text = stringResource(id = R.string.label_boton_login))
                 }
 
 
             }
 
             Text(
-                text = "¿Olvidó su contraseña?",
+                text = stringResource(id = R.string.label_recuperar_contrasenia),
                 color = Color.Gray,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 25.dp)
                     .clickable {
-                        Toast.makeText(context, "lmfao", Toast.LENGTH_SHORT).show()
+                        Toast
+                            .makeText(context, "lmfao", Toast.LENGTH_SHORT)
+                            .show()
                     }
             )
         }
@@ -115,6 +118,8 @@ fun Logo() {
     Image(
         painter = painterResource(id = R.drawable.logo),
         contentDescription = "UniEventos Logo",
-        modifier = Modifier.padding(16.dp).fillMaxWidth()
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
     )
 }

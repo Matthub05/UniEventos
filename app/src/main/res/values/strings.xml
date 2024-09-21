@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">UniEventos</string>
+    <string name="label_correo">Correo</string>
+    <string name="label_contrasenia">Contraseña</string>
+    <string name="label_boton_login">Iniciar sesión</string>
+    <string name="label_recuperar_contrasenia">¿Olvidó su contraseña?</string>
 </resources>
