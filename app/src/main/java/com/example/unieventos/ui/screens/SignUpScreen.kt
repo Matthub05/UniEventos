@@ -158,10 +158,12 @@ fun SignUpForm(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Button(onClick = { onNavigateToHome() }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { onNavigateToHome() },
+            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp)
+        ) {
             Text(text = stringResource(id = R.string.label_boton_registrarse))
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }

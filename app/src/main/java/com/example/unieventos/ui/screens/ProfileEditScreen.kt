@@ -1,16 +1,12 @@
 package com.example.unieventos.ui.screens
 
-import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -72,10 +68,8 @@ fun ProfileEditForm(
         modifier = Modifier
             .fillMaxWidth()
             .padding(padding)
-            .padding(horizontal = 16.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -109,7 +103,7 @@ fun ProfileEditForm(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(240.dp))
 
         Button(
             onClick = { onNavigateToHome() },
@@ -124,10 +118,12 @@ fun ProfileEditForm(
             Text(text = stringResource(id = R.string.btn_cerrar_cuenta))
         }
 
-        Button(onClick = { onNavigateToHome() }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { onNavigateToHome() },
+            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp)
+        ) {
             Text(text = stringResource(id = R.string.label_boton_registrarse))
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }
