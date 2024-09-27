@@ -3,8 +3,8 @@ package com.example.unieventos.ui.components
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
@@ -65,7 +65,7 @@ fun TextFieldForm(
             if (isPassword) {
                 IconButton(onClick = { isHidden = !isHidden }) {
                     val visibilityIcon =
-                        if (isHidden) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+                        if (isHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                     // Please provide localized description for accessibility services
                     val description = if (isHidden) "Show password" else "Hide password"
                     Icon(imageVector = visibilityIcon, contentDescription = description)
