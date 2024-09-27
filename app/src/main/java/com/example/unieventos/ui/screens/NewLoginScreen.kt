@@ -35,9 +35,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.ui.components.TextFieldForm
+import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun NewLoginScreen(
+    usersViewModel: UsersViewModel,
     onNavigateToHome: () -> Unit,
     onNavigateToSignUp: () -> Unit,
     onNavigateToForgotPassword: () -> Unit
@@ -52,7 +54,7 @@ fun NewLoginScreen(
                 .fillMaxSize()
         ) {
 
-            LoginForm(padding, context, onNavigateToHome, onNavigateToSignUp)
+            LoginForm(padding, context, usersViewModel, onNavigateToHome, onNavigateToSignUp)
 
             Text(
                 text = stringResource(id = R.string.label_recuperar_contrasenia),
@@ -74,11 +76,13 @@ fun NewLoginScreen(
 fun LoginForm(
     padding: PaddingValues,
     context: Context,
+    usersViewModel: UsersViewModel,
     onNavigateToHome: () -> Unit,
     onNavigateToSignUp: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val credencialesIncorrectasMessage = stringResource(id = R.string.info_credenciales_incorrectas)
 
     Column(
         modifier = Modifier
@@ -115,10 +119,13 @@ fun LoginForm(
         Button(
             modifier = Modifier.width(200.dp),
             onClick = {
-                if (email == "root" && password == "root") {
+
+                val user = usersViewModel.loginUser(email, password)
+
+                if (user != null) {
                     onNavigateToHome()
                 } else {
-                    Toast.makeText(context, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, credencialesIncorrectasMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         ) {

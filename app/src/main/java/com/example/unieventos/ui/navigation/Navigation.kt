@@ -11,9 +11,14 @@ import com.example.unieventos.ui.screens.HomeScreen
 import com.example.unieventos.ui.screens.NewLoginScreen
 import com.example.unieventos.ui.screens.ProfileEditScreen
 import com.example.unieventos.ui.screens.SignUpScreen
+import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
-fun Navigation() {
+fun Navigation(
+    eventsViewModel: EventsViewModel,
+    usersViewModel: UsersViewModel,
+) {
 
     val navController = rememberNavController()
 
@@ -24,6 +29,7 @@ fun Navigation() {
 
         composable<RouteScreen.Login> {
             NewLoginScreen(
+                usersViewModel = usersViewModel,
                 onNavigateToHome = { navController.navigate(RouteScreen.Home){
                     popUpTo(0){
                         inclusive = true
@@ -37,6 +43,7 @@ fun Navigation() {
 
         composable<RouteScreen.Home> {
             HomeScreen(
+                eventsViewModel = eventsViewModel,
                 onNavigateToProfileEdit = { navController.navigate(RouteScreen.ProfileEdit)},
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEventScreen) },
                 onNavigateToEventDetail = { eventId ->

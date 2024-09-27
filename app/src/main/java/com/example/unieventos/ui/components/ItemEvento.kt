@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.unieventos.models.Event
 
 @Composable
 fun ItemEvento(
-    nombre: String,
-    ciudad: String,
+    event: Event,
     color: Color = MaterialTheme.colorScheme.secondary,
     onNavigateToEventDetail: (String) -> Unit
 ) {
@@ -41,7 +41,7 @@ fun ItemEvento(
 
         Row (
             modifier = Modifier.padding(10.dp)
-                .clickable { onNavigateToEventDetail(nombre) },
+                .clickable { onNavigateToEventDetail(event.id) },
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -56,8 +56,8 @@ fun ItemEvento(
             Spacer(modifier = Modifier.width(10.dp))
 
             Column {
-                Text(text = nombre, fontSize = 20.sp)
-                Text(text = ciudad)
+                Text(text = event.title, fontSize = 20.sp)
+                Text(text = event.artist, fontSize = 15.sp)
             }
 
         }
