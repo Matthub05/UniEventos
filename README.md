@@ -67,7 +67,7 @@ The app is divided into two user types:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/uni-eventos.git
+   git clone https://github.com/Matthub05/UniEventos.git
    ```
 2. Open the project in Android Studio.
 3. Set up Firebase following the instructions in the [Firebase documentation](https://firebase.google.com/docs/android/setup).
