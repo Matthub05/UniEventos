@@ -15,28 +15,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.unieventos.R
+import com.example.unieventos.models.Event
 import com.example.unieventos.ui.components.TopBarComponent
+import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
 fun EventDetailScreen(
     eventId: String,
+    eventsViewModel: EventsViewModel,
     onNavigateToHome: () -> Unit
 ){
+
+    val event = eventsViewModel.getEventById(eventId)
+    requireNotNull(event)
+
     Scaffold (
         topBar = {
             TopBarComponent(
-                text = stringResource(id = R.string.titulo_evento),
+                text = event.title,
                 onClick = { onNavigateToHome() },
             ) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Back")
             }
         }
     ) { paddingValues ->
-        EventDetailForm(paddingValues, eventId)
+        EventDetailForm(paddingValues, event)
     }
 }
 @Composable
-fun EventDetailForm(paddingValues: PaddingValues, eventId: String) {
+fun EventDetailForm(paddingValues: PaddingValues, event: Event) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +51,7 @@ fun EventDetailForm(paddingValues: PaddingValues, eventId: String) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = eventId,
+            text = event.description,
             style = MaterialTheme.typography.headlineMedium
         )
     }

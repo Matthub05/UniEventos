@@ -96,6 +96,7 @@ fun Navigation(
             val eventId = it.arguments?.getString("eventId")
             EventDetailScreen(
                 eventId = eventId ?: "",
+                eventsViewModel = eventsViewModel,
                 onNavigateToHome = { navController.navigate(RouteScreen.Home){
                     popUpTo(0){
                         inclusive = true
