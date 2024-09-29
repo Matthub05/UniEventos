@@ -21,7 +21,8 @@ fun HomeScreen(
     eventsViewModel: EventsViewModel,
     onNavigateToProfileEdit: () -> Unit,
     onNavigateToCreateEvent: () -> Unit,
-    onNavigateToEventDetail: (String) -> Unit
+    onNavigateToEventDetail: (String) -> Unit,
+    onNavigateToCreateCoupon: () -> Unit
 ) {
 
     val events = eventsViewModel.event.collectAsState()
@@ -41,6 +42,10 @@ fun HomeScreen(
 
             Button(onClick = { onNavigateToCreateEvent() }) {
                 Text(text = stringResource(id = R.string.btn_crear_evento))
+            }
+            
+            Button(onClick = { onNavigateToCreateCoupon() }) {
+                Text(text = stringResource(id = R.string.btn_registrar_cupon))
             }
         }
 

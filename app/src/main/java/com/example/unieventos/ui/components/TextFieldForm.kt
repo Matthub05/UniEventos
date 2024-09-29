@@ -133,6 +133,7 @@ fun DatePickerForm(
     var datePickerState = rememberDatePickerState()
 
     OutlinedTextField(
+        modifier = modifier,
         value = value,
         onValueChange = {},
         label = { Text(text = label) },

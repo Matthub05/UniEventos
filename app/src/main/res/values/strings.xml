@@ -36,10 +36,18 @@
     <string name="title_registrar_evento">Registrar evento</string>
     <string name="titulo_evento">Evento</string>
     <string name="placeholder_titulo">Título</string>
-    <string name="placeholder_descripcion">Descripcíon</string>
+    <string name="placeholder_descripcion">Descripción</string>
     <string name="placeholder_artista">Artista</string>
     <string name="placeholder_categoria">Categoría</string>
     <string name="placeholder_nombre_recinto">Nombre</string>
     <string name="placeholder_aforo">Aforo máximo</string>
     <string name="placeholder_ubicacion">Ubicación</string>
+    <string name="titulo_generacion_cupon">Generación de cupones</string>
+    <string name="placeholder_codigo_cupon">Código de cupón</string>
+    <string name="err_descripcion">La descripción no es válida</string>
+    <string name="err_descuento">El descuento no es válido</string>
+    <string name="placeholder_descuento_cupon">Descuento de valor total</string>
+    <string name="placeholder_fecha_vencimiento">Fecha de vencimiento</string>
+    <string name="adv_generar_cupon">El cupón tendra validez unicamente hasta la fecha especificada en los campos previamente llenados.</string>
+    <string name="btn_registrar_cupon">Registrar cupón</string>
 </resources>

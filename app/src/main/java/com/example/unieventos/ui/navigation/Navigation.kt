@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.unieventos.ui.screens.CreateCouponScreen
 import com.example.unieventos.ui.screens.CreateEventScreen
 import com.example.unieventos.ui.screens.EventDetailScreen
 import com.example.unieventos.ui.screens.ForgotPasswordScreen
@@ -48,7 +49,8 @@ fun Navigation(
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEventScreen) },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.EventDetailScreen(eventId))
-                }
+                },
+                onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) }
             )
         }
 
@@ -97,6 +99,17 @@ fun Navigation(
             EventDetailScreen(
                 eventId = eventId ?: "",
                 eventsViewModel = eventsViewModel,
+                onNavigateToHome = { navController.navigate(RouteScreen.Home){
+                    popUpTo(0){
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                } }
+            )
+        }
+
+        composable<RouteScreen.CreateCouponScreen> {
+            CreateCouponScreen(
                 onNavigateToHome = { navController.navigate(RouteScreen.Home){
                     popUpTo(0){
                         inclusive = true
