@@ -50,4 +50,9 @@
     <string name="placeholder_fecha_vencimiento">Fecha de vencimiento</string>
     <string name="adv_generar_cupon">El cupón tendra validez unicamente hasta la fecha especificada en los campos previamente llenados.</string>
     <string name="btn_registrar_cupon">Registrar cupón</string>
+    <string name="label_artistas_favoritos">Artistas Favoritos</string>
+    <string name="label_eventos_destacados">Eventos Destacados</string>
+    <string name="nav_Eventos">Eventos</string>
+    <string name="nav_compras">Mis compras</string>
+    <string name="nav_perfil">Perfil</string>
 </resources>

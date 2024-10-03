@@ -25,7 +25,7 @@ fun Navigation(
 
     NavHost(
         navController = navController,
-        startDestination = RouteScreen.Login
+        startDestination = RouteScreen.UserHome
     ) {
 
         composable<RouteScreen.Login> {
@@ -40,6 +40,10 @@ fun Navigation(
                 onNavigateToSignUp = { navController.navigate(RouteScreen.SignUp) },
                 onNavigateToForgotPassword = { navController.navigate(RouteScreen.ForgotPassword) }
             )
+        }
+
+        composable<RouteScreen.UserHome> {
+            HomeScreen()
         }
 
         composable<RouteScreen.Home> {
