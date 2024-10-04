@@ -58,4 +58,5 @@
     <string name="nav_cupones">Cupones</string>
     <string name="nav_perfil">Perfil</string>
     <string name="err_navegacion_invalida">No se ha configurado la navegación</string>
+    <string name="label_guardados">Guardados</string>
 </resources>
