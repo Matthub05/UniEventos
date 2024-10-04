@@ -1,12 +1,11 @@
 package com.example.unieventos.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Stars
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Stars
 import androidx.compose.material3.Button
@@ -15,24 +14,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.unieventos.R
 import com.example.unieventos.models.BottomNavigationItem
-import com.example.unieventos.models.EventItemDestination
-import com.example.unieventos.ui.components.ListEvents
 import com.example.unieventos.ui.components.NavigationBarCustom
-import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
 fun AdminHomeScreen(
-    eventsViewModel: EventsViewModel,
+    // eventsViewModel: EventsViewModel,
     onNavigateToProfileEdit: () -> Unit,
     onNavigateToCreateEvent: () -> Unit,
     onNavigateToCreateCoupon: () -> Unit
 ) {
 
-    val events = eventsViewModel.event.collectAsState()
+    // val events = eventsViewModel.event.collectAsState()
 
     Scaffold (
         floatingActionButton = {
@@ -54,13 +50,7 @@ fun AdminHomeScreen(
                         selectedIcon = Icons.Filled.Stars,
                         unselectedIcon = Icons.Outlined.Stars,
                         hasNews = false,
-                    ),
-                    BottomNavigationItem(
-                        title = stringResource(id = R.string.nav_perfil),
-                        selectedIcon = Icons.Filled.AccountCircle,
-                        unselectedIcon = Icons.Outlined.AccountCircle,
-                        hasNews = false,
-                    ),
+                    )
                 )
             )
         }
@@ -68,15 +58,9 @@ fun AdminHomeScreen(
 
         Column {
             Text(text = "")
-            ListEvents(
-                events = events.value,
-                paddingValues = paddingValues,
-                destination = EventItemDestination.CREATE.name,
-                onNavigateToCreateEvent = onNavigateToCreateEvent
-            )
-
             Button(onClick = { onNavigateToProfileEdit() }) {
-                Text(text = stringResource(id = R.string.btn_editar_perfil))
+                Text(text = stringResource(id = R.string.btn_editar_perfil),
+                modifier = Modifier.padding(paddingValues))
             }
             
             Button(onClick = { onNavigateToCreateCoupon() }) {

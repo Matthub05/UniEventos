@@ -1,10 +1,8 @@
 package com.example.unieventos.ui.screens
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -21,12 +19,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.models.BottomNavigationItem
+import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.ui.components.FavoriteArtistsSection
 import com.example.unieventos.ui.components.FeaturedSection
-import com.example.unieventos.ui.components.ListEvents
+import com.example.unieventos.ui.components.ItemEvento
 import com.example.unieventos.ui.components.NavigationBarCustom
-import com.example.unieventos.ui.components.SavedEvent
 import com.example.unieventos.ui.components.SavedSection
 import com.example.unieventos.ui.components.SearchBarTop
 import com.example.unieventos.ui.components.SectionTitle
@@ -139,6 +137,21 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(id = R.string.label_vistos_anteriormente),
                         onSeeAllClick = {}
+                    )
+                }
+
+                items(7) {
+                    ItemEvento(
+                        event = Event(
+                            "1",
+                            "Evento",
+                            "Descripción",
+                            "Artist",
+                            "Music"
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                        destination = EventItemDestination.DETAIL.name,
+                        onNavigateToEventDetail = onNavigateToEventDetail
                     )
                 }
 
