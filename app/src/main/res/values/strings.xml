@@ -52,7 +52,10 @@
     <string name="btn_registrar_cupon">Registrar cupón</string>
     <string name="label_artistas_favoritos">Artistas Favoritos</string>
     <string name="label_eventos_destacados">Eventos Destacados</string>
+    <string name="label_vistos_anteriormente">Vistos anteriormente</string>
     <string name="nav_Eventos">Eventos</string>
     <string name="nav_compras">Mis compras</string>
+    <string name="nav_cupones">Cupones</string>
     <string name="nav_perfil">Perfil</string>
+    <string name="err_navegacion_invalida">No se ha configurado la navegación</string>
 </resources>

@@ -50,6 +50,16 @@ class UsersViewModel: ViewModel() {
             ),
             User(
                 id = "1",
+                cedula = "666666666",
+                nombre = "Alistair Cockburn",
+                direccion = "Calle 612",
+                telefono = "963852741",
+                correo = "user",
+                contrasena = "user",
+                role = Role.CLIENT
+            ),
+            User(
+                id = "2",
                 cedula = "123456789",
                 nombre = "Mateo",
                 direccion = "Calle 123",
@@ -59,7 +69,7 @@ class UsersViewModel: ViewModel() {
                 role = Role.CLIENT
             ),
             User(
-                id = "2",
+                id = "3",
                 cedula = "987654321",
                 nombre = "Juan",
                 direccion = "Calle 321",
@@ -69,7 +79,7 @@ class UsersViewModel: ViewModel() {
                 role = Role.ADMIN
             ),
             User(
-                id = "3",
+                id = "4",
                 cedula = "111111111",
                 nombre = "Pedro",
                 direccion = "Calle 999",

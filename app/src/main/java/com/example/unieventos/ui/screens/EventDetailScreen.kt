@@ -23,7 +23,7 @@ import com.example.unieventos.viewmodel.EventsViewModel
 fun EventDetailScreen(
     eventId: String,
     eventsViewModel: EventsViewModel,
-    onNavigateToHome: () -> Unit
+    onNavigateToUserHome: () -> Unit
 ){
 
     val event = eventsViewModel.getEventById(eventId)
@@ -33,7 +33,7 @@ fun EventDetailScreen(
         topBar = {
             TopBarComponent(
                 text = event.title,
-                onClick = { onNavigateToHome() },
+                onClick = { onNavigateToUserHome() },
             ) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Back")
             }

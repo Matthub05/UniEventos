@@ -34,13 +34,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.models.Role
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun NewLoginScreen(
     usersViewModel: UsersViewModel,
-    onNavigateToHome: () -> Unit,
+    onNavigateToAdminHome: () -> Unit,
+    onNavigateToUserHome: () -> Unit,
     onNavigateToSignUp: () -> Unit,
     onNavigateToForgotPassword: () -> Unit
 ){
@@ -54,7 +56,14 @@ fun NewLoginScreen(
                 .fillMaxSize()
         ) {
 
-            LoginForm(padding, context, usersViewModel, onNavigateToHome, onNavigateToSignUp)
+            LoginForm(
+                padding = padding,
+                context = context,
+                usersViewModel = usersViewModel,
+                onNavigateToAdminHome = onNavigateToAdminHome,
+                onNavigateToUserHome = onNavigateToUserHome,
+                onNavigateToSignUp = onNavigateToSignUp
+            )
 
             Text(
                 text = stringResource(id = R.string.label_recuperar_contrasenia),
@@ -77,7 +86,8 @@ fun LoginForm(
     padding: PaddingValues,
     context: Context,
     usersViewModel: UsersViewModel,
-    onNavigateToHome: () -> Unit,
+    onNavigateToAdminHome: () -> Unit,
+    onNavigateToUserHome: () -> Unit,
     onNavigateToSignUp: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -119,13 +129,16 @@ fun LoginForm(
         Button(
             modifier = Modifier.width(200.dp),
             onClick = {
-
                 val user = usersViewModel.loginUser(email, password)
 
-                if (user != null) {
-                    onNavigateToHome()
-                } else {
+                if (user == null) {
                     Toast.makeText(context, credencialesIncorrectasMessage, Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (user.role == Role.ADMIN) {
+                    onNavigateToAdminHome()
+                } else {
+                    onNavigateToUserHome()
                 }
             }
         ) {

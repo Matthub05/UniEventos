@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.unieventos.ui.screens.AdminHomeScreen
 import com.example.unieventos.ui.screens.CreateCouponScreen
 import com.example.unieventos.ui.screens.CreateEventScreen
 import com.example.unieventos.ui.screens.EventDetailScreen
@@ -25,14 +26,20 @@ fun Navigation(
 
     NavHost(
         navController = navController,
-        startDestination = RouteScreen.UserHome
+        startDestination = RouteScreen.Login
     ) {
 
         composable<RouteScreen.Login> {
             NewLoginScreen(
                 usersViewModel = usersViewModel,
-                onNavigateToHome = { navController.navigate(RouteScreen.Home){
+                onNavigateToAdminHome = { navController.navigate(RouteScreen.Home){
                     popUpTo(0){
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                } },
+                onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome) {
+                    popUpTo(0) {
                         inclusive = true
                     }
                     launchSingleTop = true
@@ -43,17 +50,19 @@ fun Navigation(
         }
 
         composable<RouteScreen.UserHome> {
-            HomeScreen()
-        }
-
-        composable<RouteScreen.Home> {
             HomeScreen(
                 eventsViewModel = eventsViewModel,
-                onNavigateToProfileEdit = { navController.navigate(RouteScreen.ProfileEdit)},
-                onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEventScreen) },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.EventDetailScreen(eventId))
                 },
+            )
+        }
+
+        composable<RouteScreen.Home> {
+            AdminHomeScreen(
+                eventsViewModel = eventsViewModel,
+                onNavigateToProfileEdit = { navController.navigate(RouteScreen.ProfileEdit)},
+                onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEventScreen) },
                 onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) }
             )
         }
@@ -103,7 +112,7 @@ fun Navigation(
             EventDetailScreen(
                 eventId = eventId ?: "",
                 eventsViewModel = eventsViewModel,
-                onNavigateToHome = { navController.navigate(RouteScreen.Home){
+                onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome){
                     popUpTo(0){
                         inclusive = true
                     }

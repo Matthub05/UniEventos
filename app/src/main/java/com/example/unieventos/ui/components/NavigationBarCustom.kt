@@ -22,31 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.example.unieventos.R
+import com.example.unieventos.models.BottomNavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationBarCustom(
+    items: List<BottomNavigationItem> = listOf()
 ) {
-    val items = listOf(
-        BottomNavigationItem(
-            title = stringResource(id = R.string.nav_Eventos),
-            selectedIcon = Icons.Filled.Star,
-            unselectedIcon = Icons.Outlined.StarOutline,
-            hasNews = false,
-        ),
-        BottomNavigationItem(
-            title = stringResource(id = R.string.nav_compras),
-            selectedIcon = Icons.Filled.ShoppingCart,
-            unselectedIcon = Icons.Outlined.ShoppingCart,
-            hasNews = false,
-        ),
-        BottomNavigationItem(
-            title = stringResource(id = R.string.nav_perfil),
-            selectedIcon = Icons.Filled.AccountCircle,
-            unselectedIcon = Icons.Outlined.AccountCircle,
-            hasNews = false,
-        ),
-    )
 
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
@@ -81,11 +63,3 @@ fun NavigationBarCustom(
         }
     }
 }
-
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount: Int? = null
-)
