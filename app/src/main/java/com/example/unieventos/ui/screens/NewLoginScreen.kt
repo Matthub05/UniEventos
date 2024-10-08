@@ -36,13 +36,13 @@ import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.models.Role
 import com.example.unieventos.ui.components.TextFieldForm
+import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun NewLoginScreen(
     usersViewModel: UsersViewModel,
-    onNavigateToAdminHome: () -> Unit,
-    onNavigateToUserHome: () -> Unit,
+    onNavigateToHome: (Role) -> Unit,
     onNavigateToSignUp: () -> Unit,
     onNavigateToForgotPassword: () -> Unit
 ){
@@ -60,8 +60,7 @@ fun NewLoginScreen(
                 padding = padding,
                 context = context,
                 usersViewModel = usersViewModel,
-                onNavigateToAdminHome = onNavigateToAdminHome,
-                onNavigateToUserHome = onNavigateToUserHome,
+                onNavigateToHome = onNavigateToHome,
                 onNavigateToSignUp = onNavigateToSignUp
             )
 
@@ -86,8 +85,7 @@ fun LoginForm(
     padding: PaddingValues,
     context: Context,
     usersViewModel: UsersViewModel,
-    onNavigateToAdminHome: () -> Unit,
-    onNavigateToUserHome: () -> Unit,
+    onNavigateToHome: (Role) -> Unit,
     onNavigateToSignUp: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -135,11 +133,9 @@ fun LoginForm(
                     Toast.makeText(context, credencialesIncorrectasMessage, Toast.LENGTH_SHORT).show()
                     return@Button
                 }
-                if (user.role == Role.ADMIN) {
-                    onNavigateToAdminHome()
-                } else {
-                    onNavigateToUserHome()
-                }
+
+                SharedPreferenceUtils.savePreference(context, user.id, user.role)
+                onNavigateToHome(user.role)
             }
         ) {
             Text(text = stringResource(id = R.string.label_boton_login))
