@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.screens
+package com.example.unieventos.ui.screens.client
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth

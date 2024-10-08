@@ -1,4 +1,4 @@
-package com.example.unieventos.ui.screens
+package com.example.unieventos.ui.screens.client
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
