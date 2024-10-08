@@ -67,9 +67,19 @@ fun Navigation(
         composable<RouteScreen.UserHome> {
             HomeScreen(
                 eventsViewModel = eventsViewModel,
+                onLogout = {
+                    SharedPreferenceUtils.clearPreference(context)
+                    navController.navigate(RouteScreen.Login){
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.EventDetailScreen(eventId))
                 },
+                onNavigateToProfileEdit = { navController.navigate(RouteScreen.ProfileEdit)},
             )
         }
 
@@ -85,7 +95,6 @@ fun Navigation(
                         launchSingleTop = true
                     }
                 },
-                onNavigateToProfileEdit = { navController.navigate(RouteScreen.ProfileEdit)},
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEventScreen) },
                 onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) }
             )
@@ -111,7 +120,7 @@ fun Navigation(
 
         composable<RouteScreen.ProfileEdit> {
             ProfileEditScreen(
-                onNavigateToHome = { navController.navigate(RouteScreen.Home){
+                onNavigateToHome = { navController.navigate(RouteScreen.UserHome){
                     popUpTo(0){
                         inclusive = true
                     }

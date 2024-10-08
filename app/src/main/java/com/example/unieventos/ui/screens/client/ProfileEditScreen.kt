@@ -69,7 +69,7 @@ fun ProfileEditForm(
             .fillMaxWidth()
             .padding(padding)
             .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -103,7 +103,7 @@ fun ProfileEditForm(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         )
 
-        Spacer(modifier = Modifier.height(240.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         Button(
             onClick = { onNavigateToHome() },
@@ -122,7 +122,7 @@ fun ProfileEditForm(
             onClick = { onNavigateToHome() },
             modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp)
         ) {
-            Text(text = stringResource(id = R.string.label_boton_registrarse))
+            Text(text = stringResource(id = R.string.btn_guardar_cambios))
         }
 
     }

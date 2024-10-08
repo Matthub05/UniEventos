@@ -11,10 +11,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.navigation.NavHostController
 import com.example.unieventos.models.BottomNavigationItem
 
 @Composable
 fun NavigationBarCustom(
+    navController: NavHostController,
     items: List<BottomNavigationItem> = listOf()
 ) {
 
@@ -26,7 +28,7 @@ fun NavigationBarCustom(
         items.forEachIndexed { index, item ->
             NavigationBarItem(selected = selectedItemIndex == index, onClick = {
                 selectedItemIndex = index
-                // navController.navigate(item.title)
+                navController.navigate(item.route)
             }, label = {
                 Text(text = item.title)
             }, icon = {

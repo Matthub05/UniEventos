@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddCircleOutline
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -83,7 +84,9 @@ fun ItemEvento(
                 Spacer(modifier = Modifier.height(45.dp))
 
                 Row (verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Rounded.AddCircleOutline, contentDescription = null)
+                    IconButton( onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Rounded.AddCircleOutline, contentDescription = null)
+                    }
                     Spacer(modifier = Modifier.width(5.dp))
 
                     Text(text = "Fecha evento",
