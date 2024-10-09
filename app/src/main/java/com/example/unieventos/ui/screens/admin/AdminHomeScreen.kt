@@ -22,7 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.R
-import com.example.unieventos.models.BottomNavigationItem
+import com.example.unieventos.models.ui.BottomNavigationItem
 import com.example.unieventos.ui.components.NavigationBarCustom
 import com.example.unieventos.ui.screens.admin.navigation.AdminRouteScreen
 import com.example.unieventos.ui.screens.admin.tabs.AdminEventsScreen

@@ -15,7 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-import com.example.unieventos.models.BottomNavigationItem
+import com.example.unieventos.models.ui.BottomNavigationItem
 
 @Composable
 fun NavigationBarCustom(
@@ -28,9 +28,9 @@ fun NavigationBarCustom(
     }
 
     NavigationBar(
-        modifier = Modifier.background(Color(0xFF161616)), // Apply dark gray background
-        containerColor = Color(0xFF161616), // Set container color to dark gray
-        contentColor = Color.White // Set content color (icons and text) to white for contrast
+        modifier = Modifier.background(Color(0xFF161616)),
+        containerColor = Color(0xFF161616),
+        contentColor = Color.White
     ){
         items.forEachIndexed { index, item ->
             NavigationBarItem(selected = selectedItemIndex == index, onClick = {

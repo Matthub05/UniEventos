@@ -8,9 +8,6 @@ data class Event(
     val description: String,
     val artistId: Int,
     val category: String,
-    val date: Date,
-
-    val place
-
+ //   val date: Date,
     val imageUrl: String
 )

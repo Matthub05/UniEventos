@@ -1,4 +1,4 @@
-package com.example.unieventos.models
+package com.example.unieventos.models.ui
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

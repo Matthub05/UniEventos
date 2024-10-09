@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,6 +24,7 @@ import com.example.unieventos.ui.components.SearchBarTop
 import com.example.unieventos.ui.components.SectionTitle
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun EventsScreen(
@@ -33,6 +36,7 @@ fun EventsScreen(
 
     val events = eventsViewModel.event.collectAsState().value
     val artists = artistViewModel.artist.collectAsState().value
+
 
     LazyColumn(
         modifier = Modifier
@@ -50,7 +54,8 @@ fun EventsScreen(
             SectionTitle(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(id = R.string.label_artistas_destacados),
-                onSeeAllClick = { }
+                onSeeAllClick = {
+                }
             )
         }
 
