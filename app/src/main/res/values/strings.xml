@@ -19,7 +19,7 @@
     <string name="label_telefono_invalido">El teléfono no es válido</string>
     <string name="label_confirmar_contrasenia">Confirmar contraseña</string>">
     <string name="label_confirmar_contrasenia_invalida">La confirmación de la contraseña no coincide</string>
-    <string name="titulo_registrarse">Registrate en UniEventos</string>
+    <string name="titulo_registrarse">Registro de usuario</string>
     <string name="label_confirmacion">Código de confirmación</string>
     <string name="placeholder_codigo">Código</string>
     <string name="err_codigo">El código no es válido</string>
@@ -61,4 +61,5 @@
     <string name="label_guardados">Guardados</string>
     <string name="btn_cerrar_sesion">Cerrar Sesión</string>
     <string name="btn_guardar_cambios">Guardar cambios</string>
+    <string name="user_created">¡Usuario registrado satisfactoriamente!</string>
 </resources>

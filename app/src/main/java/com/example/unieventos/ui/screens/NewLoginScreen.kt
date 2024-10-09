@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,8 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.unieventos.R
 import com.example.unieventos.models.Role
 import com.example.unieventos.ui.components.TextFieldForm
@@ -53,7 +57,7 @@ fun NewLoginScreen(
         Box(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
+                .fillMaxWidth()
         ) {
 
             LoginForm(
@@ -95,13 +99,21 @@ fun LoginForm(
     Column(
         modifier = Modifier
             .padding(padding)
-            .offset(y = (-90).dp)
+            .padding(start = 20.dp)
+            .offset(y = (-140).dp)
             .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        //horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
-        Logo()
+        Text(
+            text = "Unieventos",
+            fontSize = 40.sp,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         TextFieldForm(
             value = email,
@@ -110,6 +122,8 @@ fun LoginForm(
             label = stringResource(id = R.string.label_correo),
             onValidate = { !Patterns.EMAIL_ADDRESS.matcher(it).matches() },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            modifier = Modifier
+                .width(318.dp)
         )
 
         TextFieldForm(
@@ -119,13 +133,18 @@ fun LoginForm(
             label = stringResource(id = R.string.label_contrasenia),
             onValidate = { it.isEmpty() },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            isPassword = true
+            isPassword = true,
+            modifier = Modifier
+                .width(318.dp)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         Button(
-            modifier = Modifier.width(200.dp),
+            modifier = Modifier
+                .width(318.dp)
+                .height(50.dp),
+            shape = RoundedCornerShape(4.dp),
             onClick = {
                 val user = usersViewModel.loginUser(email, password)
 
@@ -141,8 +160,13 @@ fun LoginForm(
             Text(text = stringResource(id = R.string.label_boton_login))
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
+
         Button(
-            modifier = Modifier.width(200.dp),
+            modifier = Modifier
+                .width(318.dp)
+                .height(50.dp),
+            shape = RoundedCornerShape(4.dp),
             onClick = {
                 onNavigateToSignUp()
             }

@@ -2,6 +2,7 @@ package com.example.unieventos.ui.screens
 
 import android.content.Context
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,7 +10,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -30,13 +33,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.models.Role
+import com.example.unieventos.models.User
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
+import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun SignUpScreen(
-    onNavigateToLogin: () -> Unit,
-    onNavigateToHome: () -> Unit
+    onNavigateToBack: () -> Unit,
+    usersViewModel: UsersViewModel
 ) {
 
     val context = LocalContext.current
@@ -45,14 +51,20 @@ fun SignUpScreen(
         topBar = {
             TopBarComponent(
                 text = stringResource(id = R.string.titulo_registrarse),
-                onClick = { onNavigateToLogin() },
+                onClick = { onNavigateToBack() },
+
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         }
     ) { paddingValues ->
 
-        SignUpForm(paddingValues, context, onNavigateToHome)
+        SignUpForm(
+            usersViewModel,
+            paddingValues,
+            context,
+            onNavigateToBack
+        )
 
     }
 
@@ -60,9 +72,10 @@ fun SignUpScreen(
 
 @Composable
 fun SignUpForm(
+    usersViewModel: UsersViewModel,
     padding: PaddingValues,
     context: Context,
-    onNavigateToHome: () -> Unit
+    onNavigateToBack: () -> Unit,
 ) {
 
     var cedula by rememberSaveable { mutableStateOf("") }
@@ -159,8 +172,26 @@ fun SignUpForm(
         Spacer(modifier = Modifier.height(10.dp))
 
         Button(
-            onClick = { onNavigateToHome() },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp)
+            onClick = {
+                usersViewModel.createUser(
+                    User(
+                        cedula,
+                        cedula,
+                        nombre,
+                        direccion,
+                        telefono,
+                        correo,
+                        contrasena,
+                        Role.CLIENT
+                    )
+                )
+
+                Toast.makeText(context, context.getString(R.string.user_created), Toast.LENGTH_SHORT).show()
+                onNavigateToBack()
+            },
+            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp).width(318.dp)
+                .height(50.dp),
+            shape = RoundedCornerShape(4.dp),
         ) {
             Text(text = stringResource(id = R.string.label_boton_registrarse))
         }

@@ -105,13 +105,10 @@ fun Navigation(
 
         composable<RouteScreen.SignUp> {
             SignUpScreen(
-                onNavigateToLogin = { navController.navigate(RouteScreen.Login) },
-                onNavigateToHome = { navController.navigate(RouteScreen.Home){
-                    popUpTo(0){
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                } }
+                onNavigateToBack = {
+                    navController.popBackStack()
+                },
+                usersViewModel
             )
         }
 

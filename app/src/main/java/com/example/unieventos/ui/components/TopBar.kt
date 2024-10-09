@@ -20,7 +20,7 @@ fun TopBarComponent(
 ) {
     LargeTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             titleContentColor = MaterialTheme.colorScheme.onBackground,
         ),
         title = {
