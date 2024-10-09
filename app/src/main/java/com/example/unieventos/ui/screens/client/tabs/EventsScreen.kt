@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -17,6 +18,7 @@ import com.example.unieventos.ui.components.FavoriteArtistsSection
 import com.example.unieventos.ui.components.FeaturedSection
 import com.example.unieventos.ui.components.ItemEvento
 import com.example.unieventos.ui.components.SavedSection
+import com.example.unieventos.ui.components.SearchBarTop
 import com.example.unieventos.ui.components.SectionTitle
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
@@ -36,12 +38,14 @@ fun EventsScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = 8.dp,
-                end = 2.dp,
-                top = paddingValues.calculateTopPadding(),
+                start = 7.dp,
+                end = 7.dp,
+                top = 90.dp,
                 bottom = paddingValues.calculateBottomPadding()
             ),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+
         item {
             SectionTitle(
                 modifier = Modifier.fillMaxWidth(),

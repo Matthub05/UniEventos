@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -46,13 +47,13 @@ fun HomeScreen(
 
     Scaffold (
         topBar = {
-            if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true)
-                return@Scaffold
+           if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true)
+             return@Scaffold
 
             SearchBarTop(
                 onSearchTextChanged = { newText ->
                     println("Search text: $newText")
-                }
+               }
             )
         },
         bottomBar = {
@@ -113,6 +114,7 @@ fun NavHostUser(
     
     NavHost(
         modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
         navController = navController,
         startDestination = UserRouteScreen.TabEvents
     ) {
