@@ -19,7 +19,7 @@ import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
 fun EventDetailScreen(
-    eventId: String,
+    eventId: Int,
     eventsViewModel: EventsViewModel,
     onNavigateToUserHome: () -> Unit
 ){

@@ -18,16 +18,19 @@ import com.example.unieventos.ui.components.FeaturedSection
 import com.example.unieventos.ui.components.ItemEvento
 import com.example.unieventos.ui.components.SavedSection
 import com.example.unieventos.ui.components.SectionTitle
+import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
 fun EventsScreen(
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
-    onNavigateToEventDetail: (String) -> Unit,
+    artistViewModel: ArtistViewModel,
+    onNavigateToEventDetail: (Int) -> Unit,
 ) {
 
     val events = eventsViewModel.event.collectAsState().value
+    val artists = artistViewModel.artist.collectAsState().value
 
     LazyColumn(
         modifier = Modifier
@@ -42,7 +45,7 @@ fun EventsScreen(
         item {
             SectionTitle(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(id = R.string.label_artistas_favoritos),
+                title = stringResource(id = R.string.label_artistas_destacados),
                 onSeeAllClick = { }
             )
         }
@@ -51,7 +54,8 @@ fun EventsScreen(
             FavoriteArtistsSection(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onSeeAllClick = {}
+                onSeeAllClick = {},
+                artists = artists
             )
         }
 
@@ -68,7 +72,9 @@ fun EventsScreen(
             FeaturedSection(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onSeeAllClick = {}
+                onSeeAllClick = {},
+                artistViewModel = artistViewModel,
+                events = events,
             )
         }
 

@@ -16,11 +16,13 @@ import com.example.unieventos.ui.screens.NewLoginScreen
 import com.example.unieventos.ui.screens.client.ProfileEditScreen
 import com.example.unieventos.ui.screens.SignUpScreen
 import com.example.unieventos.utils.SharedPreferenceUtils
+import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun Navigation(
+    artistViewModel: ArtistViewModel,
     eventsViewModel: EventsViewModel,
     usersViewModel: UsersViewModel,
 ) {
@@ -67,6 +69,7 @@ fun Navigation(
         composable<RouteScreen.UserHome> {
             HomeScreen(
                 eventsViewModel = eventsViewModel,
+                artistViewmodel = artistViewModel,
                 onLogout = {
                     SharedPreferenceUtils.clearPreference(context)
                     navController.navigate(RouteScreen.Login){
@@ -141,9 +144,9 @@ fun Navigation(
         }
 
         composable<RouteScreen.EventDetailScreen> {
-            val eventId = it.arguments?.getString("eventId")
+            val eventId = it.arguments?.getInt("eventId")
             EventDetailScreen(
-                eventId = eventId ?: "",
+                eventId = eventId ?: 0,
                 eventsViewModel = eventsViewModel,
                 onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome){
                     popUpTo(0){

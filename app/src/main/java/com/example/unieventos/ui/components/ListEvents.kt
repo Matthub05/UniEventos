@@ -34,7 +34,7 @@ fun ItemEvento(
     modifier: Modifier,
     event: Event,
     destination: String,
-    onNavigateToEventDetail: (String) -> Unit = {},
+    onNavigateToEventDetail: (Int) -> Unit = {},
     onNavigateToCreateEvent: () -> Unit = {}
 ) {
 
@@ -77,7 +77,7 @@ fun ItemEvento(
                     text = event.title,
                     fontSize = 17.sp,
                 )
-                Text(text = event.artist,
+                Text(text = "ss",
                     fontSize = 13.sp,
                     color = Color.Gray)
 

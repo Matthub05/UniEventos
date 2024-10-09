@@ -23,7 +23,7 @@ class EventsViewModel:ViewModel() {
         _event.value -= event
     }
 
-    fun getEventById(id: String): Event? {
+    fun getEventById(id: Int): Event? {
         return _event.value.find { it.id == id }
     }
 
@@ -34,39 +34,36 @@ class EventsViewModel:ViewModel() {
     private fun getEvents(): List<Event> {
         return listOf(
             Event(
-                id = "1",
-                title = "Concierto banda rock",
+                id = 1,
+                title = "Metallica Reloaded",
                 description = "Concierto",
-                artist = "Banda rock",
-                category = "Concierto"
+                artistId = 3,
+                category = "Concierto",
+                imageUrl = "https://d31fr2pwly4c4s.cloudfront.net/e/a/3/1794885_9adb8046_metallica-reloaded_eflyer_th.jpg"
             ),
             Event(
-                id = "2",
-                title = "Charla triste",
-                description = "Charla",
-                artist = "Charla",
-                category = "Charla"
-            ),
-            Event(
-                id = "3",
-                title = "Charla feliz",
-                description = "Charla",
-                artist = "Charla",
-                category = "Charla"
-            ),
-            Event(
-                id = "4",
-                title = "Concierto banda jazz",
+                id = 2,
+                title = "Communiqué",
                 description = "Concierto",
-                artist = "Banda jazz",
-                category = "Concierto"
+                artistId = 0,
+                category = "Concierto",
+                imageUrl = "https://styles.redditmedia.com/t5_2txlm/styles/communityIcon_drd9ah0kodh31.jpg?format=pjpg&s=e1451732a37df08f245e2a50beeadb31e87043e0"
             ),
             Event(
-                id = "5",
-                title = "Concierto banda pop",
+                id = 3,
+                title = "Trucupey",
                 description = "Concierto",
-                artist = "Banda pop",
-                category = "Concierto"
+                artistId = 5,
+                category = "Concierto",
+                imageUrl = "https://i1.sndcdn.com/artworks-5bd9ea2c-3f3d-4e67-8a7a-e6d873d8c76b-0-t500x500.jpg"
+            ),
+            Event(
+                id = 4,
+                title = "Culture",
+                description = "Concierto",
+                artistId = 1,
+                category = "Concierto",
+                imageUrl = "https://res.klook.com/image/upload/v1711094730/uvsqagdqguovch1ocz49.jpg"
             )
         )
     }

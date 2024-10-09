@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.R
+import com.example.unieventos.models.Artist
 import com.example.unieventos.models.BottomNavigationItem
 import com.example.unieventos.ui.components.NavigationBarCustom
 import com.example.unieventos.ui.components.SearchBarTop
@@ -28,13 +29,15 @@ import com.example.unieventos.ui.screens.client.navigation.UserRouteScreen
 import com.example.unieventos.ui.screens.client.tabs.EventsScreen
 import com.example.unieventos.ui.screens.client.tabs.PurchasesScreen
 import com.example.unieventos.ui.screens.client.tabs.UserInfoScreen
+import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
 fun HomeScreen(
     eventsViewModel: EventsViewModel,
+    artistViewmodel: ArtistViewModel,
     onLogout: () -> Unit,
-    onNavigateToEventDetail: (String) -> Unit,
+    onNavigateToEventDetail: (Int) -> Unit,
     onNavigateToProfileEdit: () -> Unit
 ) {
 
@@ -87,6 +90,7 @@ fun HomeScreen(
             paddingValues = paddingValues,
             navController = navController,
             eventsViewModel = eventsViewModel,
+            artistViewModel = artistViewmodel,
             onLogout = onLogout,
             onNavigateToEventDetail = onNavigateToEventDetail,
             onNavigateToProfileEdit = onNavigateToProfileEdit
@@ -101,8 +105,9 @@ fun NavHostUser(
     paddingValues: PaddingValues,
     navController: NavHostController,
     eventsViewModel: EventsViewModel,
+    artistViewModel: ArtistViewModel,
     onLogout: () -> Unit,
-    onNavigateToEventDetail: (String) -> Unit,
+    onNavigateToEventDetail: (Int) -> Unit,
     onNavigateToProfileEdit: () -> Unit
 ) {
     
@@ -115,6 +120,7 @@ fun NavHostUser(
             EventsScreen(
                 paddingValues = paddingValues,
                 eventsViewModel = eventsViewModel,
+                artistViewModel = artistViewModel,
                 onNavigateToEventDetail = onNavigateToEventDetail
             )
         }
