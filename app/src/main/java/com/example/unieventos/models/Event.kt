@@ -11,5 +11,6 @@ data class Event(
     val date: Date,
     val eventSite: EventSite,
     val imageUrl: String,
+    val mediaUrls: List<String> = listOf(),
     var locations: List<EventLocation> = listOf(),
 )

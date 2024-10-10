@@ -91,15 +91,18 @@ fun EventItem(
                     fontSize = 13.sp,
                     color = Color.Gray)
 
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
-                Row (verticalAlignment = Alignment.CenterVertically) {
+                Text(text = event.eventSite.name + ", " + event.eventSite.location,
+                    fontSize = 11.sp,
+                    color = Color.Gray)
+
                     Text(text = event.date.toInstant()
                         .atZone(ZoneId.systemDefault())
                         .toLocalDateTime().format(formatter),
                         fontSize = 11.sp,
                         color = Color.Gray)
-                }
+
             }
 
         }
