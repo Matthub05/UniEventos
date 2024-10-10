@@ -10,5 +10,6 @@ data class Event(
     val category: String,
     val date: Date,
     val eventSite: EventSite,
-    val imageUrl: String
+    val imageUrl: String,
+    var locations: List<EventLocation> = listOf(),
 )

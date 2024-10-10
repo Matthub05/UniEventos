@@ -49,6 +49,7 @@
     <string name="err_ubicacion">La ubicación no es válida</string>
     <string name="btn_anadir_foto">Añadir foto</string>
     <string name="btn_anadir_localizacion">Añadir localización</string>
+    <string name="btn_guardar">Guardar</string>
     <string name="titulo_generacion_cupon">Generación de cupones</string>
     <string name="placeholder_codigo_cupon">Código de cupón</string>
     <string name="err_descripcion">La descripción no es válida</string>
@@ -72,4 +73,5 @@
     <string name="btn_guardar_cambios">Guardar cambios</string>
     <string name="user_created">¡Usuario registrado satisfactoriamente!</string>
     <string name="coupon_created">¡Cupón creado Ssatisfactoriamente!</string>
+    <string name="btn_eliminar">Eliminar</string>
 </resources>
