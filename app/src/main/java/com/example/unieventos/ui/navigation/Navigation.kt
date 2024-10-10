@@ -145,12 +145,9 @@ fun Navigation(
 
         composable<RouteScreen.CreateEventScreen> {
             CreateEventScreen(
-                onNavigateToHome = { navController.navigate(RouteScreen.Home){
-                    popUpTo(0){
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                } },
+                onNavigateToBack = {
+                    navController.popBackStack()
+                },
                 eventsViewModel = eventsViewModel,
                 artistViewModel = artistViewModel
             )

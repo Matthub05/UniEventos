@@ -50,6 +50,10 @@
     <string name="btn_anadir_foto">Añadir foto</string>
     <string name="btn_anadir_localizacion">Añadir localización</string>
     <string name="btn_guardar">Guardar</string>
+    <string name="placeholder_cupos_maximos">Cupos máximos</string>
+    <string name="err_cupos_maximos">Los cupos máximos no son válidos</string>
+    <string name="placeholder_tarifa">Tarifa</string>
+    <string name="err_tarifa">La tarifa no es válida</string>
     <string name="titulo_generacion_cupon">Generación de cupones</string>
     <string name="placeholder_codigo_cupon">Código de cupón</string>
     <string name="err_descripcion">La descripción no es válida</string>
