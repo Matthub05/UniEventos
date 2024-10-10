@@ -71,6 +71,7 @@ fun HomeScreen(
     artistViewmodel: ArtistViewModel,
     onLogout: () -> Unit,
     onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToArtistDetail: (Int) -> Unit,
     onNavigateToProfileEdit: () -> Unit
 ) {
 
@@ -207,6 +208,7 @@ fun HomeScreen(
             onLogout = onLogout,
             onNavigateToEventDetail = onNavigateToEventDetail,
             onNavigateToProfileEdit = onNavigateToProfileEdit,
+            onNavigateToArtistDetail = onNavigateToArtistDetail
         )
 
         }
@@ -224,6 +226,7 @@ fun NavHostUser(
     artistViewModel: ArtistViewModel,
     onLogout: () -> Unit,
     onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToArtistDetail: (Int) -> Unit,
     onNavigateToProfileEdit: () -> Unit,
 ) {
     
@@ -239,6 +242,7 @@ fun NavHostUser(
                 eventsViewModel = eventsViewModel,
                 artistViewModel = artistViewModel,
                 onNavigateToEventDetail = onNavigateToEventDetail,
+                onNavigateToArtistDetail = onNavigateToArtistDetail
             )
         }
         composable<UserRouteScreen.TabPurchases> {

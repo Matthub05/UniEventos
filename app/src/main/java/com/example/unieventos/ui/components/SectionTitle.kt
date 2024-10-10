@@ -38,7 +38,7 @@ fun SectionTitle(
         ) {
             Text(
                 text = title,
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )

@@ -1,6 +1,7 @@
 package com.example.unieventos.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,7 @@ import com.example.unieventos.models.Artist
 fun FavoriteArtistsSection(
     modifier: Modifier,
     artists: List<Artist>,
-    onSeeAllClick: () -> Unit
+    onNavigateToArtistDetail: (Int) -> Unit = {},
 ) {
     Column(modifier = modifier) {
 
@@ -46,7 +47,7 @@ fun FavoriteArtistsSection(
         ) {
 
             items( artists ) { artist ->
-                ArtistItem(artist)
+                ArtistItem(artist, onNavigateToArtistDetail)
             }
 
         }
@@ -55,10 +56,15 @@ fun FavoriteArtistsSection(
 
 @Composable
 fun ArtistItem(
-    artist: Artist
+    artist: Artist,
+    onNavigateToArtistDetail: (Int) -> Unit
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .clickable {
+                onNavigateToArtistDetail(artist.id)
+            }
     ) {
 
         val model = ImageRequest.Builder(LocalContext.current)

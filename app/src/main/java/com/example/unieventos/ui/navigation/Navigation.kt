@@ -14,6 +14,7 @@ import com.example.unieventos.ui.screens.ForgotPasswordScreen
 import com.example.unieventos.ui.screens.client.HomeScreen
 import com.example.unieventos.ui.screens.NewLoginScreen
 import com.example.unieventos.ui.screens.client.ProfileEditScreen
+import com.example.unieventos.ui.screens.client.ArtistDetailsScreen
 import com.example.unieventos.ui.screens.SignUpScreen
 import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
@@ -85,7 +86,12 @@ fun Navigation(
                 onNavigateToEventDetail = { eventId ->
                     navController.navigate(RouteScreen.EventDetailScreen(eventId))
                 },
-                onNavigateToProfileEdit = { navController.navigate(RouteScreen.ProfileEdit)},
+                onNavigateToProfileEdit = {
+                    navController.navigate(RouteScreen.ProfileEdit)
+                                          },
+                onNavigateToArtistDetail = { artistId ->
+                    navController.navigate(RouteScreen.ArtistDetailScreen(artistId))
+                }
             )
         }
 
@@ -136,6 +142,20 @@ fun Navigation(
         composable<RouteScreen.CreateEventScreen> {
             CreateEventScreen(
                 onNavigateToHome = { navController.navigate(RouteScreen.Home){
+                    popUpTo(0){
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                } }
+            )
+        }
+
+        composable<RouteScreen.ArtistDetailScreen> {
+            val artistId = it.arguments?.getInt("artistId")
+            ArtistDetailsScreen(
+                artistId = artistId ?: 0,
+                artistViewModel = artistViewModel,
+                onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome){
                     popUpTo(0){
                         inclusive = true
                     }

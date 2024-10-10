@@ -32,6 +32,7 @@ fun EventsScreen(
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
     onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToArtistDetail: (Int) -> Unit
 ) {
 
     val events = eventsViewModel.event.collectAsState().value
@@ -63,8 +64,8 @@ fun EventsScreen(
             FavoriteArtistsSection(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onSeeAllClick = {},
-                artists = artists
+                artists = artists,
+                onNavigateToArtistDetail = onNavigateToArtistDetail
             )
         }
 

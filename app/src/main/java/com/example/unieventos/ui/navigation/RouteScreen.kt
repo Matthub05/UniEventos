@@ -1,5 +1,7 @@
 package com.example.unieventos.ui.navigation
 
+import com.example.unieventos.models.Artist
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 sealed class RouteScreen {
@@ -27,6 +29,9 @@ sealed class RouteScreen {
 
     @Serializable
     data class EventDetailScreen(val eventId: Int) : RouteScreen()
+
+    @Serializable
+    data class ArtistDetailScreen(val artistId: Int) : RouteScreen()
 
     @Serializable
     data object CreateCouponScreen : RouteScreen()
