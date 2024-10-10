@@ -17,6 +17,7 @@ import com.example.unieventos.ui.screens.client.ProfileEditScreen
 import com.example.unieventos.ui.screens.SignUpScreen
 import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
+import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 
@@ -25,6 +26,7 @@ fun Navigation(
     artistViewModel: ArtistViewModel,
     eventsViewModel: EventsViewModel,
     usersViewModel: UsersViewModel,
+    couponViewModel: CouponsViewModel
 ) {
 
     val navController = rememberNavController()
@@ -43,6 +45,7 @@ fun Navigation(
     NavHost(
         navController = navController,
         startDestination = startDestination
+        //startDestination = RouteScreen.CreateCouponScreen
     ) {
 
         composable<RouteScreen.Login> {
@@ -99,7 +102,8 @@ fun Navigation(
                     }
                 },
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEventScreen) },
-                onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) }
+                onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) },
+                couponsViewModel = couponViewModel
             )
         }
 
@@ -156,12 +160,8 @@ fun Navigation(
 
         composable<RouteScreen.CreateCouponScreen> {
             CreateCouponScreen(
-                onNavigateToHome = { navController.navigate(RouteScreen.Home){
-                    popUpTo(0){
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                } }
+                onNavigateToBack = { navController.popBackStack() },
+                couponViewModel = couponViewModel
             )
         }
 

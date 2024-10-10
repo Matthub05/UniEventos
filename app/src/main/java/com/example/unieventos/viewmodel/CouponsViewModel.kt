@@ -1,69 +1,76 @@
 package com.example.unieventos.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.unieventos.models.Event
+import com.example.unieventos.models.Coupon
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.Calendar
 
 class CouponsViewModel:ViewModel() {
 
-    private val _event = MutableStateFlow( emptyList<Event>() )
-    val event: StateFlow< List<Event> > = _event.asStateFlow()
+    private val _coupon = MutableStateFlow( emptyList<Coupon>() )
+    val coupon: StateFlow< List<Coupon> > = _coupon.asStateFlow()
 
     init {
-        _event.value = getEvents()
+        _coupon.value = getCoupons()
     }
 
-    fun createEvent(event: Event) {
-        _event.value += event
+    fun createCoupon(coupon: Coupon) {
+        coupon.id = _coupon.value.size + 1
+        _coupon.value += coupon
     }
 
-    fun deleteEvent(event: Event) {
-        _event.value -= event
+    fun deleteCoupon(coupon: Coupon) {
+        _coupon.value -= coupon
     }
 
-    fun getEventById(id: Int): Event? {
-        return _event.value.find { it.id == id }
+    fun getCouponById(id: Int): Coupon? {
+        return _coupon.value.find { it.id == id }
     }
 
-    fun searchEvents(query: String): List<Event> {
-        return _event.value.filter { it.title.contains(query, ignoreCase = true) }
+    fun searchCoupons(code: String): List<Coupon> {
+        return _coupon.value.filter { it.code.contains(code, ignoreCase = true) }
     }
 
-    private fun getEvents(): List<Event> {
+    private fun getCoupons(): List<Coupon> {
+        val cal: Calendar = Calendar.getInstance()
+        cal.set(2024, 9, 2)
+        val inicio = cal.time
+        cal.set(2024, 10, 3)
+        val fin = cal.time
         return listOf(
-            Event(
+            Coupon(
                 id = 1,
-                title = "Metallica Reloaded",
-                description = "Concierto",
-                artistId = 3,
-                category = "Concierto",
-                imageUrl = "https://d31fr2pwly4c4s.cloudfront.net/e/a/3/1794885_9adb8046_metallica-reloaded_eflyer_th.jpg"
+                description = "Dia de las madres",
+                code = "code1",
+                startDate = inicio,
+                endDate = fin,
+                discount = 10.0
             ),
-            Event(
+            Coupon(
                 id = 2,
-                title = "Communiqué",
-                description = "Concierto",
-                artistId = 0,
-                category = "Concierto",
-                imageUrl = "https://styles.redditmedia.com/t5_2txlm/styles/communityIcon_drd9ah0kodh31.jpg?format=pjpg&s=e1451732a37df08f245e2a50beeadb31e87043e0"
+                description = "Dia de los padres",
+                code = "code2",
+                startDate = inicio,
+                endDate = fin,
+                discount = 15.0
             ),
-            Event(
+            Coupon(
                 id = 3,
-                title = "Trucupey",
-                description = "Concierto",
-                artistId = 5,
-                category = "Concierto",
-                imageUrl = "https://i1.sndcdn.com/artworks-5bd9ea2c-3f3d-4e67-8a7a-e6d873d8c76b-0-t500x500.jpg"
+                description = "Dia del agua",
+                code = "code3",
+                startDate = inicio,
+                endDate = fin,
+                discount = 20.0
             ),
-            Event(
+            Coupon(
                 id = 4,
-                title = "Culture",
-                description = "Concierto",
-                artistId = 1,
-                category = "Concierto",
-                imageUrl = "https://res.klook.com/image/upload/v1711094730/uvsqagdqguovch1ocz49.jpg"
+                description = "Que la fuerza te acompañe",
+                code = "code4",
+                startDate = inicio,
+                endDate = fin,
+                discount = 25.0
             )
         )
     }
