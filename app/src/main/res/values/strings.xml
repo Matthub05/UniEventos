@@ -34,6 +34,7 @@
     <string name="btn_editar_perfil">Editar perfil</string>
     <string name="btn_crear_evento">Crear evento</string>
     <string name="title_registrar_evento">Registrar evento</string>
+    <string name="title_modificar_evento">Modificar evento</string>
     <string name="titulo_evento">Evento</string>
     <string name="placeholder_titulo">Título</string>
     <string name="err_titulo">El título no es válido</string>

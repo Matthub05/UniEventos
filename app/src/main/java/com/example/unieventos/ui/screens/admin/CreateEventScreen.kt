@@ -54,15 +54,20 @@ import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun CreateEventScreen(
+    eventId: Int?,
     onNavigateToBack: () -> Unit,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
 ) {
 
+    var componentTitle = stringResource(id = R.string.title_registrar_evento)
     val scrollState = rememberScrollState()
 
     val artists = artistViewModel.artist.collectAsState().value
@@ -84,9 +89,28 @@ fun CreateEventScreen(
     var locationPrice by rememberSaveable { mutableStateOf("") }
     var selectedLocation: EventLocation? by rememberSaveable { mutableStateOf(null) }
 
+    if (eventId != null) {
+        val event = eventsViewModel.getEventById(eventId)
+        title = event?.title ?: ""
+        description = event?.description ?: ""
+        idArtist = (event?.artistId ?: 0).toString()
+        category = event?.category ?: ""
+        date = SimpleDateFormat(
+            "dd/MM/yyyy",
+            Locale.US
+        ).format(event?.date ?: "")
+        name = event?.eventSite?.name ?: ""
+        capacity = event?.eventSite?.capacity?.toString() ?: ""
+        location = event?.eventSite?.location ?: ""
+        imageUrl = event?.imageUrl ?: ""
+        eventLocations = event?.locations ?: listOf()
+
+        componentTitle = stringResource(id = R.string.title_modificar_evento)
+    }
+
     fun saveEvent() {
         val cal = Calendar.getInstance()
-        var values = date.split("/")
+        val values = date.split("/")
         cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
         val dateParsed = cal.time
 
@@ -105,14 +129,20 @@ fun CreateEventScreen(
             imageUrl = imageUrl,
             locations = eventLocations
         )
-        eventsViewModel.createEvent(newEvent)
+
+        if (eventId != null) {
+            newEvent.id = eventId
+            eventsViewModel.updateEvent(newEvent)
+        } else
+            eventsViewModel.createEvent(newEvent)
+
         onNavigateToBack()
     }
 
     Scaffold(
         topBar = {
             TopBarComponent(
-                text = stringResource(id = R.string.title_registrar_evento),
+                text = componentTitle,
                 onClick = { onNavigateToBack() },
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")

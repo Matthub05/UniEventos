@@ -22,6 +22,13 @@ class EventsViewModel:ViewModel() {
         _event.value += event
     }
 
+    fun updateEvent(newEvent: Event): Boolean {
+        val event: Event = getEventById(newEvent.id) ?: return false
+        _event.value -= event
+        _event.value += newEvent
+        return true
+    }
+
     fun deleteEvent(event: Event) {
         _event.value -= event
     }

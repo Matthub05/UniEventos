@@ -69,10 +69,9 @@ import kotlinx.coroutines.launch
 fun AdminHomeScreen(
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
-    onNavigateToEventDetail: (Int) -> Unit,
     couponsViewModel: CouponsViewModel,
     onLogout: () -> Unit,
-    onNavigateToCreateEvent: () -> Unit,
+    onNavigateToCreateEvent: (Int?) -> Unit,
     onNavigateToCreateCoupon: () -> Unit
 ) {
 
@@ -189,7 +188,7 @@ fun AdminHomeScreen(
                     containerColor = Color.White,
                     onClick = {
                         if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabEvents::class) == true)
-                            onNavigateToCreateEvent()
+                            onNavigateToCreateEvent(null)
                         else
                             onNavigateToCreateCoupon()
                     }
@@ -224,11 +223,10 @@ fun AdminHomeScreen(
             NavHostAdmin(
                 paddingValues = paddingValues,
                 navController = navController,
-                onLogout = onLogout,
                 couponsViewModel = couponsViewModel,
                 eventsViewModel = eventsViewModel,
                 artistViewModel = artistViewModel,
-                onNavigateToEventDetail = onNavigateToEventDetail,
+                onNavigateToCreateEvent = onNavigateToCreateEvent,
             )
 
         }
@@ -239,11 +237,10 @@ fun AdminHomeScreen(
 fun NavHostAdmin(
     paddingValues: PaddingValues,
     navController: NavHostController,
-    onLogout: () -> Unit,
     couponsViewModel: CouponsViewModel,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
-    onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToCreateEvent: (Int?) -> Unit,
 ) {
 
     NavHost(
@@ -257,8 +254,7 @@ fun NavHostAdmin(
                 paddingValues = paddingValues,
                 eventsViewModel = eventsViewModel,
                 artistViewModel = artistViewModel,
-                onNavigateToEventDetail = onNavigateToEventDetail,
-                onLogout = onLogout,
+                onNavigateToCreateEvent = onNavigateToCreateEvent,
             )
         }
         composable<AdminRouteScreen.TabCoupons> {

@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -28,7 +27,6 @@ import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.viewmodel.ArtistViewModel
 import java.time.format.DateTimeFormatter
-import java.time.LocalDateTime
 import java.time.ZoneId
 
 @Composable
@@ -38,7 +36,7 @@ fun EventItem(
     destination: String,
     artistViewModel: ArtistViewModel,
     onNavigateToEventDetail: (Int) -> Unit = {},
-    onNavigateToCreateEvent: () -> Unit = {}
+    onNavigateToCreateEvent: (Int) -> Unit = {}
 ) {
 
     if ( onNavigateToEventDetail == onNavigateToCreateEvent
@@ -59,7 +57,7 @@ fun EventItem(
                     if (destination == EventItemDestination.DETAIL.name) {
                         onNavigateToEventDetail(event.id)
                     } else if (destination == EventItemDestination.CREATE.name) {
-                        onNavigateToCreateEvent()
+                        onNavigateToCreateEvent(event.id)
                     }
                 },
 

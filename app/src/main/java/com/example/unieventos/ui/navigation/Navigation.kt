@@ -107,12 +107,11 @@ fun Navigation(
                         launchSingleTop = true
                     }
                 },
-                onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEventScreen) },
+                onNavigateToCreateEvent = { eventId: Int? ->
+                    navController.navigate(RouteScreen.CreateEventScreen(eventId))
+                },
                 onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) },
                 couponsViewModel = couponViewModel,
-                onNavigateToEventDetail = { eventId ->
-                    navController.navigate(RouteScreen.EventDetailScreen(eventId))
-                },
                 artistViewModel = artistViewModel
             )
         }
@@ -144,7 +143,9 @@ fun Navigation(
         }
 
         composable<RouteScreen.CreateEventScreen> {
+            val eventId = it.arguments?.getInt("eventId")
             CreateEventScreen(
+                eventId = if (eventId == 0) null else eventId,
                 onNavigateToBack = {
                     navController.popBackStack()
                 },
