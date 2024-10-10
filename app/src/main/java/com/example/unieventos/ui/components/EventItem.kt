@@ -27,6 +27,9 @@ import com.example.unieventos.R
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.viewmodel.ArtistViewModel
+import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 @Composable
 fun EventItem(
@@ -62,6 +65,7 @@ fun EventItem(
 
         ) {
 
+            val formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm")
             val model = ImageRequest.Builder(LocalContext.current)
                 .data(event.imageUrl)
                 .crossfade(true)
@@ -90,13 +94,11 @@ fun EventItem(
                 Spacer(modifier = Modifier.height(48.dp))
 
                 Row (verticalAlignment = Alignment.CenterVertically) {
-//                    IconButton( onClick = { /*TODO*/ }) {
-//                        Icon(imageVector = Icons.Rounded.AddCircleOutline, contentDescription = null)
-//                    }
-
-                    Text(text = "Fecha evento",
+                    Text(text = event.date.toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime().format(formatter),
                         fontSize = 11.sp,
-                        color = Color.Gray) // Aun no se ha creado la fecha para eventos lol
+                        color = Color.Gray)
                 }
             }
 
