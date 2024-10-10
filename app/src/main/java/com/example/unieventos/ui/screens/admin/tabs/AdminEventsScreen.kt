@@ -40,7 +40,9 @@ fun AdminEventsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 destination = EventItemDestination.CREATE.name,
                 onNavigateToCreateEvent = onNavigateToCreateEvent,
-                artistViewModel = artistViewModel
+                artistViewModel = artistViewModel,
+                onNavigateToEventDetail =  { _: Int, _: Int -> },
+                userId = 0
             )
         }
     }

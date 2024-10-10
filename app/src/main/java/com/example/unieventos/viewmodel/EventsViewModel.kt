@@ -2,6 +2,7 @@ package com.example.unieventos.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.unieventos.models.Event
+import com.example.unieventos.models.EventLocation
 import com.example.unieventos.models.EventSite
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +36,10 @@ class EventsViewModel:ViewModel() {
 
     fun getEventById(id: Int): Event? {
         return _event.value.find { it.id == id }
+    }
+
+    fun getEventLocationsById(id: Int): List<EventLocation> {
+        return _event.value.find { it.id == id }!!.locations
     }
 
     fun searchEvents(query: String): List<Event> {

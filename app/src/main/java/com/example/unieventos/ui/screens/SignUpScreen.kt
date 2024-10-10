@@ -175,7 +175,7 @@ fun SignUpForm(
             onClick = {
                 usersViewModel.createUser(
                     User(
-                        cedula,
+                        cedula.toInt(),
                         cedula,
                         nombre,
                         direccion,

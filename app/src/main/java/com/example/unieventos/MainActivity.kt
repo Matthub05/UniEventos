@@ -10,11 +10,13 @@ import com.example.unieventos.ui.theme.UniEventosTheme
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.TicketViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 
 class MainActivity : ComponentActivity() {
 
     private val eventsviewModel: EventsViewModel by viewModels()
+    private val ticketViewModel: TicketViewModel by viewModels()
     private val usersViewModel: UsersViewModel by viewModels()
     private val artistViewModel: ArtistViewModel by viewModels()
     private val couponsViewModel: CouponsViewModel by viewModels()
@@ -29,7 +31,8 @@ class MainActivity : ComponentActivity() {
                     eventsViewModel = eventsviewModel,
                     usersViewModel = usersViewModel,
                     artistViewModel = artistViewModel,
-                    couponViewModel = couponsViewModel
+                    couponViewModel = couponsViewModel,
+                    ticketViewModel = ticketViewModel
                 )
             }
 

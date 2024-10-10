@@ -1,5 +1,6 @@
 package com.example.unieventos.models
 
+import kotlinx.serialization.Serializable
 import java.util.Date
 
 data class Event(
@@ -13,4 +14,8 @@ data class Event(
     val imageUrl: String,
     val mediaUrls: List<String> = listOf(),
     var locations: List<EventLocation> = listOf(),
-)
+) {
+    fun findLocationById(locationId: Int): EventLocation? {
+        return locations.find { it.id == locationId }
+    }
+}

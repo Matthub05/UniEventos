@@ -28,12 +28,15 @@ sealed class RouteScreen {
     data class CreateEventScreen(val eventId: Int?) : RouteScreen()
 
     @Serializable
-    data class EventDetailScreen(val eventId: Int) : RouteScreen()
+    data class EventDetailScreen(val eventId: Int, val userId: Int) : RouteScreen()
 
     @Serializable
     data class ArtistDetailScreen(val artistId: Int) : RouteScreen()
 
     @Serializable
     data object CreateCouponScreen : RouteScreen()
+
+    @Serializable
+    data class TicketTransactionScreen(val eventId: Int, val userId: Int) : RouteScreen()
 
 }

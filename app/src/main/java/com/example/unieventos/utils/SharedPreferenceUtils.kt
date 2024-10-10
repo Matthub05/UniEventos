@@ -8,10 +8,10 @@ object SharedPreferenceUtils {
 
     private const val SESION_PREFERENCE = "sesion"
 
-    fun savePreference(context: Context, idUser: String, rol: Role) {
+    fun savePreference(context: Context, idUser: Int, rol: Role) {
         val sharedPreferences = context.getSharedPreferences(SESION_PREFERENCE, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putString("idUser", idUser)
+        editor.putInt("idUser", idUser)
         editor.putString("rol", rol.toString())
         editor.apply()
     }
@@ -25,9 +25,9 @@ object SharedPreferenceUtils {
 
     fun getCurrentUser(context: Context): UserDTO? {
         val sharedPreferences = context.getSharedPreferences(SESION_PREFERENCE, Context.MODE_PRIVATE)
-        val idUser = sharedPreferences.getString("idUser", "")
+        val idUser = sharedPreferences.getInt("idUser", -1)
         val rol = sharedPreferences.getString("rol", "")
-        return if (idUser.isNullOrEmpty() || rol.isNullOrEmpty()) null
+        return if (idUser == -1 || rol.isNullOrEmpty()) null
             else UserDTO(idUser, Role.valueOf(rol))
     }
 

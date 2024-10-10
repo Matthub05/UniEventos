@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -33,10 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.unieventos.models.Event
 import com.example.unieventos.ui.components.MediaSection
 import com.example.unieventos.ui.components.SleekButton
-import com.example.unieventos.ui.components.TopBarComponent
 import com.example.unieventos.ui.components.TransparentTopBarComponent
 import com.example.unieventos.viewmodel.EventsViewModel
 import java.time.ZoneId
@@ -46,8 +42,10 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun EventDetailScreen(
     eventId: Int,
+    userId: Int,
     eventsViewModel: EventsViewModel,
-    onNavigateToUserHome: () -> Unit
+    onNavigateToUserHome: () -> Unit,
+    onNavigateToTransaction: (Int, Int) -> Unit
 ){
 
     val event = eventsViewModel.getEventById(eventId)
@@ -179,35 +177,18 @@ fun EventDetailScreen(
 
                     Spacer(modifier = Modifier.size(15.dp))
 
-                    SleekButton(text = "Guardar evento") {
-
-                    }
+                    SleekButton(text = "Guardar evento", onClickAction ={ onNavigateToTransaction(eventId, userId) })
 
                     Spacer(modifier = Modifier.size(15.dp))
 
-                    SleekButton(text = "Comprar tiquete") {
-
-                    }
+                    SleekButton(
+                        text = "Comprar tiquete",
+                        onClickAction = { onNavigateToTransaction(eventId, userId) }
+                    )
 
                     Spacer(modifier = Modifier.size(15.dp))
                 }
             }
-
        }
-       // EventDetailFor(paddingValues, event)
-}
-}
-@Composable
-fun EventDetailForm(paddingValues: PaddingValues, event: Event) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = event.description,
-            style = MaterialTheme.typography.headlineMedium
-        )
     }
 }

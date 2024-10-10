@@ -349,6 +349,7 @@ fun CreateEventScreen(
                         selectedLocation = null
                         showLocationDialog = false
                         eventLocations += EventLocation(
+                            id = 1,
                             name = locationName,
                             places = locationPlaces.toIntOrNull() ?: 0,
                             price = locationPrice.toDoubleOrNull() ?: 0.0,

@@ -1,6 +1,5 @@
 package com.example.unieventos.ui.screens.client
 
-import android.widget.Space
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,12 +30,10 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -65,14 +61,17 @@ import com.example.unieventos.ui.screens.client.tabs.PurchasesScreen
 import com.example.unieventos.ui.screens.client.tabs.UserInfoScreen
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.TicketViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
     eventsViewModel: EventsViewModel,
     artistViewmodel: ArtistViewModel,
+    ticketViewModel: TicketViewModel,
+    userId: Int,
     onLogout: () -> Unit,
-    onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToEventDetail: (Int, Int) -> Unit,
     onNavigateToArtistDetail: (Int) -> Unit,
     onNavigateToProfileEdit: () -> Unit
 ) {
@@ -222,7 +221,9 @@ fun HomeScreen(
             onLogout = onLogout,
             onNavigateToEventDetail = onNavigateToEventDetail,
             onNavigateToProfileEdit = onNavigateToProfileEdit,
-            onNavigateToArtistDetail = onNavigateToArtistDetail
+            onNavigateToArtistDetail = onNavigateToArtistDetail,
+            userId = userId,
+            ticketViewModel = ticketViewModel
         )
 
         }
@@ -238,8 +239,10 @@ fun NavHostUser(
     navController: NavHostController,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
+    ticketViewModel: TicketViewModel,
+    userId: Int,
     onLogout: () -> Unit,
-    onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToEventDetail: (Int, Int) -> Unit,
     onNavigateToArtistDetail: (Int) -> Unit,
     onNavigateToProfileEdit: () -> Unit,
 ) {
@@ -256,12 +259,15 @@ fun NavHostUser(
                 eventsViewModel = eventsViewModel,
                 artistViewModel = artistViewModel,
                 onNavigateToEventDetail = onNavigateToEventDetail,
-                onNavigateToArtistDetail = onNavigateToArtistDetail
+                onNavigateToArtistDetail = onNavigateToArtistDetail,
+                userId = userId
             )
         }
         composable<UserRouteScreen.TabPurchases> {
             PurchasesScreen(
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                ticketViewModel = ticketViewModel,
+                eventsViewModel = eventsViewModel
             )
 
         }

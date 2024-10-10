@@ -6,33 +6,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
-import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.ui.components.EventItem
 import com.example.unieventos.ui.components.FavoriteArtistsSection
 import com.example.unieventos.ui.components.FeaturedSection
 import com.example.unieventos.ui.components.SavedSection
-import com.example.unieventos.ui.components.SearchBarTop
 import com.example.unieventos.ui.components.SectionTitle
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun EventsScreen(
+    userId: Int,
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
-    onNavigateToEventDetail: (Int) -> Unit,
+    onNavigateToEventDetail: (Int, Int) -> Unit,
     onNavigateToArtistDetail: (Int) -> Unit
 ) {
 
@@ -119,7 +115,8 @@ fun EventsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 destination = EventItemDestination.DETAIL.name,
                 onNavigateToEventDetail = onNavigateToEventDetail,
-                artistViewModel = artistViewModel
+                artistViewModel = artistViewModel,
+                userId = userId
             )
         }
 

@@ -33,9 +33,10 @@ import java.time.ZoneId
 fun EventItem(
     modifier: Modifier,
     event: Event,
+    userId: Int,
     destination: String,
     artistViewModel: ArtistViewModel,
-    onNavigateToEventDetail: (Int) -> Unit = {},
+    onNavigateToEventDetail: (Int, Int) -> Unit,
     onNavigateToCreateEvent: (Int) -> Unit = {}
 ) {
 
@@ -55,7 +56,7 @@ fun EventItem(
                 .padding(10.dp)
                 .clickable {
                     if (destination == EventItemDestination.DETAIL.name) {
-                        onNavigateToEventDetail(event.id)
+                        onNavigateToEventDetail(event.id, userId)
                     } else if (destination == EventItemDestination.CREATE.name) {
                         onNavigateToCreateEvent(event.id)
                     }
