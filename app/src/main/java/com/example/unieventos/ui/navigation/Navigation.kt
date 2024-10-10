@@ -46,7 +46,7 @@ fun Navigation(
     NavHost(
         navController = navController,
         startDestination = startDestination
-        //startDestination = RouteScreen.CreateCouponScreen
+        //startDestination = RouteScreen.CreateEventScreen
     ) {
 
         composable<RouteScreen.Login> {
@@ -146,7 +146,9 @@ fun Navigation(
                         inclusive = true
                     }
                     launchSingleTop = true
-                } }
+                } },
+                eventsViewModel = eventsViewModel,
+                artistViewModel = artistViewModel
             )
         }
 
