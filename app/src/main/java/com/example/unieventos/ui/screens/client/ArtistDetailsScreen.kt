@@ -137,8 +137,6 @@ fun ArtistDetailsScreen(
             }
         }
 
-
-
             item {
                 Column(
                     modifier = Modifier
