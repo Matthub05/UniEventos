@@ -1,5 +1,7 @@
 package com.example.unieventos.ui.screens.admin
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -22,34 +24,46 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.unieventos.R
+import com.example.unieventos.models.Coupon
 import com.example.unieventos.ui.components.DatePickerForm
 
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
+import com.example.unieventos.viewmodel.CouponsViewModel
+import java.util.Calendar
 
 @Composable
 fun CreateCouponScreen(
-    onNavigateToHome: () -> Unit
+    onNavigateToBack: () -> Unit,
+    couponViewModel: CouponsViewModel
 ) {
+
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             TopBarComponent(
                 text = stringResource(id = R.string.titulo_generacion_cupon),
-                onClick = { onNavigateToHome() },
+                onClick = { onNavigateToBack() },
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         }
     ) { innerPadding ->
 
-        CreateEventForm(padding = innerPadding, onNavigateToHome = onNavigateToHome)
+        CreateEventForm(
+            padding = innerPadding,
+            onNavigateToBack = onNavigateToBack,
+            couponViewModel = couponViewModel,
+            context = context
+        )
 
     }
 
@@ -58,13 +72,16 @@ fun CreateCouponScreen(
 @Composable
 fun CreateEventForm(
     padding: PaddingValues,
-    onNavigateToHome: () -> Unit
+    onNavigateToBack: () -> Unit,
+    couponViewModel: CouponsViewModel,
+    context: Context
 ) {
 
-    var codigo by rememberSaveable { mutableStateOf("") }
-    var descripcion by rememberSaveable { mutableStateOf("") }
-    var descuento by rememberSaveable { mutableIntStateOf(0) }
-    var fecha by rememberSaveable { mutableStateOf("") }
+    var code by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var discount by rememberSaveable { mutableIntStateOf(0) }
+    var startDate by rememberSaveable { mutableStateOf("") }
+    var endDate by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -78,8 +95,8 @@ fun CreateEventForm(
 
         TextFieldForm(
             modifier = Modifier.fillMaxWidth(),
-            value = codigo,
-            onValueChange = { codigo = it },
+            value = code,
+            onValueChange = { code = it },
             supportingText = stringResource(id = R.string.err_codigo),
             label = stringResource(id = R.string.placeholder_codigo_cupon),
             onValidate = { it.isEmpty() || it.toIntOrNull() == null },
@@ -88,8 +105,8 @@ fun CreateEventForm(
 
         TextFieldForm(
             modifier = Modifier.fillMaxWidth(),
-            value = descripcion,
-            onValueChange = { descripcion = it },
+            value = description,
+            onValueChange = { description = it },
             supportingText = stringResource(id = R.string.err_descripcion),
             label = stringResource(id = R.string.placeholder_descripcion),
             onValidate = { it.isEmpty() },
@@ -98,8 +115,8 @@ fun CreateEventForm(
 
         TextFieldForm(
             modifier = Modifier.fillMaxWidth(),
-            value = descuento.toString(),
-            onValueChange = { descuento = it.toIntOrNull() ?: 0},
+            value = discount.toString(),
+            onValueChange = { discount = it.toIntOrNull() ?: 0},
             supportingText = stringResource(id = R.string.err_descuento),
             label = stringResource(id = R.string.placeholder_descuento_cupon),
             onValidate = { it.isEmpty() || it.toIntOrNull() == null},
@@ -108,8 +125,15 @@ fun CreateEventForm(
 
         DatePickerForm(
             modifier = Modifier.fillMaxWidth(),
-            value = fecha,
-            onValueChange = { fecha = it },
+            value = startDate,
+            onValueChange = { startDate = it },
+            label = stringResource(id = R.string.placeholder_fecha_inicio)
+        )
+
+        DatePickerForm(
+            modifier = Modifier.fillMaxWidth(),
+            value = endDate,
+            onValueChange = { endDate = it },
             label = stringResource(id = R.string.placeholder_fecha_vencimiento)
         )
 
@@ -125,7 +149,29 @@ fun CreateEventForm(
         Spacer(modifier = Modifier.height(10.dp))
 
         Button(
-            onClick = { onNavigateToHome() },
+            onClick = {
+                val cal = Calendar.getInstance()
+                var values = startDate.split("/")
+                cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
+                val startDateParsed = cal.time
+                values = endDate.split("/")
+                cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
+                val endDateParsed = cal.time
+
+                couponViewModel.createCoupon(
+                    Coupon(
+                        id = 0,
+                        description = description,
+                        code = code,
+                        startDate = startDateParsed,
+                        endDate = endDateParsed,
+                        discount = discount.toDouble()
+                    )
+                )
+
+                Toast.makeText(context, context.getString(R.string.coupon_created), Toast.LENGTH_SHORT).show()
+                onNavigateToBack()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 25.dp),

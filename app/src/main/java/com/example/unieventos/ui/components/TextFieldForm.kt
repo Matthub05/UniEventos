@@ -130,7 +130,7 @@ fun DatePickerForm(
 ) {
 
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState()
 
     OutlinedTextField(
         modifier = modifier,

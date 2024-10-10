@@ -47,6 +47,7 @@
     <string name="err_descripcion">La descripción no es válida</string>
     <string name="err_descuento">El descuento no es válido</string>
     <string name="placeholder_descuento_cupon">Descuento de valor total</string>
+    <string name="placeholder_fecha_inicio">Fecha de inicio</string>
     <string name="placeholder_fecha_vencimiento">Fecha de vencimiento</string>
     <string name="adv_generar_cupon">El cupón tendra validez unicamente hasta la fecha especificada en los campos previamente llenados.</string>
     <string name="btn_registrar_cupon">Registrar cupón</string>
@@ -62,4 +63,5 @@
     <string name="btn_cerrar_sesion">Cerrar Sesión</string>
     <string name="btn_guardar_cambios">Guardar cambios</string>
     <string name="user_created">¡Usuario registrado satisfactoriamente!</string>
+    <string name="coupon_created">¡Cupón creado Ssatisfactoriamente!</string>
 </resources>

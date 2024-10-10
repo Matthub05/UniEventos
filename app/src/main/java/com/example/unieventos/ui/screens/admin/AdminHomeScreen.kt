@@ -27,11 +27,13 @@ import com.example.unieventos.ui.components.NavigationBarCustom
 import com.example.unieventos.ui.screens.admin.navigation.AdminRouteScreen
 import com.example.unieventos.ui.screens.admin.tabs.AdminEventsScreen
 import com.example.unieventos.ui.screens.admin.tabs.CouponsScreen
+import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
 fun AdminHomeScreen(
     eventsViewModel: EventsViewModel,
+    couponsViewModel: CouponsViewModel,
     onLogout: () -> Unit,
     onNavigateToCreateEvent: () -> Unit,
     onNavigateToCreateCoupon: () -> Unit
@@ -80,6 +82,7 @@ fun AdminHomeScreen(
             paddingValues = paddingValues,
             navController = navController,
             onLogout = onLogout,
+            couponsViewModel = couponsViewModel
         )
 
     }
@@ -90,6 +93,7 @@ fun NavHostAdmin(
     paddingValues: PaddingValues,
     navController: NavHostController,
     onLogout: () -> Unit,
+    couponsViewModel: CouponsViewModel
 ) {
 
     NavHost(
@@ -107,6 +111,7 @@ fun NavHostAdmin(
         composable<AdminRouteScreen.TabCoupons> {
             CouponsScreen(
                 paddingValues = paddingValues,
+                couponsViewModel = couponsViewModel
             )
 
         }
