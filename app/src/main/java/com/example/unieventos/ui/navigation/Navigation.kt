@@ -109,7 +109,11 @@ fun Navigation(
                 },
                 onNavigateToCreateEvent = { navController.navigate(RouteScreen.CreateEventScreen) },
                 onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) },
-                couponsViewModel = couponViewModel
+                couponsViewModel = couponViewModel,
+                onNavigateToEventDetail = { eventId ->
+                    navController.navigate(RouteScreen.EventDetailScreen(eventId))
+                },
+                artistViewModel = artistViewModel
             )
         }
 

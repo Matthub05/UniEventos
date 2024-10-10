@@ -43,9 +43,8 @@ fun SearchBarTop(
     var searchTextPlaceholder by remember { mutableStateOf("UniEventos Mobile") }
     var scope = rememberCoroutineScope()
 
-    // Use LaunchedEffect to change the text after 2 seconds
     LaunchedEffect(key1 = Unit) {
-        delay(2000) // Wait for 2 seconds
+        delay(2000)
         searchTextPlaceholder = "Search"
         onSearchTextChanged(searchText)
     }

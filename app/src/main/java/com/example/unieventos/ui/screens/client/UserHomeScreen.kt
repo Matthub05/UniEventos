@@ -11,12 +11,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.StarOutline
@@ -74,7 +76,6 @@ fun HomeScreen(
     onNavigateToArtistDetail: (Int) -> Unit,
     onNavigateToProfileEdit: () -> Unit
 ) {
-
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -86,22 +87,34 @@ fun HomeScreen(
         DrawerItem(
             title = "Home",
             selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
-        ),
-        DrawerItem(
-            title = "Cuenta",
-            selectedIcon = Icons.Filled.AccountCircle,
-            unselectedIcon = Icons.Outlined.AccountCircle
+            unselectedIcon = Icons.Outlined.Home,
+            onClick = {
+
+            }
         ),
         DrawerItem(
             title = "Ajustes",
             selectedIcon = Icons.Filled.Settings,
-            unselectedIcon = Icons.Outlined.Settings
+            unselectedIcon = Icons.Outlined.Settings,
+            onClick = {
+
+            }
+        ),
+        DrawerItem(
+            title = "Cerrar Sesión",
+            selectedIcon = Icons.Filled.Logout,
+            unselectedIcon = Icons.Outlined.Logout,
+            onClick = {
+                onLogout()
+            }
         ),
         DrawerItem(
             title = "Acerca de",
             selectedIcon = Icons.Filled.Info,
-            unselectedIcon = Icons.Outlined.Info
+            unselectedIcon = Icons.Outlined.Info,
+            onClick = {
+
+            }
         )
 
     )
@@ -137,6 +150,7 @@ fun HomeScreen(
                         selected = index == selectedItemIndex,
                         onClick = {
                             selectedItemIndex = index
+                            drawerItem.onClick()
                             scope.launch {
                                 drawerState.close()
                             }

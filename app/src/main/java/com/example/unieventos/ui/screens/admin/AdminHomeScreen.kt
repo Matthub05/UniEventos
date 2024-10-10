@@ -11,12 +11,14 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Stars
@@ -58,6 +60,7 @@ import com.example.unieventos.ui.screens.admin.navigation.AdminRouteScreen
 import com.example.unieventos.ui.screens.admin.tabs.AdminEventsScreen
 import com.example.unieventos.ui.screens.admin.tabs.CouponsScreen
 import com.example.unieventos.ui.screens.client.navigation.UserRouteScreen
+import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import kotlinx.coroutines.launch
@@ -65,6 +68,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun AdminHomeScreen(
     eventsViewModel: EventsViewModel,
+    artistViewModel: ArtistViewModel,
+    onNavigateToEventDetail: (Int) -> Unit,
     couponsViewModel: CouponsViewModel,
     onLogout: () -> Unit,
     onNavigateToCreateEvent: () -> Unit,
@@ -82,22 +87,34 @@ fun AdminHomeScreen(
         DrawerItem(
             title = "Home",
             selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
-        ),
-        DrawerItem(
-            title = "Cuenta",
-            selectedIcon = Icons.Filled.AccountCircle,
-            unselectedIcon = Icons.Outlined.AccountCircle
+            unselectedIcon = Icons.Outlined.Home,
+            onClick = {
+
+            }
         ),
         DrawerItem(
             title = "Ajustes",
             selectedIcon = Icons.Filled.Settings,
-            unselectedIcon = Icons.Outlined.Settings
+            unselectedIcon = Icons.Outlined.Settings,
+            onClick = {
+
+            }
+        ),
+        DrawerItem(
+            title = "Cerrar Sesión",
+            selectedIcon = Icons.Filled.Logout,
+            unselectedIcon = Icons.Outlined.Logout,
+            onClick = {
+                   onLogout()
+            }
         ),
         DrawerItem(
             title = "Acerca de",
             selectedIcon = Icons.Filled.Info,
-            unselectedIcon = Icons.Outlined.Info
+            unselectedIcon = Icons.Outlined.Info,
+            onClick = {
+
+            }
         )
 
     )
@@ -133,6 +150,7 @@ fun AdminHomeScreen(
                         selected = index == selectedItemIndex,
                         onClick = {
                             selectedItemIndex = index
+                            drawerItem.onClick()
                             scope.launch {
                                 drawerState.close()
                             }
@@ -207,7 +225,10 @@ fun AdminHomeScreen(
                 paddingValues = paddingValues,
                 navController = navController,
                 onLogout = onLogout,
-                couponsViewModel = couponsViewModel
+                couponsViewModel = couponsViewModel,
+                eventsViewModel = eventsViewModel,
+                artistViewModel = artistViewModel,
+                onNavigateToEventDetail = onNavigateToEventDetail,
             )
 
         }
@@ -219,7 +240,10 @@ fun NavHostAdmin(
     paddingValues: PaddingValues,
     navController: NavHostController,
     onLogout: () -> Unit,
-    couponsViewModel: CouponsViewModel
+    couponsViewModel: CouponsViewModel,
+    eventsViewModel: EventsViewModel,
+    artistViewModel: ArtistViewModel,
+    onNavigateToEventDetail: (Int) -> Unit,
 ) {
 
     NavHost(
@@ -231,6 +255,9 @@ fun NavHostAdmin(
         composable<AdminRouteScreen.TabEvents> {
             AdminEventsScreen(
                 paddingValues = paddingValues,
+                eventsViewModel = eventsViewModel,
+                artistViewModel = artistViewModel,
+                onNavigateToEventDetail = onNavigateToEventDetail,
                 onLogout = onLogout,
             )
         }
