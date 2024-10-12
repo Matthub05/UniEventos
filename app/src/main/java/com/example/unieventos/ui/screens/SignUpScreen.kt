@@ -103,7 +103,7 @@ fun SignUpForm(
             onValueChange = { cedula = it },
             supportingText = stringResource(id = R.string.label_cedula_invalida),
             label = stringResource(id = R.string.label_cedula),
-            onValidate = { it.isEmpty() || it.toIntOrNull() == null },
+            onValidate = { it.isEmpty() || it.toLongOrNull() == null },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
 
@@ -133,7 +133,7 @@ fun SignUpForm(
             onValueChange = { telefono = it },
             supportingText = stringResource(id = R.string.label_telefono_invalido),
             label = stringResource(id = R.string.label_telefono),
-            onValidate = { it.isEmpty() || it.toIntOrNull() == null },
+            onValidate = { it.isEmpty() || it.toLongOrNull() == null },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         )
 
