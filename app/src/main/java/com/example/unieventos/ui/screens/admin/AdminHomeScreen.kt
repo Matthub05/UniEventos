@@ -71,7 +71,7 @@ fun AdminHomeScreen(
     artistViewModel: ArtistViewModel,
     couponsViewModel: CouponsViewModel,
     onLogout: () -> Unit,
-    onNavigateToCreateEvent: (Int?) -> Unit,
+    onNavigateToCreateEvent: (String?) -> Unit,
     onNavigateToCreateCoupon: () -> Unit
 ) {
 
@@ -240,7 +240,7 @@ fun NavHostAdmin(
     couponsViewModel: CouponsViewModel,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
-    onNavigateToCreateEvent: (Int?) -> Unit,
+    onNavigateToCreateEvent: (String?) -> Unit,
 ) {
 
     NavHost(

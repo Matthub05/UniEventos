@@ -72,8 +72,8 @@ import java.util.Calendar
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TicketTransactionScreen(
-    eventId: Int,
-    userId: Int,
+    eventId: String,
+    userId: String,
     usersViewModel: UsersViewModel,
     eventsViewModel: EventsViewModel,
     couponViewModel: CouponsViewModel,
@@ -195,8 +195,8 @@ fun buyTicketForm(
     ticketViewModel: TicketViewModel,
     eventsViewModel: EventsViewModel,
     usersViewModel: UsersViewModel,
-    eventId: Int,
-    userId: Int,
+    eventId: String,
+    userId: String,
     context: Context
 ) {
 
@@ -236,7 +236,7 @@ fun buyTicketForm(
         SleekButton(text = "Comprar", onClickAction = {
             ticketViewModel.addTicketCart(
                 event = eventsViewModel.getEventById(eventId)!!,
-                locationId = idLocation.toInt(),
+                locationId = idLocation,
                 quantity = quantity.toInt(),
                 user = usersViewModel.getUserById(userId)!!
 

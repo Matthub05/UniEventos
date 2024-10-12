@@ -4,9 +4,9 @@ import android.net.http.UrlRequest.Status
 import java.util.Date
 
 data class Ticket(
-    val id: Int,
-    val userId: Int,
-    val eventId: Int,
+    val id: String,
+    val userId: String,
+    val eventId: String,
     val eventLocation: EventLocation,
     val quantity: Int,
     val acquisitionDate: Date,

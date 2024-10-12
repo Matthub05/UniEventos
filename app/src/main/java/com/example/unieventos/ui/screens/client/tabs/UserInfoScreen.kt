@@ -1,5 +1,6 @@
 package com.example.unieventos.ui.screens.client.tabs
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,10 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.models.User
+import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
@@ -37,13 +40,16 @@ fun UserInfoScreen(
     paddingValues: PaddingValues,
     onLogout: () -> Unit,
     onNavigateToProfileEdit: () -> Unit,
-    userId: Int,
     usersViewModel: UsersViewModel
 ) {
 
+    val context = LocalContext.current
+    val session = SharedPreferenceUtils.getCurrentUser(context)
+
     var user by remember { mutableStateOf<User?>(null) }
-    LaunchedEffect(userId) {
-        user = usersViewModel.getUserById(userId)
+
+    LaunchedEffect(context) {
+        user = session?.let { usersViewModel.getUserById(it.id) }
     }
 
     Column (

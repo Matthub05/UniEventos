@@ -1,6 +1,7 @@
 package com.example.unieventos.ui.screens
 
 import android.content.Context
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -154,6 +155,7 @@ fun LoginForm(
                 }
 
                 SharedPreferenceUtils.savePreference(context, user.id, user.role)
+                Log.e("Error", "Preferences saved: "+ user.id + " " + user.role)
                 onNavigateToHome(user.role)
             }
         ) {
@@ -173,19 +175,5 @@ fun LoginForm(
         ) {
             Text(text = stringResource(id = R.string.label_boton_registrarse))
         }
-
-
     }
-
-}
-
-@Composable
-fun Logo() {
-    Image(
-        painter = painterResource(id = R.drawable.logo),
-        contentDescription = "UniEventos Logo",
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-    )
 }

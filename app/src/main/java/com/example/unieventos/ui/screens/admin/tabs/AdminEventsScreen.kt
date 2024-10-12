@@ -19,7 +19,7 @@ fun AdminEventsScreen(
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
-    onNavigateToCreateEvent: (Int?) -> Unit,
+    onNavigateToCreateEvent: (String?) -> Unit,
 ) {
 
     val events = eventsViewModel.event.collectAsState().value
@@ -41,8 +41,8 @@ fun AdminEventsScreen(
                 destination = EventItemDestination.CREATE.name,
                 onNavigateToCreateEvent = onNavigateToCreateEvent,
                 artistViewModel = artistViewModel,
-                onNavigateToEventDetail =  { _: Int, _: Int -> },
-                userId = 0
+                onNavigateToEventDetail =  { _: String, _: String -> },
+                userId = "0"
             )
         }
     }

@@ -41,11 +41,11 @@ import java.time.format.DateTimeFormatter
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun EventDetailScreen(
-    eventId: Int,
-    userId: Int,
+    eventId: String,
+    userId: String,
     eventsViewModel: EventsViewModel,
     onNavigateToUserHome: () -> Unit,
-    onNavigateToTransaction: (Int, Int) -> Unit
+    onNavigateToTransaction: (String, String) -> Unit
 ){
 
     val event = eventsViewModel.getEventById(eventId)

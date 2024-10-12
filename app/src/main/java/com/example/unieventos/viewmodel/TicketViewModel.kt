@@ -21,10 +21,10 @@ class TicketViewModel:ViewModel() {
         _ticket.value = getTickets()
     }
 
-    fun addTicketCart(user: User, event: Event, locationId: Int, quantity: Int) {
+    fun addTicketCart(user: User, event: Event, locationId: String, quantity: Int) {
         val location = event.findLocationById(locationId)!!
         val ticket = Ticket(
-            id = _ticket.value.size + 1,
+            id = (_ticket.value.size + 1).toString()    ,
             userId = user.id,
             eventId = event.id,
             eventLocation = location,
@@ -40,7 +40,7 @@ class TicketViewModel:ViewModel() {
         _ticket.value -= ticket
     }
 
-    fun getTicketById(id: Int): Ticket? {
+    fun getTicketById(id: String): Ticket? {
         return  _ticket.value.find { it.id == id }
     }
 

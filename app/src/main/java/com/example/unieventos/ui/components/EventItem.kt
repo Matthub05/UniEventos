@@ -33,11 +33,11 @@ import java.time.ZoneId
 fun EventItem(
     modifier: Modifier,
     event: Event,
-    userId: Int,
+    userId: String,
     destination: String,
     artistViewModel: ArtistViewModel,
-    onNavigateToEventDetail: (Int, Int) -> Unit,
-    onNavigateToCreateEvent: (Int) -> Unit = {}
+    onNavigateToEventDetail: (String, String) -> Unit,
+    onNavigateToCreateEvent: (String) -> Unit = {}
 ) {
 
     if ( onNavigateToEventDetail == onNavigateToCreateEvent

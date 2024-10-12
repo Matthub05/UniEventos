@@ -17,7 +17,7 @@ class UsersViewModel: ViewModel() {
         _users.value = getUsers()
     }
 
-    fun getUserById(id: Int): User? {
+    fun getUserById(id: String): User? {
         return _users.value.find { it.id == id }
     }
 
@@ -51,7 +51,7 @@ class UsersViewModel: ViewModel() {
     private fun getUsers(): List<User> {
         return listOf(
             User(
-                id = 0,
+                id = "0",
                 cedula = "0",
                 nombre = "Admin",
                 direccion = "Calle 0",
@@ -61,7 +61,7 @@ class UsersViewModel: ViewModel() {
                 role = Role.ADMIN
             ),
             User(
-                id = 1,
+                id = "1",
                 cedula = "666666666",
                 nombre = "Alistair Cockburn",
                 direccion = "Calle 612",
@@ -71,7 +71,7 @@ class UsersViewModel: ViewModel() {
                 role = Role.CLIENT
             ),
             User(
-                id = 2,
+                id = "2",
                 cedula = "123456789",
                 nombre = "Mateo",
                 direccion = "Calle 123",
@@ -81,7 +81,7 @@ class UsersViewModel: ViewModel() {
                 role = Role.CLIENT
             ),
             User(
-                id = 3,
+                id = "3",
                 cedula = "987654321",
                 nombre = "Juan",
                 direccion = "Calle 321",
@@ -91,7 +91,7 @@ class UsersViewModel: ViewModel() {
                 role = Role.ADMIN
             ),
             User(
-                id = 4,
+                id = "4",
                 cedula = "111111111",
                 nombre = "Pedro",
                 direccion = "Calle 999",

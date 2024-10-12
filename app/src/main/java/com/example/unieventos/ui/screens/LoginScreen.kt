@@ -38,7 +38,6 @@ import com.example.unieventos.ui.components.TextFieldForm
 fun LoginScreen(onLoginSuccess: () -> Unit) {
 
     var context = LocalContext.current
-    // RemeberSavable permite que las variables se guarden si se recompone el Main
     var email by rememberSaveable { mutableStateOf("") }
     var emailError by rememberSaveable { mutableStateOf(false) }
     var password by rememberSaveable { mutableStateOf("") }

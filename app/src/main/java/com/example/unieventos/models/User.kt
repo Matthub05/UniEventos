@@ -1,7 +1,7 @@
 package com.example.unieventos.models
 
 data class User(
-    val id: Int,
+    val id: String,
     val cedula: String,
     var nombre: String,
     var direccion: String,
@@ -13,7 +13,7 @@ data class User(
 )
 
 data class UserUpdateDTO(
-    val id: Int?,
+    val id: String?,
     val nombre: String,
     val direccion: String,
     val telefono: String,

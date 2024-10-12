@@ -62,7 +62,7 @@ import java.util.Locale
 
 @Composable
 fun CreateEventScreen(
-    eventId: Int?,
+    eventId: String?,
     onNavigateToBack: () -> Unit,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
@@ -120,10 +120,10 @@ fun CreateEventScreen(
         val dateParsed = cal.time
 
         val newEvent = Event(
-            id = 0,
+            id = "0",
             title = title,
             description = description,
-            artistId = idArtist.toIntOrNull() ?: 0,
+            artistId = idArtist ?: "",
             category = category,
             date = dateParsed,
             eventSite = EventSite(
@@ -354,7 +354,7 @@ fun CreateEventScreen(
                         selectedLocation = null
                         showLocationDialog = false
                         eventLocations += EventLocation(
-                            id = 1,
+                            id = "1",
                             name = locationName,
                             places = locationPlaces.toIntOrNull() ?: 0,
                             price = locationPrice.toDoubleOrNull() ?: 0.0,

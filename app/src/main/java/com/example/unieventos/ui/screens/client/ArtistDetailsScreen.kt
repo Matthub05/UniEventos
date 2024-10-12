@@ -48,7 +48,7 @@ import com.example.unieventos.viewmodel.ArtistViewModel
 @Composable
 
 fun ArtistDetailsScreen(
-    artistId: Int,
+    artistId: String,
     artistViewModel: ArtistViewModel,
     onNavigateToUserHome: () -> Unit
 ) {

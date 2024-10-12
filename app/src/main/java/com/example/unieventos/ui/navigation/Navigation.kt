@@ -1,5 +1,6 @@
 package com.example.unieventos.ui.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -37,10 +38,10 @@ fun Navigation(
 
     var startDestination: RouteScreen = RouteScreen.Login
     val context = LocalContext.current
-    val sesion = SharedPreferenceUtils.getCurrentUser(context)
+    var session = SharedPreferenceUtils.getCurrentUser(context)
 
-    if (sesion != null) {
-        startDestination = when (sesion.rol) {
+    if (session != null) {
+        startDestination = when (session.rol) {
             Role.ADMIN -> RouteScreen.Home
             Role.CLIENT -> RouteScreen.UserHome
         }
@@ -74,31 +75,36 @@ fun Navigation(
         }
 
         composable<RouteScreen.UserHome> {
-            HomeScreen(
-                eventsViewModel = eventsViewModel,
-                artistViewmodel = artistViewModel,
-                onLogout = {
-                    SharedPreferenceUtils.clearPreference(context)
-                    navController.navigate(RouteScreen.Login){
-                        popUpTo(0){
-                            inclusive = true
+            session = SharedPreferenceUtils.getCurrentUser(context)
+
+            if (session != null) {
+                HomeScreen(
+                    eventsViewModel = eventsViewModel,
+                    artistViewmodel = artistViewModel,
+                    onLogout = {
+                        SharedPreferenceUtils.clearPreference(context)
+                        navController.navigate(RouteScreen.Login){
+                            popUpTo(0){
+                                inclusive = true
+                            }
+                            launchSingleTop = true
                         }
-                        launchSingleTop = true
-                    }
-                },
-                onNavigateToEventDetail = { eventId, userId ->
-                    navController.navigate(RouteScreen.EventDetailScreen(eventId, userId))
-                },
-                onNavigateToProfileEdit = {
-                    navController.navigate(RouteScreen.ProfileEdit)
-                                          },
-                onNavigateToArtistDetail = { artistId ->
-                    navController.navigate(RouteScreen.ArtistDetailScreen(artistId))
-                },
-                userId = sesion!!.id,
-                ticketViewModel = ticketViewModel,
-                usersViewModel = usersViewModel
-            )
+                    },
+                    onNavigateToEventDetail = { eventId, userId ->
+                        navController.navigate(RouteScreen.EventDetailScreen(eventId, userId))
+                    },
+                    onNavigateToProfileEdit = {
+                        navController.navigate(RouteScreen.ProfileEdit)
+                    },
+                    onNavigateToArtistDetail = { artistId ->
+                        navController.navigate(RouteScreen.ArtistDetailScreen(artistId))
+                    },
+                    ticketViewModel = ticketViewModel,
+                    usersViewModel = usersViewModel
+                )
+            } else {
+                Log.e("Error", "Session is null")
+            }
         }
 
         composable<RouteScreen.Home> {
@@ -113,7 +119,7 @@ fun Navigation(
                         launchSingleTop = true
                     }
                 },
-                onNavigateToCreateEvent = { eventId: Int? ->
+                onNavigateToCreateEvent = { eventId: String? ->
                     navController.navigate(RouteScreen.CreateEventScreen(eventId))
                 },
                 onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) },
@@ -141,14 +147,14 @@ fun Navigation(
             ProfileEditScreen(
                 onNavigateToBack = { navController.popBackStack() },
                 usersViewModel = usersViewModel,
-                userId = sesion!!.id
+                userId = session!!.id
             )
         }
 
         composable<RouteScreen.CreateEventScreen> {
-            val eventId = it.arguments?.getInt("eventId")
+            val eventId = it.arguments?.getString("eventId")
             CreateEventScreen(
-                eventId = if (eventId == 0) null else eventId,
+                eventId = eventId ?: "",
                 onNavigateToBack = {
                     navController.popBackStack()
                 },
@@ -158,9 +164,9 @@ fun Navigation(
         }
 
         composable<RouteScreen.ArtistDetailScreen> {
-            val artistId = it.arguments?.getInt("artistId")
+            val artistId = it.arguments?.getString("artistId")
             ArtistDetailsScreen(
-                artistId = artistId ?: 0,
+                artistId = artistId ?: "",
                 artistViewModel = artistViewModel,
                 onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome){
                     popUpTo(0){
@@ -171,13 +177,12 @@ fun Navigation(
             )
         }
 
-
         composable<RouteScreen.EventDetailScreen> {
-            val eventId = it.arguments?.getInt("eventId")
-            val userId = it.arguments?.getInt("userId")
+            val eventId = it.arguments?.getString("eventId")
+            val userId = it.arguments?.getString("userId")
             EventDetailScreen(
-                eventId = eventId ?: 0,
-                userId = userId ?: 0,
+                eventId = eventId ?: "",
+                userId = userId ?: "",
                 eventsViewModel = eventsViewModel,
                 onNavigateToTransaction = { eventId , userId->
                     navController.navigate(RouteScreen.TicketTransactionScreen(eventId, userId))
@@ -194,11 +199,11 @@ fun Navigation(
         }
 
         composable<RouteScreen.TicketTransactionScreen> {
-            val eventId = it.arguments?.getInt("eventId")
-            val userId = it.arguments?.getInt("userId")
+            val eventId = it.arguments?.getString("eventId")
+            val userId = it.arguments?.getString("userId")
             TicketTransactionScreen(
-                eventId = eventId ?: 0,
-                userId = userId ?: 0,
+                eventId = eventId ?: "",
+                userId = userId ?: "",
                 couponViewModel = couponViewModel,
                 eventsViewModel = eventsViewModel,
                 onNavigateToBack = {

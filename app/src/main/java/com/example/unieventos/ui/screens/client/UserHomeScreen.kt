@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -32,14 +34,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,18 +57,23 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.R
+import com.example.unieventos.dto.UserDTO
 import com.example.unieventos.models.ui.BottomNavigationItem
 import com.example.unieventos.models.ui.DrawerItem
 import com.example.unieventos.ui.components.NavigationBarCustom
 import com.example.unieventos.ui.components.SearchBarTop
+import com.example.unieventos.ui.screens.admin.navigation.AdminRouteScreen
 import com.example.unieventos.ui.screens.client.navigation.UserRouteScreen
 import com.example.unieventos.ui.screens.client.tabs.EventsScreen
 import com.example.unieventos.ui.screens.client.tabs.PurchasesScreen
 import com.example.unieventos.ui.screens.client.tabs.UserInfoScreen
+import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.TicketViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -71,12 +82,15 @@ fun HomeScreen(
     artistViewmodel: ArtistViewModel,
     ticketViewModel: TicketViewModel,
     usersViewModel: UsersViewModel,
-    userId: Int,
     onLogout: () -> Unit,
-    onNavigateToEventDetail: (Int, Int) -> Unit,
-    onNavigateToArtistDetail: (Int) -> Unit,
+    onNavigateToEventDetail: (String, String) -> Unit,
+    onNavigateToArtistDetail: (String) -> Unit,
     onNavigateToProfileEdit: () -> Unit
 ) {
+
+    val context = LocalContext.current
+    val session = SharedPreferenceUtils.getCurrentUser(context)
+
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -173,6 +187,29 @@ fun HomeScreen(
     ) {
 
     Scaffold (
+        floatingActionButton = {
+            var showFab by remember { mutableStateOf(false) }
+
+            if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabPurchases::class) == true) {
+                LaunchedEffect(key1 = Unit) {
+                    delay(500)
+                    showFab = true
+                }
+            } else {
+                showFab = false
+            }
+            if (showFab){
+                FloatingActionButton(
+                    containerColor = Color.White,
+                    onClick = {
+
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = null)
+                }
+            }
+        },
+
         topBar = {
            if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true)
              return@Scaffold
@@ -225,7 +262,7 @@ fun HomeScreen(
             onNavigateToEventDetail = onNavigateToEventDetail,
             onNavigateToProfileEdit = onNavigateToProfileEdit,
             onNavigateToArtistDetail = onNavigateToArtistDetail,
-            userId = userId,
+            userId = session!!.id,
             ticketViewModel = ticketViewModel
         )
 
@@ -244,10 +281,10 @@ fun NavHostUser(
     artistViewModel: ArtistViewModel,
     ticketViewModel: TicketViewModel,
     usersViewModel: UsersViewModel,
-    userId: Int,
+    userId: String,
     onLogout: () -> Unit,
-    onNavigateToEventDetail: (Int, Int) -> Unit,
-    onNavigateToArtistDetail: (Int) -> Unit,
+    onNavigateToEventDetail: (String, String) -> Unit,
+    onNavigateToArtistDetail: (String) -> Unit,
     onNavigateToProfileEdit: () -> Unit,
 ) {
     
@@ -280,7 +317,6 @@ fun NavHostUser(
                 paddingValues = paddingValues,
                 onLogout = onLogout,
                 onNavigateToProfileEdit = onNavigateToProfileEdit,
-                userId = userId,
                 usersViewModel = usersViewModel
             )
         }

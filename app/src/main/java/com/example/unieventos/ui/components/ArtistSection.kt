@@ -35,7 +35,7 @@ import com.example.unieventos.models.Artist
 fun FavoriteArtistsSection(
     modifier: Modifier,
     artists: List<Artist>,
-    onNavigateToArtistDetail: (Int) -> Unit = {},
+    onNavigateToArtistDetail: (String) -> Unit = {},
 ) {
     Column(modifier = modifier) {
 
@@ -57,7 +57,7 @@ fun FavoriteArtistsSection(
 @Composable
 fun ArtistItem(
     artist: Artist,
-    onNavigateToArtistDetail: (Int) -> Unit
+    onNavigateToArtistDetail: (String) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

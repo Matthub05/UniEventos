@@ -160,7 +160,7 @@ fun CreateEventForm(
 
                 couponViewModel.createCoupon(
                     Coupon(
-                        id = 0,
+                        id = "0",
                         description = description,
                         code = code,
                         startDate = startDateParsed,

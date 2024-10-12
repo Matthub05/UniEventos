@@ -19,7 +19,7 @@ class EventsViewModel:ViewModel() {
     }
 
     fun createEvent(event: Event) {
-        event.id = _event.value.size + 1
+        event.id = (_event.value.size + 1).toString()
         _event.value += event
     }
 
@@ -34,11 +34,11 @@ class EventsViewModel:ViewModel() {
         _event.value -= event
     }
 
-    fun getEventById(id: Int): Event? {
+    fun getEventById(id: String): Event? {
         return _event.value.find { it.id == id }
     }
 
-    fun getEventLocationsById(id: Int): List<EventLocation> {
+    fun getEventLocationsById(id: String): List<EventLocation> {
         return _event.value.find { it.id == id }!!.locations
     }
 
@@ -53,10 +53,10 @@ class EventsViewModel:ViewModel() {
 
         return listOf(
             Event(
-                id = 1,
+                id = "1",
                 title = "Metallica Reloaded",
                 description = "This event currently has no title or description available. Please check back later for updates and more information about the event details. We appreciate your understanding and patience as we continue to finalize the event schedule.",
-                artistId = 3,
+                artistId = "3",
                 category = "Concierto",
                 date = inicio,
                 eventSite = EventSite(
@@ -71,10 +71,10 @@ class EventsViewModel:ViewModel() {
                 )
             ),
             Event(
-                id = 2,
+                id = "2",
                 title = "Communiqué",
                 description = "This event currently has no title or description available. Please check back later for updates and more information about the event details. We appreciate your understanding and patience as we continue to finalize the event schedule.",
-                artistId = 0,
+                artistId = "0",
                 category = "Concierto",
                 date = inicio,
                 eventSite = EventSite(
@@ -89,10 +89,10 @@ class EventsViewModel:ViewModel() {
                 )
             ),
             Event(
-                id = 3,
+                id = "3",
                 title = "Trucupey",
                 description = "This event currently has no title or description available. Please check back later for updates and more information about the event details. We appreciate your understanding and patience as we continue to finalize the event schedule.",
-                artistId = 5,
+                artistId = "5",
                 category = "Concierto",
                 date = inicio,
                 eventSite = EventSite(
@@ -107,10 +107,10 @@ class EventsViewModel:ViewModel() {
                 )
             ),
             Event(
-                id = 4,
+                id = "4",
                 title = "Culture",
                 description = "This event currently has no title or description available. Please check back later for updates and more information about the event details. We appreciate your understanding and patience as we continue to finalize the event schedule.",
-                artistId = 1,
+                artistId = "1",
                 category = "Concierto",
                 date = inicio,
                 eventSite = EventSite(

@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 import java.util.Date
 
 data class Event(
-    var id: Int,
+    var id: String,
     val title: String,
     val description: String,
-    val artistId: Int,
+    val artistId: String,
     val category: String,
     val date: Date,
     val eventSite: EventSite,
@@ -15,7 +15,7 @@ data class Event(
     val mediaUrls: List<String> = listOf(),
     var locations: List<EventLocation> = listOf(),
 ) {
-    fun findLocationById(locationId: Int): EventLocation? {
+    fun findLocationById(locationId: String): EventLocation? {
         return locations.find { it.id == locationId }
     }
 }

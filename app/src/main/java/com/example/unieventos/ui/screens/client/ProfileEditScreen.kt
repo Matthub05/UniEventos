@@ -34,13 +34,14 @@ import com.example.unieventos.models.User
 import com.example.unieventos.models.UserUpdateDTO
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
+import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun ProfileEditScreen(
     onNavigateToBack: () -> Unit,
     usersViewModel: UsersViewModel,
-    userId: Int
+    userId: String
 ) {
 
     Scaffold (
@@ -58,7 +59,6 @@ fun ProfileEditScreen(
             padding =  paddingValues,
             onNavigateToBack = onNavigateToBack,
             usersViewModel = usersViewModel,
-            userId = userId
         )
 
     }
@@ -70,19 +70,23 @@ fun ProfileEditForm(
     padding: PaddingValues,
     onNavigateToBack: () -> Unit,
     usersViewModel: UsersViewModel,
-    userId: Int
 ) {
 
     val context = LocalContext.current
+    val session = SharedPreferenceUtils.getCurrentUser(context)
+    var user by remember { mutableStateOf<User?>(null) }
+
+    LaunchedEffect(null) {
+        user = session?.let { usersViewModel.getUserById(it.id) }
+    }
+
     val mensajeError = stringResource(id = R.string.err_campos_vacios)
 
-    var user by remember { mutableStateOf<User?>(null) }
     var nombre by rememberSaveable { mutableStateOf("") }
     var direccion by rememberSaveable { mutableStateOf("") }
     var telefono by rememberSaveable { mutableStateOf("") }
 
-    LaunchedEffect(userId) {
-        user = usersViewModel.getUserById(userId)
+    LaunchedEffect(user?.id) {
         user?.let { loadedUser ->
             nombre = loadedUser.nombre
             direccion = loadedUser.direccion

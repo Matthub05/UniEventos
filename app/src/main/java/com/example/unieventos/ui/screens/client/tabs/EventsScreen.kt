@@ -1,5 +1,6 @@
 package com.example.unieventos.ui.screens.client.tabs
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,9 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
@@ -19,22 +22,22 @@ import com.example.unieventos.ui.components.FavoriteArtistsSection
 import com.example.unieventos.ui.components.FeaturedSection
 import com.example.unieventos.ui.components.SavedSection
 import com.example.unieventos.ui.components.SectionTitle
+import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
 fun EventsScreen(
-    userId: Int,
+    userId: String,
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
-    onNavigateToEventDetail: (Int, Int) -> Unit,
-    onNavigateToArtistDetail: (Int) -> Unit
+    onNavigateToEventDetail: (String, String) -> Unit,
+    onNavigateToArtistDetail: (String) -> Unit
 ) {
 
     val events = eventsViewModel.event.collectAsState().value
     val artists = artistViewModel.artist.collectAsState().value
-
 
     LazyColumn(
         modifier = Modifier

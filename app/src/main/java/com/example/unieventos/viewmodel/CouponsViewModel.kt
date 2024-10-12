@@ -17,7 +17,7 @@ class CouponsViewModel:ViewModel() {
     }
 
     fun createCoupon(coupon: Coupon) {
-        coupon.id = _coupon.value.size + 1
+        coupon.id = (_coupon.value.size + 1).toString()
         _coupon.value += coupon
     }
 
@@ -25,7 +25,7 @@ class CouponsViewModel:ViewModel() {
         _coupon.value -= coupon
     }
 
-    fun getCouponById(id: Int): Coupon? {
+    fun getCouponById(id: String): Coupon? {
         return _coupon.value.find { it.id == id }
     }
 
@@ -41,7 +41,7 @@ class CouponsViewModel:ViewModel() {
         val fin = cal.time
         return listOf(
             Coupon(
-                id = 1,
+                id = "1",
                 description = "Dia de las madres",
                 code = "code1",
                 startDate = inicio,
@@ -49,7 +49,7 @@ class CouponsViewModel:ViewModel() {
                 discount = 10.0
             ),
             Coupon(
-                id = 2,
+                id = "2",
                 description = "Dia de los padres",
                 code = "code2",
                 startDate = inicio,
@@ -57,7 +57,7 @@ class CouponsViewModel:ViewModel() {
                 discount = 15.0
             ),
             Coupon(
-                id = 3,
+                id = "3",
                 description = "Dia del agua",
                 code = "code3",
                 startDate = inicio,
@@ -65,7 +65,7 @@ class CouponsViewModel:ViewModel() {
                 discount = 20.0
             ),
             Coupon(
-                id = 4,
+                id = "4",
                 description = "Que la fuerza te acompañe",
                 code = "code4",
                 startDate = inicio,
