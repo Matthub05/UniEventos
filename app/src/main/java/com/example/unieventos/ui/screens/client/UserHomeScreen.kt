@@ -7,17 +7,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.StarOutline
@@ -62,6 +62,7 @@ import com.example.unieventos.ui.screens.client.tabs.UserInfoScreen
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.TicketViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -69,6 +70,7 @@ fun HomeScreen(
     eventsViewModel: EventsViewModel,
     artistViewmodel: ArtistViewModel,
     ticketViewModel: TicketViewModel,
+    usersViewModel: UsersViewModel,
     userId: Int,
     onLogout: () -> Unit,
     onNavigateToEventDetail: (Int, Int) -> Unit,
@@ -101,8 +103,8 @@ fun HomeScreen(
         ),
         DrawerItem(
             title = "Cerrar Sesión",
-            selectedIcon = Icons.Filled.Logout,
-            unselectedIcon = Icons.Outlined.Logout,
+            selectedIcon = Icons.AutoMirrored.Filled.Logout,
+            unselectedIcon = Icons.AutoMirrored.Outlined.Logout,
             onClick = {
                 onLogout()
             }
@@ -218,6 +220,7 @@ fun HomeScreen(
             navController = navController,
             eventsViewModel = eventsViewModel,
             artistViewModel = artistViewmodel,
+            usersViewModel = usersViewModel,
             onLogout = onLogout,
             onNavigateToEventDetail = onNavigateToEventDetail,
             onNavigateToProfileEdit = onNavigateToProfileEdit,
@@ -240,6 +243,7 @@ fun NavHostUser(
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
     ticketViewModel: TicketViewModel,
+    usersViewModel: UsersViewModel,
     userId: Int,
     onLogout: () -> Unit,
     onNavigateToEventDetail: (Int, Int) -> Unit,
@@ -275,7 +279,9 @@ fun NavHostUser(
             UserInfoScreen(
                 paddingValues = paddingValues,
                 onLogout = onLogout,
-                onNavigateToProfileEdit = onNavigateToProfileEdit
+                onNavigateToProfileEdit = onNavigateToProfileEdit,
+                userId = userId,
+                usersViewModel = usersViewModel
             )
         }
     }

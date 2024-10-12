@@ -17,6 +17,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,14 +29,23 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.models.User
+import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun UserInfoScreen(
     paddingValues: PaddingValues,
     onLogout: () -> Unit,
     onNavigateToProfileEdit: () -> Unit,
+    userId: Int,
+    usersViewModel: UsersViewModel
 ) {
-        
+
+    var user by remember { mutableStateOf<User?>(null) }
+    LaunchedEffect(userId) {
+        user = usersViewModel.getUserById(userId)
+    }
+
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -53,13 +67,13 @@ fun UserInfoScreen(
         )
 
         Text(
-            text = "Nombre de Usuario",
+            text = user?.nombre ?: "",
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally),
             fontSize = MaterialTheme.typography.headlineMedium.fontSize
         )
-        Text(text = "informacion adicional")
+        Text(text = user?.correo ?: "")
 
         Spacer(modifier = Modifier.weight(1f))
 

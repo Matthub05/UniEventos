@@ -1,8 +1,9 @@
 package com.example.unieventos.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.unieventos.models.Role
 import com.example.unieventos.models.User
+import com.example.unieventos.models.Role
+import com.example.unieventos.models.UserUpdateDTO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,6 +31,17 @@ class UsersViewModel: ViewModel() {
 
     fun createUser(user: User) {
         _users.value += user
+    }
+
+    fun updateUser(updatedUser: UserUpdateDTO): Boolean {
+        if (updatedUser.id == null) return false
+        val user: User = getUserById(updatedUser.id) ?: return false
+        _users.value -= user
+        user.nombre = updatedUser.nombre
+        user.direccion = updatedUser.direccion
+        user.telefono = updatedUser.telefono
+        _users.value += user
+        return true
     }
 
     fun loginUser(correo: String, contrasena: String): User? {

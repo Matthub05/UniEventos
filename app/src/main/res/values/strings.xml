@@ -79,4 +79,5 @@
     <string name="user_created">¡Usuario registrado satisfactoriamente!</string>
     <string name="coupon_created">¡Cupón creado Ssatisfactoriamente!</string>
     <string name="btn_eliminar">Eliminar</string>
+    <string name="err_campos_vacios">Por favor, complete todos los campos</string>
 </resources>

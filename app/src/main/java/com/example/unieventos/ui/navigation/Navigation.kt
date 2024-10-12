@@ -96,7 +96,8 @@ fun Navigation(
                     navController.navigate(RouteScreen.ArtistDetailScreen(artistId))
                 },
                 userId = sesion!!.id,
-                ticketViewModel = ticketViewModel
+                ticketViewModel = ticketViewModel,
+                usersViewModel = usersViewModel
             )
         }
 
@@ -138,12 +139,9 @@ fun Navigation(
 
         composable<RouteScreen.ProfileEdit> {
             ProfileEditScreen(
-                onNavigateToHome = { navController.navigate(RouteScreen.UserHome){
-                    popUpTo(0){
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                } }
+                onNavigateToBack = { navController.popBackStack() },
+                usersViewModel = usersViewModel,
+                userId = sesion!!.id
             )
         }
 

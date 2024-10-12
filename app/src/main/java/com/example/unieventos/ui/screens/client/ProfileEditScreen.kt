@@ -1,5 +1,6 @@
 package com.example.unieventos.ui.screens.client
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -16,8 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,28 +30,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.models.User
+import com.example.unieventos.models.UserUpdateDTO
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
+import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun ProfileEditScreen(
-    onNavigateToHome: () -> Unit
+    onNavigateToBack: () -> Unit,
+    usersViewModel: UsersViewModel,
+    userId: Int
 ) {
-
-    val context = LocalContext.current
 
     Scaffold (
         topBar = {
             TopBarComponent(
                 text = stringResource(id = R.string.titulo_editar_cuenta),
-                onClick = { onNavigateToHome() },
+                onClick = { onNavigateToBack() },
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         }
     ) { paddingValues ->
 
-        ProfileEditForm(paddingValues, onNavigateToHome)
+        ProfileEditForm(
+            padding =  paddingValues,
+            onNavigateToBack = onNavigateToBack,
+            usersViewModel = usersViewModel,
+            userId = userId
+        )
 
     }
 
@@ -57,12 +68,42 @@ fun ProfileEditScreen(
 @Composable
 fun ProfileEditForm(
     padding: PaddingValues,
-    onNavigateToHome: () -> Unit
+    onNavigateToBack: () -> Unit,
+    usersViewModel: UsersViewModel,
+    userId: Int
 ) {
 
+    val context = LocalContext.current
+    val mensajeError = stringResource(id = R.string.err_campos_vacios)
+
+    var user by remember { mutableStateOf<User?>(null) }
     var nombre by rememberSaveable { mutableStateOf("") }
     var direccion by rememberSaveable { mutableStateOf("") }
     var telefono by rememberSaveable { mutableStateOf("") }
+
+    LaunchedEffect(userId) {
+        user = usersViewModel.getUserById(userId)
+        user?.let { loadedUser ->
+            nombre = loadedUser.nombre
+            direccion = loadedUser.direccion
+            telefono = loadedUser.telefono
+        }
+    }
+
+    fun camposValidos(): Boolean {
+        return nombre.isNotEmpty() && direccion.isNotEmpty() && telefono.isNotEmpty()
+    }
+
+    fun saveUser() {
+        val updatedUser = UserUpdateDTO(
+            id = user?.id,
+            nombre = nombre,
+            direccion = direccion,
+            telefono = telefono,
+        )
+
+        usersViewModel.updateUser(updatedUser)
+    }
 
     Column(
         modifier = Modifier
@@ -106,7 +147,7 @@ fun ProfileEditForm(
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = { onNavigateToHome() },
+            onClick = { onNavigateToBack() },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonColors(
                 contentColor = MaterialTheme.colorScheme.onBackground,
@@ -119,8 +160,17 @@ fun ProfileEditForm(
         }
 
         Button(
-            onClick = { onNavigateToHome() },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp)
+            onClick = {
+                if (!camposValidos()) {
+                    Toast.makeText(context, mensajeError, Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                saveUser()
+                onNavigateToBack()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 25.dp)
         ) {
             Text(text = stringResource(id = R.string.btn_guardar_cambios))
         }
