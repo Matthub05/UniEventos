@@ -31,9 +31,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,7 +58,6 @@ import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 @Composable
@@ -67,11 +68,14 @@ fun CreateEventScreen(
     artistViewModel: ArtistViewModel,
 ) {
 
-    var componentTitle = stringResource(id = R.string.title_registrar_evento)
+    val titleRegistrar = stringResource(id = R.string.title_registrar_evento)
+    val titleModificar = stringResource(id = R.string.title_modificar_evento)
+    var componentTitle = titleRegistrar
     val scrollState = rememberScrollState()
 
     val artists = artistViewModel.artist.collectAsState().value
 
+    var event by remember { mutableStateOf<Event?>(null) }
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var idArtist by rememberSaveable { mutableStateOf("") }
@@ -81,31 +85,32 @@ fun CreateEventScreen(
     var capacity by rememberSaveable { mutableStateOf("") }
     var location by rememberSaveable { mutableStateOf("") }
     var imageUrl by rememberSaveable { mutableStateOf("") }
+    var eventLocations by remember { mutableStateOf( listOf<EventLocation>() ) }
 
     var showLocationDialog by rememberSaveable { mutableStateOf(false) }
-    var eventLocations by rememberSaveable { mutableStateOf( listOf<EventLocation>() ) }
     var locationName by rememberSaveable { mutableStateOf("") }
     var locationPlaces by rememberSaveable { mutableStateOf("") }
     var locationPrice by rememberSaveable { mutableStateOf("") }
     var selectedLocation: EventLocation? by rememberSaveable { mutableStateOf(null) }
 
-    if (eventId != null) {
-        val event = eventsViewModel.getEventById(eventId)
-        title = event?.title ?: ""
-        description = event?.description ?: ""
-        idArtist = (event?.artistId ?: 0).toString()
-        category = event?.category ?: ""
-        date = SimpleDateFormat(
-            "dd/MM/yyyy",
-            Locale.US
-        ).format(event?.date ?: "")
-        name = event?.eventSite?.name ?: ""
-        capacity = event?.eventSite?.capacity?.toString() ?: ""
-        location = event?.eventSite?.location ?: ""
-        imageUrl = event?.imageUrl ?: ""
-        eventLocations = event?.locations ?: listOf()
+    LaunchedEffect(eventId) {
+        if (eventId != null) {
+            event = eventsViewModel.getEventById(eventId)
+            event?.let { loadedEvent ->
+                title = loadedEvent.title
+                description = loadedEvent.description
+                idArtist = loadedEvent.artistId.toString()
+                category = loadedEvent.category
+                date = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(loadedEvent.date)
+                name = loadedEvent.eventSite.name
+                capacity = loadedEvent.eventSite.capacity.toString()
+                location = loadedEvent.eventSite.location
+                imageUrl = loadedEvent.imageUrl
+                eventLocations = loadedEvent.locations
 
-        componentTitle = stringResource(id = R.string.title_modificar_evento)
+                componentTitle = titleModificar
+            }
+        }
     }
 
     fun saveEvent() {
