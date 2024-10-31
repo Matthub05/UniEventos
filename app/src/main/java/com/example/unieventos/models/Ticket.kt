@@ -1,6 +1,5 @@
 package com.example.unieventos.models
 
-import android.net.http.UrlRequest.Status
 import java.util.Date
 
 data class Ticket(

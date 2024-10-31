@@ -1,7 +1,5 @@
 package com.example.unieventos.ui.navigation
 
-import com.example.unieventos.models.Artist
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 sealed class RouteScreen {

@@ -21,8 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.unieventos.R
 import com.example.unieventos.models.Coupon
 
 @Composable
@@ -66,7 +68,7 @@ fun CouponItem(
                     fontSize = 13.sp,
                     color = Color.Gray
                 )
-                Text(text = "Descuento: " + coupon.discount + " %",
+                Text(text = "${stringResource(id = R.string.label_descuento)}: ${coupon.discount}%",
                     fontSize = 13.sp,
                     color = Color.Gray
                 )

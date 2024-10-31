@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">UniEventos</string>
     <string name="label_correo">Correo</string>
     <string name="label_correo_invalido">El correo no es válido</string>
     <string name="label_contrasenia">Contraseña</string>
@@ -63,7 +62,7 @@
     <string name="placeholder_fecha">Fecha</string>
     <string name="placeholder_fecha_inicio">Fecha de inicio</string>
     <string name="placeholder_fecha_vencimiento">Fecha de vencimiento</string>
-    <string name="adv_generar_cupon">El cupón tendra validez unicamente hasta la fecha especificada en los campos previamente llenados.</string>
+    <string name="adv_generar_cupon">El cupón tendra validez únicamente hasta la fecha especificada en los campos previamente llenados.</string>
     <string name="btn_registrar_cupon">Registrar cupón</string>
     <string name="label_artistas_destacados">Artistas Destacados</string>
     <string name="label_eventos_destacados">Eventos Destacados</string>

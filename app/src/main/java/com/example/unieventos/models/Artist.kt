@@ -1,7 +1,5 @@
 package com.example.unieventos.models
 
-import kotlinx.serialization.Serializable
-
 data class Artist(
     val id: String,
     val name: String,

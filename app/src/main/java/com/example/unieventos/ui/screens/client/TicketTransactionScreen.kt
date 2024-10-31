@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -31,11 +29,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -44,30 +40,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.unieventos.R
-import com.example.unieventos.models.Artist
-import com.example.unieventos.models.Coupon
-import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
-import com.example.unieventos.ui.components.DatePickerForm
 import com.example.unieventos.ui.components.SleekButton
-
 import com.example.unieventos.ui.components.TextFieldForm
-import com.example.unieventos.ui.components.TopBarComponent
 import com.example.unieventos.ui.components.TransparentTopBarComponent
-import com.example.unieventos.ui.screens.admin.DropdownMenuArtists
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.TicketViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -147,7 +134,7 @@ fun TicketTransactionScreen(
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
-                            text = event?.date!!.toInstant()
+                            text = event.date.toInstant()
                                 .atZone(ZoneId.systemDefault())
                                 .toLocalDateTime().format(formatter),
                             style = MaterialTheme.typography.bodyMedium,
@@ -171,7 +158,7 @@ fun TicketTransactionScreen(
                         fontWeight = FontWeight.Bold
                     )
 
-                    buyTicketForm(
+                    BuyTicketForm(
                         onNavigateToBack = { /*TODO*/ },
                         ticketViewModel = ticketViewModel,
                         context = context,
@@ -190,7 +177,7 @@ fun TicketTransactionScreen(
 }
 
 @Composable
-fun buyTicketForm(
+fun BuyTicketForm(
     onNavigateToBack: () -> Unit,
     ticketViewModel: TicketViewModel,
     eventsViewModel: EventsViewModel,
@@ -286,7 +273,7 @@ fun DropdownMenuLocation(
                     text = { Text(text = item.name) },
                     onClick = {
                         expanded = false
-                        onValueChange((item.id).toString())
+                        onValueChange((item.id))
                     }
                 )
             }

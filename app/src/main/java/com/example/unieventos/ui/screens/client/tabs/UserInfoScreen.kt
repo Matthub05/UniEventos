@@ -1,6 +1,5 @@
 package com.example.unieventos.ui.screens.client.tabs
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

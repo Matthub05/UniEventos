@@ -51,7 +51,6 @@ import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
 import com.example.unieventos.models.EventSite
 import com.example.unieventos.ui.components.DatePickerForm
-
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
 import com.example.unieventos.viewmodel.ArtistViewModel
@@ -99,7 +98,7 @@ fun CreateEventScreen(
             event?.let { loadedEvent ->
                 title = loadedEvent.title
                 description = loadedEvent.description
-                idArtist = loadedEvent.artistId.toString()
+                idArtist = loadedEvent.artistId
                 category = loadedEvent.category
                 date = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(loadedEvent.date)
                 name = loadedEvent.eventSite.name
@@ -123,7 +122,7 @@ fun CreateEventScreen(
             id = "0",
             title = title,
             description = description,
-            artistId = idArtist ?: "",
+            artistId = idArtist,
             category = category,
             date = dateParsed,
             eventSite = EventSite(
@@ -467,7 +466,7 @@ fun DropdownMenuArtists(
                     text = { Text(text = item.name) },
                     onClick = {
                         expanded = false
-                        onValueChange((item.id).toString())
+                        onValueChange((item.id))
                     }
                 )
             }
