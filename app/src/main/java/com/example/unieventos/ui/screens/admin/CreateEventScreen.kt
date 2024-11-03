@@ -1,5 +1,6 @@
 package com.example.unieventos.ui.screens.admin
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +41,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -66,6 +68,8 @@ fun CreateEventScreen(
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
 ) {
+
+    val context = LocalContext.current
 
     val titleRegistrar = stringResource(id = R.string.title_registrar_evento)
     val titleModificar = stringResource(id = R.string.title_modificar_evento)
@@ -112,9 +116,14 @@ fun CreateEventScreen(
         }
     }
 
+    val errDateMessage = stringResource(id = R.string.err_fecha)
     fun saveEvent() {
         val cal = Calendar.getInstance()
         val values = date.split("/")
+        if (values.size != 3) {
+            Toast.makeText(context, errDateMessage, Toast.LENGTH_SHORT).show()
+            return
+        }
         cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
         val dateParsed = cal.time
 
@@ -134,7 +143,7 @@ fun CreateEventScreen(
             locations = eventLocations
         )
 
-        if (eventId != null) {
+        if (!eventId.isNullOrEmpty()) {
             newEvent.id = eventId
             eventsViewModel.updateEvent(newEvent)
         } else

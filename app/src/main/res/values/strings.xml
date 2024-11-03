@@ -83,4 +83,5 @@
     <string name="btn_detalles_compra">Detalles de tiquete</string>
     <string name="btn_ok">Confirmar</string>
     <string name="label_descuento">Descuento</string>
+    <string name="err_fecha">La fecha no es válida</string>
 </resources>

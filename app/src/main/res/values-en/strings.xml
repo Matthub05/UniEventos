@@ -82,4 +82,5 @@
     <string name="btn_detalles_compra">Ticket details</string>
     <string name="btn_ok">Confirm</string>
     <string name="label_descuento">Discount</string>
+    <string name="err_fecha">The date is not valid</string>
 </resources>
