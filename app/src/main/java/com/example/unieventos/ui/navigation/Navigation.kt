@@ -44,6 +44,7 @@ fun Navigation(
         startDestination = when (session.rol) {
             Role.ADMIN -> RouteScreen.Home
             Role.CLIENT -> RouteScreen.UserHome
+            Role.DEFAULT -> RouteScreen.UserHome
         }
     }
 
@@ -60,6 +61,7 @@ fun Navigation(
                     val route = when (role) {
                         Role.ADMIN -> RouteScreen.Home
                         Role.CLIENT -> RouteScreen.UserHome
+                        Role.DEFAULT -> RouteScreen.UserHome
                     }
 
                     navController.navigate(route){

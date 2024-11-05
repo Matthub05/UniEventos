@@ -1,21 +1,64 @@
 package com.example.unieventos.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.unieventos.models.User
 import com.example.unieventos.models.Role
 import com.example.unieventos.models.UserUpdateDTO
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class UsersViewModel: ViewModel() {
 
+    private val db = Firebase.firestore
+    private val collectionPathName = "users"
     private val _users = MutableStateFlow( emptyList<User>() )
     val users: StateFlow< List<User> > = _users.asStateFlow()
 
     init {
         _users.value = getUsers()
     }
+
+//    private fun loadUsers() {
+//        viewModelScope.launch {
+//            _users.value = getUsers()
+//        }
+//    }
+
+//    private suspend fun getUsers(): List<User> {
+//        val snapshot = db.collection(collectionPathName).get().await()
+//        return snapshot.documents.mapNotNull {
+//            val user = it.toObject(User::class.java)
+//            requireNotNull(user)
+//            user.id = it.id
+//            user
+//        }
+//    }
+
+//    suspend fun getUserById(id: String): User? {
+//        val snapshot = db.collection(collectionPathName).document(id).get().await()
+//        val user = snapshot.toObject(User::class.java)
+//        user?.id = snapshot.id
+//        return user
+//    }
+
+//    fun updateUser(newUser: User) {
+//        viewModelScope.launch {
+//            db.collection(collectionPathName).document(newUser.id).set(newUser).await()
+//            _users.value = getUsers()
+//        }
+//    }
+
+//    fun deleteUser(userId: String) {
+//        viewModelScope.launch {
+//            db.collection(collectionPathName).document(userId).delete().await()
+//            _users.value = getUsers()
+//        }
+//    }
 
     fun getUserById(id: String): User? {
         return _users.value.find { it.id == id }

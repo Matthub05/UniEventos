@@ -1,14 +1,14 @@
 package com.example.unieventos.models
 
 data class User(
-    val id: String,
-    val cedula: String,
-    var nombre: String,
-    var direccion: String,
-    var telefono: String,
-    val correo: String,
-    val contrasena: String,
-    val role: Role,
+    var id: String = "",
+    val cedula: String = "",
+    var nombre: String = "",
+    var direccion: String = "",
+    var telefono: String = "",
+    val correo: String = "",
+    val contrasena: String = "",
+    val role: Role = Role.DEFAULT,
     var tickets: List<Ticket> = listOf(),
 )
 
