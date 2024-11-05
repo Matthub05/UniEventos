@@ -83,4 +83,22 @@
     <string name="btn_ok">Confirm</string>
     <string name="label_descuento">Discount</string>
     <string name="err_fecha">The date is not valid</string>
+    <string name="err_no_localizacion">Must add at least one location</string>
+    <string name="nav_ajustes">Settings</string>
+    <string name="nav_acerca_de">About</string>
+    <string name="label_detalles">Details</string>
+    <string name="label_cantidad">Quantity</string>
+    <string name="err_cantidad">Quantity is not valid</string>
+    <string name="btn_comprar">Buy</string>
+    <string name="text_precio">Price</string>
+    <string name="text_unidades">units</string>
+    <string name="btn_guardar_evento">Save event</string>
+    <string name="btn_comprar_tiquete">Buy ticket</string>
+    <string name="label_url_imagen">Image URL</string>
+    <string name="placeholder_tarifas">Rates</string>
+    <string name="text_multimedia">Multimedia</string>
+    <string name="text_recinto">Venue</string>
+    <string name="btn_cancelar">Cancel</string>
+    <string name="adv_eliminar_evento">Do you want to delete the event?</string>
+    <string name="adv_accion_no_se_puede_deshacer">This action can not be undone</string>
 </resources>

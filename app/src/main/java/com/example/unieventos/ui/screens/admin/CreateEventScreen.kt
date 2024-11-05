@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
@@ -96,8 +97,10 @@ fun CreateEventScreen(
     var locationPrice by rememberSaveable { mutableStateOf("") }
     var selectedLocation: EventLocation? by rememberSaveable { mutableStateOf(null) }
 
+    var showConfirmationDialog by rememberSaveable { mutableStateOf(false) }
+
     LaunchedEffect(eventId) {
-        if (eventId != null) {
+        if (!eventId.isNullOrEmpty()) {
             event = eventsViewModel.getEventById(eventId)
             event?.let { loadedEvent ->
                 title = loadedEvent.title
@@ -117,41 +120,7 @@ fun CreateEventScreen(
     }
 
     val errDateMessage = stringResource(id = R.string.err_fecha)
-    fun saveEvent() {
-        val cal = Calendar.getInstance()
-        val values = date.split("/")
-        if (values.size != 3) {
-            Toast.makeText(context, errDateMessage, Toast.LENGTH_SHORT).show()
-            return
-        }
-        cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
-        val dateParsed = cal.time
-
-        val newEvent = Event(
-            id = "0",
-            title = title,
-            description = description,
-            artistId = idArtist,
-            category = category,
-            date = dateParsed,
-            eventSite = EventSite(
-                name = name,
-                capacity = capacity.toLongOrNull() ?: 0,
-                location = location,
-            ),
-            imageUrl = imageUrl,
-            locations = eventLocations
-        )
-
-        if (!eventId.isNullOrEmpty()) {
-            newEvent.id = eventId
-            eventsViewModel.updateEvent(newEvent)
-        } else
-            eventsViewModel.createEvent(newEvent)
-
-        onNavigateToBack()
-    }
-
+    val errNoLocation = stringResource(id = R.string.err_no_localizacion)
     Scaffold(
         topBar = {
             TopBarComponent(
@@ -162,11 +131,65 @@ fun CreateEventScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { saveEvent() }
-            ) {
-                Icon(imageVector = Icons.Default.Save, contentDescription = null)
+            Column {
+                FloatingActionButton(
+                    onClick = {
+                        if (eventLocations.isEmpty()) {
+                            Toast.makeText(context, errNoLocation, Toast.LENGTH_SHORT).show()
+                            return@FloatingActionButton
+                        }
+
+                        val cal = Calendar.getInstance()
+                        val values = date.split("/")
+                        if (values.size != 3) {
+                            Toast.makeText(context, errDateMessage, Toast.LENGTH_SHORT).show()
+                            return@FloatingActionButton
+                        }
+                        cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
+                        val dateParsed = cal.time
+
+                        val newEvent = Event(
+                            title = title,
+                            description = description,
+                            artistId = idArtist,
+                            category = category,
+                            date = dateParsed,
+                            eventSite = EventSite(
+                                name = name,
+                                capacity = capacity.toLongOrNull() ?: 0,
+                                location = location,
+                            ),
+                            imageUrl = imageUrl,
+                            locations = eventLocations
+                        )
+
+                        if (!eventId.isNullOrEmpty()) {
+                            newEvent.id = eventId
+                            eventsViewModel.updateEvent(newEvent)
+                        } else
+                            eventsViewModel.createEvent(newEvent)
+
+                        onNavigateToBack()
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.Save, contentDescription = null)
+                }
+
+                if (!eventId.isNullOrEmpty()) {
+                    Spacer(modifier = Modifier
+                        .height(10.dp))
+                    FloatingActionButton(
+                        contentColor = MaterialTheme.colorScheme.onBackground,
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        onClick = {
+                            showConfirmationDialog = true
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+                    }
+                }
             }
+
         },
     ) { innerPadding ->
 
@@ -185,7 +208,7 @@ fun CreateEventScreen(
                 modifier = Modifier.align(Alignment.Start),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                text = "Detalles generales"
+                text = stringResource(id = R.string.label_detalles)
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -243,7 +266,7 @@ fun CreateEventScreen(
                 modifier = Modifier.align(Alignment.Start),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                text = "Recinto"
+                text = stringResource(id = R.string.text_recinto)
             )
 
             Spacer(modifier = Modifier.height(15.dp))
@@ -282,7 +305,7 @@ fun CreateEventScreen(
                 modifier = Modifier.align(Alignment.Start),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                text = "Multimedia"
+                text = stringResource(id = R.string.text_multimedia)
             )
 
             TextFieldForm(
@@ -290,7 +313,7 @@ fun CreateEventScreen(
                 value = imageUrl,
                 onValueChange = { imageUrl = it },
                 supportingText = "",
-                label = "Url de la imagen", //cambiar luego
+                label = stringResource(id = R.string.label_url_imagen),
                 onValidate = { it.isEmpty() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
@@ -306,7 +329,7 @@ fun CreateEventScreen(
                 modifier = Modifier.align(Alignment.Start),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                text = "Tarifas"
+                text = stringResource(id = R.string.placeholder_tarifas)
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -433,6 +456,54 @@ fun CreateEventScreen(
                 }
 
             }
+        )
+
+    }
+
+    val errorMessage = stringResource(id = R.string.adv_error)
+    if (showConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showConfirmationDialog = false
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        if (eventId.isNullOrEmpty()) {
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                            return@TextButton
+                        }
+                        eventsViewModel.deleteEvent(eventId)
+                        showConfirmationDialog = false
+                        onNavigateToBack()
+                    },
+                    colors = ButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onBackground,
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        disabledContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        disabledContentColor = MaterialTheme.colorScheme.onBackground
+                    )
+                ) {
+                    Text(text = stringResource(id = R.string.btn_eliminar))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showConfirmationDialog = false
+                    },
+                    colors = ButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onBackground,
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        disabledContainerColor = MaterialTheme.colorScheme.tertiary,
+                        disabledContentColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                ) {
+                    Text(text = stringResource(id = R.string.btn_cancelar))
+                }
+            },
+            title = { Text(text = stringResource(id = R.string.adv_eliminar_evento)) },
+            text = { Text(text = stringResource(id = R.string.adv_accion_no_se_puede_deshacer)) },
         )
 
     }

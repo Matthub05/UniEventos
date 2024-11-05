@@ -14,7 +14,7 @@ import kotlinx.coroutines.tasks.await
 
 class EventsViewModel:ViewModel() {
 
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
     private val collectionPathName = "events"
     private val _event = MutableStateFlow( emptyList<Event>() )
     val event: StateFlow< List<Event> > = _event.asStateFlow()
@@ -42,22 +42,29 @@ class EventsViewModel:ViewModel() {
     fun createEvent(event: Event) {
         viewModelScope.launch {
             db.collection(collectionPathName).add(event).await()
+            _event.value = getEvents()
         }
     }
 
-    fun updateEvent(newEvent: Event): Boolean {
-        val event: Event = getEventById(newEvent.id) ?: return false
-        _event.value -= event
-        _event.value += newEvent
-        return true
+    fun updateEvent(newEvent: Event) {
+        viewModelScope.launch {
+            db.collection(collectionPathName).document(newEvent.id).set(newEvent).await()
+            _event.value = getEvents()
+        }
     }
 
-    fun deleteEvent(event: Event) {
-        _event.value -= event
+    fun deleteEvent(eventId: String) {
+        viewModelScope.launch {
+            db.collection(collectionPathName).document(eventId).delete().await()
+            _event.value = getEvents()
+        }
     }
 
-    fun getEventById(id: String): Event? {
-        return _event.value.find { it.id == id }
+    suspend fun getEventById(id: String): Event? {
+        val snapshot = db.collection(collectionPathName).document(id).get().await()
+        val event = snapshot.toObject(Event::class.java)
+        event?.id = snapshot.id
+        return event
     }
 
     fun getEventLocationsById(id: String): List<EventLocation> {

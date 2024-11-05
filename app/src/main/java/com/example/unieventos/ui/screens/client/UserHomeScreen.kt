@@ -96,7 +96,7 @@ fun HomeScreen(
     }
     val items = listOf(
         DrawerItem(
-            title = "Home",
+            title = stringResource(id = R.string.nav_home),
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
             onClick = {
@@ -104,7 +104,7 @@ fun HomeScreen(
             }
         ),
         DrawerItem(
-            title = "Ajustes",
+            title = stringResource(id = R.string.nav_ajustes),
             selectedIcon = Icons.Filled.Settings,
             unselectedIcon = Icons.Outlined.Settings,
             onClick = {
@@ -112,7 +112,7 @@ fun HomeScreen(
             }
         ),
         DrawerItem(
-            title = "Cerrar Sesión",
+            title = stringResource(id = R.string.btn_cerrar_sesion),
             selectedIcon = Icons.AutoMirrored.Filled.Logout,
             unselectedIcon = Icons.AutoMirrored.Outlined.Logout,
             onClick = {
@@ -120,7 +120,7 @@ fun HomeScreen(
             }
         ),
         DrawerItem(
-            title = "Acerca de",
+            title = stringResource(id = R.string.nav_acerca_de),
             selectedIcon = Icons.Filled.Info,
             unselectedIcon = Icons.Outlined.Info,
             onClick = {
@@ -143,7 +143,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "UniEventos",
+                    text = stringResource(id = R.string.app_name),
                     fontSize = 25.sp,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
@@ -207,13 +207,13 @@ fun HomeScreen(
         },
 
         topBar = {
-           if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true)
-             return@Scaffold
+            if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true)
+                return@Scaffold
 
             SearchBarTop(
                 onSearchTextChanged = { newText ->
                     println("Search text: $newText")
-               },
+                },
                 drawerState
             )
         },

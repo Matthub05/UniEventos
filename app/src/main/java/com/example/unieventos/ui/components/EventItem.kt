@@ -86,7 +86,7 @@ fun EventItem(
                     text = event.title,
                     fontSize = 17.sp,
                 )
-                Text(text = artistViewModel.getArtistById(event.artistId)!!.name,
+                Text(text = artistViewModel.getArtistById(event.artistId)?.name ?: "",
                     fontSize = 13.sp,
                     color = Color.Gray)
 

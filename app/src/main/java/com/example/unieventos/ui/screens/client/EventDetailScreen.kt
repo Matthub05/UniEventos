@@ -21,16 +21,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.unieventos.R
+import com.example.unieventos.models.Event
 import com.example.unieventos.ui.components.MediaSection
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TransparentTopBarComponent
@@ -46,11 +54,14 @@ fun EventDetailScreen(
     eventsViewModel: EventsViewModel,
     onNavigateToUserHome: () -> Unit,
     onNavigateToTransaction: (String, String) -> Unit
-){
+) {
 
-    val event = eventsViewModel.getEventById(eventId)
+    var event by rememberSaveable { mutableStateOf(Event()) }
+    LaunchedEffect (eventId) {
+        event = eventsViewModel.getEventById(eventId)!!
+    }
+
     val formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm")
-    requireNotNull(event)
 
     Scaffold (
         topBar = {
@@ -73,7 +84,7 @@ fun EventDetailScreen(
                 ) {
 
                     val model = ImageRequest.Builder(LocalContext.current)
-                        .data(event?.imageUrl)
+                        .data(event.imageUrl)
                         .crossfade(true)
                         .build()
 
@@ -172,17 +183,20 @@ fun EventDetailScreen(
                         Spacer(modifier = Modifier.size(4.dp))
 
 
-                        Text(text = "Artista")
+                        Text(text = stringResource(id = R.string.placeholder_artista))
                     }
 
                     Spacer(modifier = Modifier.size(15.dp))
 
-                    SleekButton(text = "Guardar evento", onClickAction ={ onNavigateToTransaction(eventId, userId) })
+                    SleekButton(
+                        text = stringResource(id = R.string.btn_guardar_evento),
+                        onClickAction = { onNavigateToTransaction(eventId, userId) }
+                    )
 
                     Spacer(modifier = Modifier.size(15.dp))
 
                     SleekButton(
-                        text = "Comprar tiquete",
+                        text = stringResource(id = R.string.btn_comprar_tiquete),
                         onClickAction = { onNavigateToTransaction(eventId, userId) }
                     )
 

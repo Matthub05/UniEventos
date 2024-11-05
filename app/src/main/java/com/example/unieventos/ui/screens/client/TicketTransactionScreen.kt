@@ -28,6 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.unieventos.R
+import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
@@ -68,7 +70,12 @@ fun TicketTransactionScreen(
     onNavigateToBack: () -> Unit
 ) {
     val formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm")
-    val event = eventsViewModel.getEventById(eventId)
+
+    var event by rememberSaveable { mutableStateOf(Event()) }
+    LaunchedEffect (eventId) {
+        event = eventsViewModel.getEventById(eventId)!!
+    }
+
     val user = usersViewModel.getUserById(userId)
     var idLocation by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
@@ -94,7 +101,7 @@ fun TicketTransactionScreen(
                 ) {
 
                     val model = ImageRequest.Builder(LocalContext.current)
-                        .data(event?.imageUrl)
+                        .data(event.imageUrl)
                         .crossfade(true)
                         .build()
 
@@ -126,7 +133,7 @@ fun TicketTransactionScreen(
                             .padding(top = 270.dp, start = 20.dp),
                     ) {
                         Text(
-                            text = event!!.title,
+                            text = event.title,
                             style = MaterialTheme.typography.headlineLarge,
                             color = Color.White,
                             fontWeight = FontWeight.SemiBold,
@@ -152,7 +159,7 @@ fun TicketTransactionScreen(
                         .padding(top = 5.dp, start = 20.dp),
                 ) {
                     Text(
-                        text = "Detalles",
+                        text = stringResource(id = R.string.label_detalles),
                         fontSize = 23.sp,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
@@ -190,6 +197,11 @@ fun BuyTicketForm(
     var quantity by rememberSaveable { mutableStateOf("") }
     var idLocation by rememberSaveable { mutableStateOf("") }
 
+    var event by rememberSaveable { mutableStateOf(Event()) }
+    LaunchedEffect (eventId) {
+        event = eventsViewModel.getEventById(eventId)!!
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -202,8 +214,8 @@ fun BuyTicketForm(
                 .width(318.dp),
             value = quantity,
             onValueChange = { quantity = it },
-            supportingText = stringResource(id = R.string.err_codigo),
-            label = "Cantidad",
+            supportingText = stringResource(id = R.string.err_cantidad),
+            label = stringResource(id = R.string.label_cantidad),
             onValidate = { it.isEmpty() || it.toIntOrNull() == null },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
@@ -214,15 +226,15 @@ fun BuyTicketForm(
                 .padding(bottom = 14.dp),
             value = idLocation,
             onValueChange = { idLocation = it },
-            label = "Tarifa",
+            label = stringResource(id = R.string.placeholder_tarifa),
             items = eventsViewModel.getEventLocationsById(eventId)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        SleekButton(text = "Comprar", onClickAction = {
+        SleekButton(text = stringResource(id = R.string.btn_comprar), onClickAction = {
             ticketViewModel.addTicketCart(
-                event = eventsViewModel.getEventById(eventId)!!,
+                event = event,
                 locationId = idLocation,
                 quantity = quantity.toInt(),
                 user = usersViewModel.getUserById(userId)!!

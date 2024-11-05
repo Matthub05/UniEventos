@@ -54,6 +54,7 @@
     <string name="placeholder_cupos_maximos">Cupos máximos</string>
     <string name="err_cupos_maximos">Los cupos máximos no son válidos</string>
     <string name="placeholder_tarifa">Tarifa</string>
+    <string name="placeholder_tarifas">Tarifas</string>
     <string name="err_tarifa">La tarifa no es válida</string>
     <string name="titulo_generacion_cupon">Generación de cupones</string>
     <string name="placeholder_codigo_cupon">Código de cupón</string>
@@ -77,11 +78,31 @@
     <string name="btn_cerrar_sesion">Cerrar Sesión</string>
     <string name="btn_guardar_cambios">Guardar cambios</string>
     <string name="user_created">¡Usuario registrado satisfactoriamente!</string>
-    <string name="coupon_created">¡Cupón creado Ssatisfactoriamente!</string>
+    <string name="coupon_created">¡Cupón creado satisfactoriamente!</string>
     <string name="btn_eliminar">Eliminar</string>
     <string name="err_campos_vacios">Por favor, complete todos los campos</string>
     <string name="btn_detalles_compra">Detalles de tiquete</string>
     <string name="btn_ok">Confirmar</string>
     <string name="label_descuento">Descuento</string>
     <string name="err_fecha">La fecha no es válida</string>
+    <string name="err_no_localizacion">Debe añadir al menos una ubicación</string>
+    <string name="nav_home" translatable="false">Home</string>
+    <string name="nav_ajustes">Ajustes</string>
+    <string name="nav_acerca_de">Acerca de</string>
+    <string name="label_detalles">Detalles</string>
+    <string name="label_cantidad">Cantidad</string>
+    <string name="err_cantidad">La cantidad no es válida</string>
+    <string name="btn_comprar">Comprar</string>
+    <string name="text_unidades">unidades</string>
+    <string name="text_total" translatable="false">Total</string>
+    <string name="text_precio">Precio</string>
+    <string name="btn_guardar_evento">Guardar evento</string>
+    <string name="btn_comprar_tiquete">Comprar tiquete</string>
+    <string name="label_url_imagen">Url de la imagen</string>
+    <string name="text_multimedia">Multimedia</string>
+    <string name="text_recinto">Recinto</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="adv_eliminar_evento">¿Desea eliminar el evento?</string>
+    <string name="adv_accion_no_se_puede_deshacer">Esta acción no se puede deshacer</string>
+    <string name="adv_error" translatable="false">Error</string>
 </resources>
