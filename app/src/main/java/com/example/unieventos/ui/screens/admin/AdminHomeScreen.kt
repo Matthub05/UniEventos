@@ -15,11 +15,13 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Stars
+import androidx.compose.material.icons.filled.SupervisorAccount
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Stars
+import androidx.compose.material.icons.outlined.SupervisorAccount
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -56,6 +58,7 @@ import com.example.unieventos.ui.components.NavigationBarCustom
 import com.example.unieventos.ui.components.SearchBarTop
 import com.example.unieventos.ui.screens.admin.navigation.AdminRouteScreen
 import com.example.unieventos.ui.screens.admin.tabs.AdminEventsScreen
+import com.example.unieventos.ui.screens.admin.tabs.ArtistsScreen
 import com.example.unieventos.ui.screens.admin.tabs.CouponsScreen
 import com.example.unieventos.ui.screens.client.navigation.UserRouteScreen
 import com.example.unieventos.viewmodel.ArtistViewModel
@@ -70,6 +73,7 @@ fun AdminHomeScreen(
     couponsViewModel: CouponsViewModel,
     onLogout: () -> Unit,
     onNavigateToCreateEvent: (String?) -> Unit,
+    onNavigateToCreateArtist: (String?) -> Unit,
     onNavigateToCreateCoupon: () -> Unit
 ) {
 
@@ -187,6 +191,8 @@ fun AdminHomeScreen(
                     onClick = {
                         if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabEvents::class) == true)
                             onNavigateToCreateEvent(null)
+                        else if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabArtists::class) == true)
+                            onNavigateToCreateArtist(null)
                         else
                             onNavigateToCreateCoupon()
                     }
@@ -204,6 +210,13 @@ fun AdminHomeScreen(
                             route = AdminRouteScreen.TabEvents,
                             selectedIcon = Icons.Filled.Star,
                             unselectedIcon = Icons.Outlined.StarOutline,
+                            hasNews = false,
+                        ),
+                        BottomNavigationItem(
+                            title = stringResource(id = R.string.nav_artistas),
+                            route = AdminRouteScreen.TabArtists,
+                            selectedIcon = Icons.Filled.SupervisorAccount,
+                            unselectedIcon = Icons.Outlined.SupervisorAccount,
                             hasNews = false,
                         ),
                         BottomNavigationItem(
@@ -225,6 +238,7 @@ fun AdminHomeScreen(
                 eventsViewModel = eventsViewModel,
                 artistViewModel = artistViewModel,
                 onNavigateToCreateEvent = onNavigateToCreateEvent,
+                onNavigateToCreateArtist = onNavigateToCreateArtist
             )
 
         }
@@ -239,6 +253,7 @@ fun NavHostAdmin(
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
     onNavigateToCreateEvent: (String?) -> Unit,
+    onNavigateToCreateArtist: (String?) -> Unit,
 ) {
 
     NavHost(
@@ -255,6 +270,15 @@ fun NavHostAdmin(
                 onNavigateToCreateEvent = onNavigateToCreateEvent,
             )
         }
+
+        composable<AdminRouteScreen.TabArtists> {
+            ArtistsScreen(
+                paddingValues = paddingValues,
+                artistViewModel = artistViewModel,
+                onNavigateToCreateArtist = onNavigateToCreateArtist,
+            )
+        }
+
         composable<AdminRouteScreen.TabCoupons> {
             CouponsScreen(
                 paddingValues = paddingValues,

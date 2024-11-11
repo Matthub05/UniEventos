@@ -17,6 +17,7 @@ import com.example.unieventos.ui.screens.NewLoginScreen
 import com.example.unieventos.ui.screens.client.ProfileEditScreen
 import com.example.unieventos.ui.screens.client.ArtistDetailsScreen
 import com.example.unieventos.ui.screens.SignUpScreen
+import com.example.unieventos.ui.screens.admin.CreateArtistScreen
 import com.example.unieventos.ui.screens.client.TicketTransactionScreen
 import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
@@ -124,7 +125,12 @@ fun Navigation(
                 onNavigateToCreateEvent = { eventId: String? ->
                     navController.navigate(RouteScreen.CreateEventScreen(eventId))
                 },
-                onNavigateToCreateCoupon = { navController.navigate(RouteScreen.CreateCouponScreen) },
+                onNavigateToCreateArtist = { artistId: String? ->
+                    navController.navigate(RouteScreen.CreateArtistScreen(artistId))
+                                           },
+                onNavigateToCreateCoupon = {
+                    navController.navigate(RouteScreen.CreateCouponScreen)
+                                           },
                 couponsViewModel = couponViewModel,
                 artistViewModel = artistViewModel
             )
@@ -161,6 +167,17 @@ fun Navigation(
                     navController.popBackStack()
                 },
                 eventsViewModel = eventsViewModel,
+                artistViewModel = artistViewModel
+            )
+        }
+
+        composable<RouteScreen.CreateArtistScreen> {
+            val artistId = it.arguments?.getString("artistId")
+            CreateArtistScreen(
+                artistId = artistId ?: "",
+                onNavigateToBack = {
+                    navController.popBackStack()
+                },
                 artistViewModel = artistViewModel
             )
         }

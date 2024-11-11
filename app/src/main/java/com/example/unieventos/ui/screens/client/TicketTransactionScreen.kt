@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -55,8 +56,10 @@ import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.TicketViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
+import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -71,9 +74,36 @@ fun TicketTransactionScreen(
 ) {
     val formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm")
 
-    var event by rememberSaveable { mutableStateOf(Event()) }
-    LaunchedEffect (eventId) {
-        event = eventsViewModel.getEventById(eventId)!!
+    var event by remember { mutableStateOf<Event?>(null) }
+    var title by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var idArtist by rememberSaveable { mutableStateOf("") }
+    var category by rememberSaveable { mutableStateOf("") }
+    var date by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+    var capacity by rememberSaveable { mutableStateOf("") }
+    var locationName by rememberSaveable { mutableStateOf("") }
+    var location by rememberSaveable { mutableStateOf("") }
+    var imageUrl by rememberSaveable { mutableStateOf("") }
+    var eventLocations by remember { mutableStateOf( listOf<EventLocation>() ) }
+
+    LaunchedEffect(eventId) {
+        if (!eventId.isNullOrEmpty()) {
+            event = eventsViewModel.getEventById(eventId)
+            event?.let { loadedEvent ->
+                title = loadedEvent.title
+                description = loadedEvent.description
+                idArtist = loadedEvent.artistId
+                category = loadedEvent.category
+                date = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(loadedEvent.date)
+                name = loadedEvent.eventSite.name
+                capacity = loadedEvent.eventSite.capacity.toString()
+                locationName = loadedEvent.eventSite.name
+                location = loadedEvent.eventSite.location
+                imageUrl = loadedEvent.imageUrl
+                eventLocations = loadedEvent.locations
+            }
+        }
     }
 
     val user = usersViewModel.getUserById(userId)
@@ -101,7 +131,7 @@ fun TicketTransactionScreen(
                 ) {
 
                     val model = ImageRequest.Builder(LocalContext.current)
-                        .data(event.imageUrl)
+                        .data(imageUrl)
                         .crossfade(true)
                         .build()
 
@@ -133,7 +163,7 @@ fun TicketTransactionScreen(
                             .padding(top = 270.dp, start = 20.dp),
                     ) {
                         Text(
-                            text = event.title,
+                            text = title,
                             style = MaterialTheme.typography.headlineLarge,
                             color = Color.White,
                             fontWeight = FontWeight.SemiBold,
@@ -141,9 +171,7 @@ fun TicketTransactionScreen(
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
-                            text = event.date.toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime().format(formatter),
+                            text = date,
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.Gray,
                             fontSize = 13.sp

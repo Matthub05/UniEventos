@@ -8,5 +8,8 @@ sealed class AdminRouteScreen {
     data object TabEvents : AdminRouteScreen()
 
     @Serializable
+    data object TabArtists : AdminRouteScreen()
+
+    @Serializable
     data object TabCoupons : AdminRouteScreen()
 }

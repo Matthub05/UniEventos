@@ -76,6 +76,39 @@ fun TextFieldForm(
     )
 }
 
+@Composable
+fun LongTextFieldForm(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    supportingText: String,
+    label: String,
+    onValidate: (String) -> Boolean,
+    maxLines: Int,
+    minLines: Int,
+
+){
+
+    var isError by rememberSaveable { mutableStateOf(false) }
+
+    OutlinedTextField(
+        modifier = modifier,
+        value = value,
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                Text(text = supportingText)
+            }
+        },
+        label = { Text(text = label) },
+        onValueChange = {
+            onValueChange(it)
+            isError = onValidate(it)
+        },
+        maxLines = maxLines,
+        minLines = minLines,
+    )
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownMenuForm(

@@ -101,4 +101,10 @@
     <string name="btn_cancelar">Cancelar</string>
     <string name="adv_eliminar_evento">¿Desea eliminar el evento?</string>
     <string name="adv_accion_no_se_puede_deshacer">Esta acción no se puede deshacer</string>
+    <string name="nav_artistas">Artistas</string>
+    <string name="placeholder_genero">Género</string>
+    <string name="title_registrar_artista">Registrar artista</string>
+    <string name="title_modificar_artista">Modificar artista</string>
+    <string name="placeholder_form_artista">Nuevo Artista</string>
+    <string name="adv_eliminar_artista">¿Desea eliminar este artista?</string>
 </resources>

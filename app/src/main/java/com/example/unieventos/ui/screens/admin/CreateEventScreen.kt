@@ -113,7 +113,6 @@ fun CreateEventScreen(
                 location = loadedEvent.eventSite.location
                 imageUrl = loadedEvent.imageUrl
                 eventLocations = loadedEvent.locations
-
                 componentTitle = titleModificar
             }
         }

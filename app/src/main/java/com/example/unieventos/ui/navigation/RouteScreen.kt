@@ -32,6 +32,9 @@ sealed class RouteScreen {
     data class ArtistDetailScreen(val artistId: String) : RouteScreen()
 
     @Serializable
+    data class CreateArtistScreen(val artistId: String?) : RouteScreen()
+
+    @Serializable
     data object CreateCouponScreen : RouteScreen()
 
     @Serializable

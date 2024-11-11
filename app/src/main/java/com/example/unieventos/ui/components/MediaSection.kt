@@ -38,7 +38,7 @@ import com.example.unieventos.models.Event
 @Composable
 fun MediaSection(
     modifier: Modifier,
-    event: Event,
+    imageUrl: String,
 ) {
     Column(modifier = modifier) {
         Text(
@@ -57,16 +57,16 @@ fun MediaSection(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            items( event.mediaUrls ) { mediaUrl ->
-                Picture(mediaUrl)
+            item {
+                Picture(imageUrl)
             }
 
-            items( event.mediaUrls ) { mediaUrl ->
-                Picture(mediaUrl)
+            item {
+                Picture(imageUrl)
             }
 
-            items( event.mediaUrls ) { mediaUrl ->
-                Picture(mediaUrl)
+            item {
+                Picture(imageUrl)
             }
 
         }

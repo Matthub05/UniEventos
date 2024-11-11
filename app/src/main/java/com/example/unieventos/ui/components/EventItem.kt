@@ -1,6 +1,7 @@
 package com.example.unieventos.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.unieventos.R
+import com.example.unieventos.models.Artist
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.viewmodel.ArtistViewModel
@@ -40,6 +48,18 @@ fun EventItem(
     onNavigateToCreateEvent: (String) -> Unit = {}
 ) {
 
+    var artist by remember { mutableStateOf<Artist?>(null) }
+    var artistName by rememberSaveable { mutableStateOf("") }
+
+    LaunchedEffect(event.artistId) {
+        if (!event.artistId.isNullOrEmpty()) {
+            artist = artistViewModel.getArtistById(event.artistId)
+            artist?.let { loadedArtist ->
+                artistName = loadedArtist.name
+            }
+        }
+    }
+
     if ( onNavigateToEventDetail == onNavigateToCreateEvent
         || EventItemDestination.entries.toTypedArray().none { it.name == destination } ) {
         throw Exception(stringResource(id = R.string.err_navegacion_invalida))
@@ -54,7 +74,10 @@ fun EventItem(
         Row (
             modifier = Modifier
                 .padding(10.dp)
-                .clickable {
+                .clickable  (
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ){
                     if (destination == EventItemDestination.DETAIL.name) {
                         onNavigateToEventDetail(event.id, userId)
                     } else if (destination == EventItemDestination.CREATE.name) {
@@ -86,7 +109,7 @@ fun EventItem(
                     text = event.title,
                     fontSize = 17.sp,
                 )
-                Text(text = artistViewModel.getArtistById(event.artistId)?.name ?: "",
+                Text(text = artistName ?: "",
                     fontSize = 13.sp,
                     color = Color.Gray)
 
