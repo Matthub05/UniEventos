@@ -1,8 +1,6 @@
 package com.example.unieventos.ui.screens
 
-import android.content.Context
 import android.util.Patterns
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,16 +17,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -37,15 +38,15 @@ import com.example.unieventos.models.Role
 import com.example.unieventos.models.User
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
+import com.example.unieventos.utils.RequestResult
 import com.example.unieventos.viewmodel.UsersViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun SignUpScreen(
     onNavigateToBack: () -> Unit,
     usersViewModel: UsersViewModel
 ) {
-
-    val context = LocalContext.current
 
     Scaffold (
         topBar = {
@@ -62,8 +63,7 @@ fun SignUpScreen(
         SignUpForm(
             usersViewModel,
             paddingValues,
-            context,
-            onNavigateToBack
+            onNavigateToBack,
         )
 
     }
@@ -74,9 +74,10 @@ fun SignUpScreen(
 fun SignUpForm(
     usersViewModel: UsersViewModel,
     padding: PaddingValues,
-    context: Context,
     onNavigateToBack: () -> Unit,
 ) {
+
+    val authResult by usersViewModel.authResult.collectAsState()
 
     var cedula by rememberSaveable { mutableStateOf("") }
     var nombre by rememberSaveable { mutableStateOf("") }
@@ -171,6 +172,30 @@ fun SignUpForm(
 
         Spacer(modifier = Modifier.height(10.dp))
 
+        when(authResult) {
+            is RequestResult.Loading -> {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+            is RequestResult.Failure -> {
+                Text(
+                    text = (authResult as RequestResult.Failure).error,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+            is RequestResult.Success -> {
+                Text(
+                    text = (authResult as RequestResult.Success).message,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                LaunchedEffect (Unit) {
+                    delay(2000)
+                    onNavigateToBack()
+                    usersViewModel.resetAuthResult()
+                }
+            }
+            null -> { }
+        }
+
         Button(
             onClick = {
                 usersViewModel.createUser(
@@ -185,11 +210,11 @@ fun SignUpForm(
                         Role.CLIENT
                     )
                 )
-
-                Toast.makeText(context, context.getString(R.string.user_created), Toast.LENGTH_SHORT).show()
-                onNavigateToBack()
             },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp).width(318.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 25.dp)
+                .width(318.dp)
                 .height(50.dp),
             shape = RoundedCornerShape(4.dp),
         ) {

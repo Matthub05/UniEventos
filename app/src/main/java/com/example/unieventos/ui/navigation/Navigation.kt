@@ -2,6 +2,8 @@ package com.example.unieventos.ui.navigation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,6 +38,7 @@ fun Navigation(
 ) {
 
     val navController = rememberNavController()
+    val currentUser by usersViewModel.currentUser.collectAsState()
 
     var startDestination: RouteScreen = RouteScreen.Login
     val context = LocalContext.current
@@ -45,7 +48,6 @@ fun Navigation(
         startDestination = when (session.rol) {
             Role.ADMIN -> RouteScreen.Home
             Role.CLIENT -> RouteScreen.UserHome
-            Role.DEFAULT -> RouteScreen.UserHome
         }
     }
 
@@ -58,11 +60,20 @@ fun Navigation(
         composable<RouteScreen.Login> {
             NewLoginScreen(
                 usersViewModel = usersViewModel,
-                onNavigateToHome = { role ->
+                onNavigateToHome = {
+
+                    val user = currentUser
+                    if (user == null) {
+                        Log.e("Error", "User is null")
+                        return@NewLoginScreen
+                    }
+
+                    val role = user.role
+                    SharedPreferenceUtils.savePreference(context, user.id, user.role)
+
                     val route = when (role) {
                         Role.ADMIN -> RouteScreen.Home
                         Role.CLIENT -> RouteScreen.UserHome
-                        Role.DEFAULT -> RouteScreen.UserHome
                     }
 
                     navController.navigate(route){
@@ -155,7 +166,6 @@ fun Navigation(
             ProfileEditScreen(
                 onNavigateToBack = { navController.popBackStack() },
                 usersViewModel = usersViewModel,
-                userId = session!!.id
             )
         }
 
@@ -203,9 +213,9 @@ fun Navigation(
                 eventId = eventId ?: "",
                 userId = userId ?: "",
                 eventsViewModel = eventsViewModel,
-                onNavigateToTransaction = { eventId , userId->
-                    navController.navigate(RouteScreen.TicketTransactionScreen(eventId, userId))
-                                          },
+                onNavigateToTransaction = { eventIdTransaction, userIdTransaction ->
+                    navController.navigate(RouteScreen.TicketTransactionScreen(eventIdTransaction, userIdTransaction))
+                },
                 onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome){
                     popUpTo(0){
                         inclusive = true

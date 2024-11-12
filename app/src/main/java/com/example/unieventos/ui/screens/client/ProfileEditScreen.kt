@@ -41,7 +41,6 @@ import com.example.unieventos.viewmodel.UsersViewModel
 fun ProfileEditScreen(
     onNavigateToBack: () -> Unit,
     usersViewModel: UsersViewModel,
-    userId: String
 ) {
 
     Scaffold (
@@ -74,11 +73,8 @@ fun ProfileEditForm(
 
     val context = LocalContext.current
     val session = SharedPreferenceUtils.getCurrentUser(context)
+    val userId = session?.id
     var user by remember { mutableStateOf<User?>(null) }
-
-    LaunchedEffect(null) {
-        user = session?.let { usersViewModel.getUserById(it.id) }
-    }
 
     val mensajeError = stringResource(id = R.string.err_campos_vacios)
 
@@ -86,7 +82,8 @@ fun ProfileEditForm(
     var direccion by rememberSaveable { mutableStateOf("") }
     var telefono by rememberSaveable { mutableStateOf("") }
 
-    LaunchedEffect(user?.id) {
+    LaunchedEffect(userId) {
+        if (userId != null) user = usersViewModel.getUserById(userId)
         user?.let { loadedUser ->
             nombre = loadedUser.nombre
             direccion = loadedUser.direccion

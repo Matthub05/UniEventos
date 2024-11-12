@@ -8,7 +8,7 @@ data class User(
     var telefono: String = "",
     val correo: String = "",
     val contrasena: String = "",
-    val role: Role = Role.DEFAULT,
+    val role: Role = Role.CLIENT,
     var tickets: List<Ticket> = listOf(),
 )
 

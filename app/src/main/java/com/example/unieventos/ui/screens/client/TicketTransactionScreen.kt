@@ -49,6 +49,7 @@ import coil.request.ImageRequest
 import com.example.unieventos.R
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
+import com.example.unieventos.models.User
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TransparentTopBarComponent
@@ -57,7 +58,6 @@ import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.TicketViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 import java.text.SimpleDateFormat
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -88,7 +88,7 @@ fun TicketTransactionScreen(
     var eventLocations by remember { mutableStateOf( listOf<EventLocation>() ) }
 
     LaunchedEffect(eventId) {
-        if (!eventId.isNullOrEmpty()) {
+        if (eventId.isNotEmpty()) {
             event = eventsViewModel.getEventById(eventId)
             event?.let { loadedEvent ->
                 title = loadedEvent.title
@@ -106,7 +106,13 @@ fun TicketTransactionScreen(
         }
     }
 
-    val user = usersViewModel.getUserById(userId)
+    var user by remember { mutableStateOf<User?>(null) }
+    LaunchedEffect(userId) {
+        if (userId.isNotEmpty()) {
+            user = usersViewModel.getUserById(userId)
+        }
+    }
+
     var idLocation by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
 
@@ -230,6 +236,11 @@ fun BuyTicketForm(
         event = eventsViewModel.getEventById(eventId)!!
     }
 
+    var user by rememberSaveable { mutableStateOf(User()) }
+    LaunchedEffect (userId) {
+        user = usersViewModel.getUserById(userId)!!
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -265,8 +276,7 @@ fun BuyTicketForm(
                 event = event,
                 locationId = idLocation,
                 quantity = quantity.toInt(),
-                user = usersViewModel.getUserById(userId)!!
-
+                user = user
             )
 
             Toast.makeText(context, context.getString(R.string.coupon_created), Toast.LENGTH_SHORT).show()

@@ -44,11 +44,12 @@ fun UserInfoScreen(
 
     val context = LocalContext.current
     val session = SharedPreferenceUtils.getCurrentUser(context)
+    val userId = session?.id
 
     var user by remember { mutableStateOf<User?>(null) }
 
-    LaunchedEffect(context) {
-        user = session?.let { usersViewModel.getUserById(it.id) }
+    LaunchedEffect(userId) {
+        if (userId != null) user = usersViewModel.getUserById(userId)
     }
 
     Column (

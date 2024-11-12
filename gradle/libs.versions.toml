@@ -15,6 +15,7 @@ volley = "1.2.1"
 coilCompose = "2.7.0"
 googleGmsGoogleServices = "4.4.2"
 firebaseFirestore = "25.1.1"
+firebaseAuth = "23.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +38,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
