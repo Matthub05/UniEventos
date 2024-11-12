@@ -78,29 +78,29 @@ fun ProfileEditForm(
 
     val mensajeError = stringResource(id = R.string.err_campos_vacios)
 
-    var nombre by rememberSaveable { mutableStateOf("") }
-    var direccion by rememberSaveable { mutableStateOf("") }
-    var telefono by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+    var direction by rememberSaveable { mutableStateOf("") }
+    var phone by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(userId) {
         if (userId != null) user = usersViewModel.getUserById(userId)
         user?.let { loadedUser ->
-            nombre = loadedUser.nombre
-            direccion = loadedUser.direccion
-            telefono = loadedUser.telefono
+            name = loadedUser.name
+            direction = loadedUser.direction
+            phone = loadedUser.phone
         }
     }
 
     fun camposValidos(): Boolean {
-        return nombre.isNotEmpty() && direccion.isNotEmpty() && telefono.isNotEmpty()
+        return name.isNotEmpty() && direction.isNotEmpty() && phone.isNotEmpty()
     }
 
     fun saveUser() {
         val updatedUser = UserUpdateDTO(
             id = user?.id,
-            nombre = nombre,
-            direccion = direccion,
-            telefono = telefono,
+            name = name,
+            direction = direction,
+            phone = phone,
         )
 
         usersViewModel.updateUser(updatedUser)
@@ -117,8 +117,8 @@ fun ProfileEditForm(
 
         TextFieldForm(
             modifier = Modifier.fillMaxWidth(),
-            value = nombre,
-            onValueChange = { nombre = it },
+            value = name,
+            onValueChange = { name = it },
             supportingText = stringResource(id = R.string.label_nombre_invalido),
             label = stringResource(id = R.string.label_nombre),
             onValidate = { it.isEmpty() },
@@ -127,8 +127,8 @@ fun ProfileEditForm(
 
         TextFieldForm(
             modifier = Modifier.fillMaxWidth(),
-            value = direccion,
-            onValueChange = { direccion = it },
+            value = direction,
+            onValueChange = { direction = it },
             supportingText = stringResource(id = R.string.label_direccion_invalida),
             label = stringResource(id = R.string.label_direccion),
             onValidate = { it.isEmpty() },
@@ -137,8 +137,8 @@ fun ProfileEditForm(
 
         TextFieldForm(
             modifier = Modifier.fillMaxWidth(),
-            value = telefono,
-            onValueChange = { telefono = it },
+            value = phone,
+            onValueChange = { phone = it },
             supportingText = stringResource(id = R.string.label_telefono_invalido),
             label = stringResource(id = R.string.label_telefono),
             onValidate = { it.isEmpty() || it.toIntOrNull() == null },

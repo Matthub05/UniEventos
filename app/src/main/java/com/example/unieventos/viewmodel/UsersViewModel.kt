@@ -39,10 +39,10 @@ class UsersViewModel: ViewModel() {
     }
 
     private suspend fun createUserFirebase(user: User) {
-        val response = auth.createUserWithEmailAndPassword(user.correo, user.contrasena).await()
+        val response = auth.createUserWithEmailAndPassword(user.email, user.password).await()
         val userId = response.user?.uid ?: throw Exception("No se pudo crear el usuario")
 
-        val userSave = user.copy(id = userId, contrasena = "")
+        val userSave = user.copy(id = userId, password = "")
 
         db.collection(collectionPathName).document(userId).set(userSave).await()
     }
@@ -59,9 +59,9 @@ class UsersViewModel: ViewModel() {
             if (newUser.id == null) return@launch
             val user = getUserById(newUser.id) ?: return@launch
             val updatedUser = user.copy(
-                nombre = newUser.nombre,
-                direccion = newUser.direccion,
-                telefono = newUser.telefono,
+                name = newUser.name,
+                direction = newUser.direction,
+                phone = newUser.phone,
             )
             db.collection(collectionPathName).document(newUser.id).set(updatedUser).await()
         }

@@ -3,18 +3,18 @@ package com.example.unieventos.models
 data class User(
     var id: String = "",
     val cedula: String = "",
-    var nombre: String = "",
-    var direccion: String = "",
-    var telefono: String = "",
-    val correo: String = "",
-    val contrasena: String = "",
+    var name: String = "",
+    var direction: String = "",
+    var phone: String = "",
+    val email: String = "",
+    val password: String = "",
     val role: Role = Role.CLIENT,
     var tickets: List<Ticket> = listOf(),
 )
 
 data class UserUpdateDTO(
     val id: String?,
-    val nombre: String,
-    val direccion: String,
-    val telefono: String,
+    val name: String,
+    val direction: String,
+    val phone: String,
 )

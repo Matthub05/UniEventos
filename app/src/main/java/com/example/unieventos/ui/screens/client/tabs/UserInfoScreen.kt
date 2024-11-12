@@ -73,13 +73,13 @@ fun UserInfoScreen(
         )
 
         Text(
-            text = user?.nombre ?: "",
+            text = user?.name ?: "",
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally),
             fontSize = MaterialTheme.typography.headlineMedium.fontSize
         )
-        Text(text = user?.correo ?: "")
+        Text(text = user?.email ?: "")
 
         Spacer(modifier = Modifier.weight(1f))
 
