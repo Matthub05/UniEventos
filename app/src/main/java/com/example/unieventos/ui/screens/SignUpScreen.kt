@@ -18,7 +18,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.models.Role
 import com.example.unieventos.models.User
+import com.example.unieventos.models.ui.AlertType
+import com.example.unieventos.ui.components.AlertMessage
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
 import com.example.unieventos.utils.RequestResult
@@ -177,16 +178,14 @@ fun SignUpForm(
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
             is RequestResult.Failure -> {
-                Text(
-                    text = (authResult as RequestResult.Failure).error,
-                    color = MaterialTheme.colorScheme.error
-                )
+                AlertMessage(type = AlertType.ERROR, message = (authResult as RequestResult.Failure).error)
+                LaunchedEffect (Unit) {
+                    delay(2000)
+                    usersViewModel.resetAuthResult()
+                }
             }
             is RequestResult.Success -> {
-                Text(
-                    text = (authResult as RequestResult.Success).message,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                AlertMessage(type = AlertType.SUCCESS, message = (authResult as RequestResult.Success).message)
                 LaunchedEffect (Unit) {
                     delay(2000)
                     onNavigateToBack()

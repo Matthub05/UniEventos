@@ -20,7 +20,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +36,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.unieventos.R
+import com.example.unieventos.models.ui.AlertType
+import com.example.unieventos.ui.components.AlertMessage
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.utils.RequestResult
 import com.example.unieventos.viewmodel.UsersViewModel
@@ -99,7 +100,6 @@ fun LoginForm(
             .padding(start = 20.dp)
             .offset(y = (-140).dp)
             .fillMaxSize(),
-        //horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
@@ -138,25 +138,49 @@ fun LoginForm(
         Spacer(modifier = Modifier.height(10.dp))
 
         Button(
-            modifier = Modifier.width(318.dp).height(50.dp),
+            modifier = Modifier
+                .width(318.dp)
+                .height(50.dp),
             shape = RoundedCornerShape(4.dp),
             onClick = { usersViewModel.loginUser(email, password) }
         ) {
             Text(text = stringResource(id = R.string.label_boton_login))
         }
 
+        if (authResult is RequestResult.Loading) {
+            LinearProgressIndicator(modifier = Modifier.width(318.dp))
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            modifier = Modifier
+                .width(318.dp)
+                .height(50.dp),
+            shape = RoundedCornerShape(4.dp),
+            onClick = { onNavigateToSignUp() }
+        ) {
+            Text(text = stringResource(id = R.string.label_boton_registrarse))
+        }
+
         when(authResult) {
-            is RequestResult.Loading -> { LinearProgressIndicator(modifier = Modifier.width(318.dp)) }
+            is RequestResult.Loading -> {  }
             is RequestResult.Failure -> {
-                Text(
-                    text = (authResult as RequestResult.Failure).error,
-                    color = MaterialTheme.colorScheme.error
+                AlertMessage(
+                    type = AlertType.ERROR,
+                    message = (authResult as RequestResult.Failure).error,
+                    modifier = Modifier.width(318.dp)
                 )
+                LaunchedEffect (Unit) {
+                    delay(2000)
+                    usersViewModel.resetAuthResult()
+                }
             }
             is RequestResult.Success -> {
-                Text(
-                    text = (authResult as RequestResult.Success).message,
-                    color = MaterialTheme.colorScheme.primary
+                AlertMessage(
+                    type = AlertType.SUCCESS,
+                    message = (authResult as RequestResult.Success).message,
+                    modifier = Modifier.width(318.dp)
                 )
                 LaunchedEffect (Unit) {
                     delay(2000)
@@ -165,18 +189,6 @@ fun LoginForm(
                 }
             }
             null -> { }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        TextButton(
-            modifier = Modifier
-                .width(318.dp)
-                .height(50.dp),
-            shape = RoundedCornerShape(4.dp),
-            onClick = { onNavigateToSignUp() }
-        ) {
-            Text(text = stringResource(id = R.string.label_boton_registrarse))
         }
     }
 }
