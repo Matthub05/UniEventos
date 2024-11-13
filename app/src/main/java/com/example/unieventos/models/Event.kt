@@ -14,7 +14,7 @@ data class Event(
     val mediaUrls: List<String> = listOf(),
     var locations: List<EventLocation> = listOf(),
 ) {
-    fun findLocationById(locationId: String): EventLocation? {
+    fun findLocationById(locationId: Int): EventLocation? {
         return locations.find { it.id == locationId }
     }
 }

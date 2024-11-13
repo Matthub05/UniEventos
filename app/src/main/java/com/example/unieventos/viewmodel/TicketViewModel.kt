@@ -1,7 +1,6 @@
 package com.example.unieventos.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.unieventos.models.Coupon
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.Ticket
 import com.example.unieventos.models.TicketStatus
@@ -9,7 +8,6 @@ import com.example.unieventos.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.util.Calendar
 import java.util.Date
 
 class TicketViewModel:ViewModel() {
@@ -21,7 +19,7 @@ class TicketViewModel:ViewModel() {
         _ticket.value = getTickets()
     }
 
-    fun addTicketCart(user: User, event: Event, locationId: String, quantity: Int) {
+    fun addTicketCart(user: User, event: Event, locationId: Int, quantity: Int) {
         val location = event.findLocationById(locationId)!!
         val ticket = Ticket(
             id = (_ticket.value.size + 1).toString()    ,

@@ -3,9 +3,6 @@ package com.example.unieventos.ui.screens.admin
 import AutoResizedText
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,15 +20,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -80,7 +74,6 @@ import com.example.unieventos.ui.components.DatePickerForm
 import com.example.unieventos.ui.components.LongTextFieldForm
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
-import com.example.unieventos.ui.components.TopBarComponent
 import com.example.unieventos.ui.components.TransparentTopBarComponent
 import com.example.unieventos.utils.Formatters
 import com.example.unieventos.utils.RequestResult
@@ -104,7 +97,6 @@ fun CreateEventScreen(
 
     val titleForm = stringResource(id = R.string.title_nuevo_evento)
     val defaultImage = "https://images.stockcake.com/public/7/1/7/7170f19b-43f2-4d74-9b02-426f5830c897_large/singer-at-spotlight-stockcake.jpg"
-    val componentImage = defaultImage
     var componentTitle = titleForm
     val scrollState = rememberScrollState()
 
@@ -264,7 +256,7 @@ fun CreateEventScreen(
             }
 
         },
-    ) {  innerPadding ->
+    ) {
 
         LazyColumn {
 
@@ -279,9 +271,8 @@ fun CreateEventScreen(
                     val model = ImageRequest.Builder(LocalContext.current)
                         .data(
                             if (imageUrl.isBlank() || imageUrl == "Image URL") {
-                                componentImage
-                            }
-                            else imageUrl,
+                                defaultImage
+                            } else imageUrl,
 
                             )
                         .crossfade(true)
@@ -316,11 +307,11 @@ fun CreateEventScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         AutoResizedText(
-                            text = if (title.isBlank()) titleForm else title,
+                            text = title.ifBlank { titleForm },
                         )
 
                         Text(
-                            text = if (name.isBlank()) "" else name,
+                            text = name.ifBlank { "" },
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.Gray,
                             fontSize = 17.sp
@@ -457,13 +448,6 @@ fun CreateEventScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                     )
 
-//                    Button(onClick = {   }) {
-//                        Row(verticalAlignment = Alignment.CenterVertically) {
-//                            Icon(imageVector = Icons.Default.Add, contentDescription = null)
-//                            Text(text = stringResource(id = R.string.btn_anadir_foto))
-//                        }
-//                    }
-
                     Spacer(modifier = Modifier.height(14.dp))
 
                     Text(
@@ -472,8 +456,6 @@ fun CreateEventScreen(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
-
-                    //Spacer(modifier = Modifier.height(14.dp))
 
                     eventLocations.forEach { location ->
                         Row(
@@ -529,14 +511,22 @@ fun CreateEventScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        selectedLocation = null
-                        showLocationDialog = false
+                        var newId: Int
+                        if (selectedLocation != null) {
+                            newId = selectedLocation!!.id
+                            eventLocations -= selectedLocation!!
+                        } else {
+                            newId = eventLocations[0].id + 1
+                        }
                         eventLocations += EventLocation(
-                            id = "1",
+                            id = newId,
                             name = locationName,
                             places = locationPlaces.toIntOrNull() ?: 0,
                             price = locationPrice.toDoubleOrNull() ?: 0.0,
                         )
+
+                        selectedLocation = null
+                        showLocationDialog = false
                         locationName = ""
                         locationPlaces = ""
                         locationPrice = ""

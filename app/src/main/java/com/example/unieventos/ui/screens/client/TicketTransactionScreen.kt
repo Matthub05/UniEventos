@@ -231,12 +231,12 @@ fun BuyTicketForm(
     var quantity by rememberSaveable { mutableStateOf("") }
     var idLocation by rememberSaveable { mutableStateOf("") }
 
-    var event by rememberSaveable { mutableStateOf(Event()) }
+    var event by rememberSaveable { mutableStateOf<Event?>(null) }
     LaunchedEffect (eventId) {
         event = eventsViewModel.getEventById(eventId)!!
     }
 
-    var user by rememberSaveable { mutableStateOf(User()) }
+    var user by rememberSaveable { mutableStateOf<User?>(null) }
     LaunchedEffect (userId) {
         user = usersViewModel.getUserById(userId)!!
     }
@@ -273,10 +273,10 @@ fun BuyTicketForm(
 
         SleekButton(text = stringResource(id = R.string.btn_comprar), onClickAction = {
             ticketViewModel.addTicketCart(
-                event = event,
-                locationId = idLocation,
+                event = event!!,
+                locationId = idLocation.toInt(),
                 quantity = quantity.toInt(),
-                user = user
+                user = user!!
             )
 
             Toast.makeText(context, context.getString(R.string.coupon_created), Toast.LENGTH_SHORT).show()
@@ -323,7 +323,7 @@ fun DropdownMenuLocation(
                     text = { Text(text = item.name) },
                     onClick = {
                         expanded = false
-                        onValueChange((item.id))
+                        onValueChange((item.id.toString()))
                     }
                 )
             }
