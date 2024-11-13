@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -91,6 +92,8 @@ fun LoginForm(
 
     val authResult by usersViewModel.authResult.collectAsState()
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -142,7 +145,8 @@ fun LoginForm(
                 .width(318.dp)
                 .height(50.dp),
             shape = RoundedCornerShape(4.dp),
-            onClick = { usersViewModel.loginUser(email, password) }
+            onClick = { usersViewModel.loginUser(email, password)
+                keyboardController?.hide()}
         ) {
             Text(text = stringResource(id = R.string.label_boton_login))
         }

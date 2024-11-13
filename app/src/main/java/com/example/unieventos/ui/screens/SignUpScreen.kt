@@ -179,6 +179,7 @@ fun SignUpForm(
             }
             is RequestResult.Failure -> {
                 AlertMessage(type = AlertType.ERROR, message = (authResult as RequestResult.Failure).error)
+
                 LaunchedEffect (Unit) {
                     delay(2000)
                     usersViewModel.resetAuthResult()

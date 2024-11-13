@@ -3,6 +3,9 @@ package com.example.unieventos.ui.screens.admin
 import AutoResizedText
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +16,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -31,9 +36,11 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -60,6 +67,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -67,13 +75,17 @@ import com.example.unieventos.R
 import com.example.unieventos.models.Artist
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.Ticket
+import com.example.unieventos.models.ui.AlertType
+import com.example.unieventos.ui.components.AlertMessage
 import com.example.unieventos.ui.components.LongTextFieldForm
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
 import com.example.unieventos.ui.components.TransparentTopBarComponent
+import com.example.unieventos.utils.RequestResult
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -86,7 +98,8 @@ fun CreateArtistScreen(
     val context = LocalContext.current
 
     val titleForm = stringResource(id = R.string.placeholder_form_artista)
-    val defaultImage = "https://images.stockcake.com/public/7/1/7/7170f19b-43f2-4d74-9b02-426f5830c897_large/singer-at-spotlight-stockcake.jpg"
+    val defaultImage =
+        "https://images.stockcake.com/public/7/1/7/7170f19b-43f2-4d74-9b02-426f5830c897_large/singer-at-spotlight-stockcake.jpg"
     var componentTitle = titleForm
     var componentImage = defaultImage
 
@@ -99,6 +112,10 @@ fun CreateArtistScreen(
     var imageUrl by rememberSaveable { mutableStateOf("") }
 
     var showConfirmationDialog by rememberSaveable { mutableStateOf(false) }
+    val authResult by artistViewModel.authResult.collectAsState()
+    var visible by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(artistId) {
         if (!artistId.isNullOrEmpty()) {
@@ -113,7 +130,7 @@ fun CreateArtistScreen(
             }
         }
     }
-    
+
     Scaffold(
         topBar = {
             TransparentTopBarComponent(
@@ -125,7 +142,6 @@ fun CreateArtistScreen(
         },
         floatingActionButton = {
             Column {
-
                 if (!artistId.isNullOrEmpty()) {
                     Spacer(
                         modifier = Modifier
@@ -134,7 +150,8 @@ fun CreateArtistScreen(
                     FloatingActionButton(
                         containerColor = Color.White,
                         modifier = Modifier
-                            .padding(end = 15.dp, bottom = 13.dp),
+                            .padding(end = 15.dp, bottom = 13.dp)
+                            .align(Alignment.End),
                         onClick = {
                             showConfirmationDialog = true
                         }
@@ -146,7 +163,8 @@ fun CreateArtistScreen(
                 FloatingActionButton(
                     containerColor = Color.White,
                     modifier = Modifier
-                        .padding(end = 15.dp, bottom = 13.dp),
+                        .padding(end = 15.dp, bottom = 13.dp)
+                        .align(Alignment.End),
                     onClick = {
                         val newArtist = Artist(
                             name = name,
@@ -160,11 +178,59 @@ fun CreateArtistScreen(
                             artistViewModel.updateArtist(newArtist)
                         } else
                             artistViewModel.createArtist(newArtist)
-                        onNavigateToBack()
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.Save, contentDescription = null)
+                    if (authResult is RequestResult.Loading) {
+                        CircularProgressIndicator(modifier = Modifier.width(24.dp))
+                    } else {
+                        Icon(imageVector = Icons.Default.Save, contentDescription = null)
+                    }
                 }
+
+                    when (authResult) {
+                        is RequestResult.Loading -> {  }
+                        is RequestResult.Failure -> {
+
+                                AlertMessage(
+                                    type = AlertType.ERROR,
+                                    message = (authResult as RequestResult.Failure).error,
+                                    modifier = Modifier
+                                        .width(318.dp)
+
+                                        .padding(bottom = 20.dp)
+                                )
+                                LaunchedEffect(Unit) {
+                                    delay(1000)
+                                    artistViewModel.resetAuthResult()
+
+                                }
+
+
+
+                        }
+                        is  RequestResult.Success -> {
+                            visible = true
+                            AnimatedVisibility(visible = visible,
+                                enter = slideInVertically(initialOffsetY = { it / 2 }),
+                                exit = slideOutVertically(targetOffsetY = { it / 2 })) {
+
+                                AlertMessage(
+                                    type = AlertType.SUCCESS,
+                                    message = (authResult as RequestResult.Success).message,
+                                    modifier = Modifier
+                                        .width(318.dp)
+                                )
+                                LaunchedEffect(Unit) {
+                                    delay(1000)
+                                    visible = false
+                                    onNavigateToBack()
+                                    artistViewModel.resetAuthResult()
+                                }
+                            }
+                        }
+                        null -> { }
+                    }
+
             }
 
         },
@@ -183,10 +249,9 @@ fun CreateArtistScreen(
                         .data(
                             if (imageUrl.isBlank() || imageUrl == "Image URL") {
                                 componentImage
-                            }
-                            else imageUrl,
+                            } else imageUrl,
 
-                        )
+                            )
                         .crossfade(true)
                         .build()
 
@@ -336,8 +401,9 @@ fun CreateArtistScreen(
                                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                                 return@SleekButton
                             }
+                            showConfirmationDialog = false
                             artistViewModel.deleteArtist(artistId)
-                            onNavigateToBack()
+
                         }
 
                         SleekButton(text = stringResource(id = R.string.btn_cancelar)) {

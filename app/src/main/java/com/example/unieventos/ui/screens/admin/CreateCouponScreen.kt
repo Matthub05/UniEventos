@@ -2,12 +2,15 @@ package com.example.unieventos.ui.screens.admin
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -16,6 +19,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,13 +35,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.unieventos.R
 import com.example.unieventos.models.Coupon
+import com.example.unieventos.models.ui.AlertType
+import com.example.unieventos.ui.components.AlertMessage
 import com.example.unieventos.ui.components.DatePickerForm
+import com.example.unieventos.ui.components.SleekButton
 
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TopBarComponent
+import com.example.unieventos.utils.RequestResult
 import com.example.unieventos.viewmodel.CouponsViewModel
+import kotlinx.coroutines.delay
 import java.util.Calendar
 
 @Composable
@@ -46,6 +57,7 @@ fun CreateCouponScreen(
 ) {
 
     val context = LocalContext.current
+
 
     Scaffold(
         topBar = {
@@ -58,7 +70,7 @@ fun CreateCouponScreen(
         }
     ) { innerPadding ->
 
-        CreateEventForm(
+        CreateCouponForm(
             padding = innerPadding,
             onNavigateToBack = onNavigateToBack,
             couponViewModel = couponViewModel,
@@ -70,12 +82,14 @@ fun CreateCouponScreen(
 }
 
 @Composable
-fun CreateEventForm(
+fun CreateCouponForm(
     padding: PaddingValues,
     onNavigateToBack: () -> Unit,
     couponViewModel: CouponsViewModel,
     context: Context
 ) {
+
+    val authResult by couponViewModel.authResult.collectAsState()
 
     var code by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
@@ -116,10 +130,10 @@ fun CreateEventForm(
         TextFieldForm(
             modifier = Modifier.fillMaxWidth(),
             value = discount.toString(),
-            onValueChange = { discount = it.toIntOrNull() ?: 0},
+            onValueChange = { discount = it.toIntOrNull() ?: 0 },
             supportingText = stringResource(id = R.string.err_descuento),
             label = stringResource(id = R.string.placeholder_descuento_cupon),
-            onValidate = { it.isEmpty() || it.toIntOrNull() == null},
+            onValidate = { it.isEmpty() || it.toIntOrNull() == null },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
@@ -148,35 +162,71 @@ fun CreateEventForm(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Button(
-            onClick = {
-                val cal = Calendar.getInstance()
-                var values = startDate.split("/")
-                cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
-                val startDateParsed = cal.time
-                values = endDate.split("/")
-                cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
-                val endDateParsed = cal.time
+        SleekButton(text = stringResource(id = R.string.btn_registrar_cupon)) {
+            val cal = Calendar.getInstance()
+            var values = startDate.split("/")
+            cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
+            val startDateParsed = cal.time
+            values = endDate.split("/")
+            cal.set(values[2].toInt(), values[1].toInt() - 1, values[0].toInt())
+            val endDateParsed = cal.time
 
-                couponViewModel.createCoupon(
-                    Coupon(
-                        id = "0",
-                        description = description,
-                        code = code,
-                        startDate = startDateParsed,
-                        endDate = endDateParsed,
-                        discount = discount.toDouble()
-                    )
+            couponViewModel.createCoupon(
+                Coupon(
+                    id = "0",
+                    description = description,
+                    code = code,
+                    startDate = startDateParsed,
+                    endDate = endDateParsed,
+                    discount = discount.toDouble()
                 )
+            )
 
-                Toast.makeText(context, context.getString(R.string.coupon_created), Toast.LENGTH_SHORT).show()
-                onNavigateToBack()
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 25.dp),
-        ) {
-            Text(text = stringResource(id = R.string.btn_registrar_cupon))
+        }
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Box() {
+            when (authResult) {
+                is RequestResult.Loading -> {
+                }
+
+                is RequestResult.Failure -> {
+                    AlertMessage(
+                        type = AlertType.ERROR,
+                        message = (authResult as RequestResult.Failure).error,
+                        modifier = Modifier
+                            .width(318.dp)
+                            .align(Alignment.BottomCenter)
+                            .zIndex(1f)
+                            .padding(bottom = 20.dp)
+                    )
+                    LaunchedEffect(Unit) {
+                        delay(1000)
+                        couponViewModel.resetAuthResult()
+                    }
+                }
+
+                is RequestResult.Success -> {
+                    AlertMessage(
+                        type = AlertType.SUCCESS,
+                        message = (authResult as RequestResult.Success).message,
+                        modifier = Modifier
+                            .width(318.dp)
+                            .align(Alignment.BottomCenter)
+                            .zIndex(2f)
+                            .padding(bottom = 20.dp)
+                    )
+                    LaunchedEffect(Unit) {
+                        delay(1000)
+                        onNavigateToBack()
+                        couponViewModel.resetAuthResult()
+                    }
+                }
+
+                null -> {
+                }
+            }
         }
 
     }

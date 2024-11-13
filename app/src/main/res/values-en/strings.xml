@@ -107,5 +107,7 @@
     <string name="title_modificar_artista">Edit artist</string>
     <string name="placeholder_form_artista">New Artist</string>
     <string name="adv_eliminar_artista">Do you want to delete this artist?</string>
+    <string name="title_nuevo_evento">New event</string>
+    <string name="text_cupos">Slots</string>
 
 </resources>

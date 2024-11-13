@@ -112,4 +112,7 @@
     <string name="placeholder_form_artista">Nuevo Artista</string>
     <string name="adv_eliminar_artista">¿Desea eliminar este artista?</string>
 
+    <string name="title_nuevo_evento">Nuevo Evento</string>
+    <string name="text_cupos">Cupos</string>
+
 </resources>

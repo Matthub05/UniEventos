@@ -67,7 +67,6 @@ fun TextFieldForm(
                 IconButton(onClick = { isHidden = !isHidden }) {
                     val visibilityIcon =
                         if (isHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                    // Please provide localized description for accessibility services
                     val description = if (isHidden) "Show password" else "Hide password"
                     Icon(imageVector = visibilityIcon, contentDescription = description)
                 }
