@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.unieventos.R
+import com.example.unieventos.dto.LocationDropdownDTO
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
 import com.example.unieventos.models.User
@@ -229,7 +230,7 @@ fun BuyTicketForm(
 ) {
 
     var quantity by rememberSaveable { mutableStateOf("") }
-    var idLocation by rememberSaveable { mutableStateOf("") }
+    var idLocation by rememberSaveable { mutableStateOf<LocationDropdownDTO?>(null) }
 
     var event by rememberSaveable { mutableStateOf<Event?>(null) }
     LaunchedEffect (eventId) {
@@ -263,7 +264,7 @@ fun BuyTicketForm(
             modifier = Modifier
                 .width(318.dp)
                 .padding(bottom = 14.dp),
-            value = idLocation,
+            value = idLocation?.locationName ?: "",
             onValueChange = { idLocation = it },
             label = stringResource(id = R.string.placeholder_tarifa),
             items = eventsViewModel.getEventLocationsById(eventId)
@@ -274,7 +275,7 @@ fun BuyTicketForm(
         SleekButton(text = stringResource(id = R.string.btn_comprar), onClickAction = {
             ticketViewModel.addTicketCart(
                 event = event!!,
-                locationId = idLocation.toInt(),
+                locationId = idLocation?.idLocation ?: 0,
                 quantity = quantity.toInt(),
                 user = user!!
             )
@@ -291,13 +292,12 @@ fun BuyTicketForm(
 fun DropdownMenuLocation(
     modifier: Modifier = Modifier,
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (LocationDropdownDTO) -> Unit,
     label: String,
     items: List<EventLocation>,
 ) {
 
     var expanded by rememberSaveable { mutableStateOf(false) }
-
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -323,7 +323,7 @@ fun DropdownMenuLocation(
                     text = { Text(text = item.name) },
                     onClick = {
                         expanded = false
-                        onValueChange((item.id.toString()))
+                        onValueChange(LocationDropdownDTO(item.id, item.name))
                     }
                 )
             }

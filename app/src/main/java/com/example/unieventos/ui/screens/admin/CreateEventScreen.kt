@@ -105,7 +105,7 @@ fun CreateEventScreen(
     var event by remember { mutableStateOf<Event?>(null) }
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
-    var idArtist by rememberSaveable { mutableStateOf("") }
+    var idArtist by rememberSaveable { mutableStateOf(arrayOf("", "")) }
     var category by rememberSaveable { mutableStateOf("") }
     var date by rememberSaveable { mutableStateOf("") }
     var name by rememberSaveable { mutableStateOf("") }
@@ -129,7 +129,7 @@ fun CreateEventScreen(
             event?.let { loadedEvent ->
                 title = loadedEvent.title
                 description = loadedEvent.description
-                idArtist = loadedEvent.artistId
+                idArtist[0] = loadedEvent.artistId
                 category = loadedEvent.category
                 date = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(loadedEvent.date)
                 name = loadedEvent.eventSite.name
@@ -197,7 +197,7 @@ fun CreateEventScreen(
                         val newEvent = Event(
                             title = title,
                             description = description,
-                            artistId = idArtist,
+                            artistId = idArtist[0],
                             category = category,
                             date = dateParsed,
                             eventSite = EventSite(
@@ -363,7 +363,7 @@ fun CreateEventScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 14.dp),
-                        value = idArtist,
+                        value = idArtist[1],
                         onValueChange = { idArtist = it },
                         label = stringResource(id = R.string.placeholder_artista),
                         items = artists
@@ -516,7 +516,11 @@ fun CreateEventScreen(
                             newId = selectedLocation!!.id
                             eventLocations -= selectedLocation!!
                         } else {
-                            newId = eventLocations[0].id + 1
+                            newId = if (eventLocations.isNotEmpty()) {
+                                eventLocations[0].id + 1
+                            } else {
+                                0
+                            }
                         }
                         eventLocations += EventLocation(
                             id = newId,
@@ -659,7 +663,7 @@ fun CreateEventScreen(
 fun DropdownMenuArtists(
     modifier: Modifier = Modifier,
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (Array<String>) -> Unit,
     label: String,
     items: List<Artist>,
 ) {
@@ -690,7 +694,7 @@ fun DropdownMenuArtists(
                     text = { Text(text = item.name) },
                     onClick = {
                         expanded = false
-                        onValueChange((item.id))
+                        onValueChange(arrayOf(item.id, item.name))
                     }
                 )
             }
