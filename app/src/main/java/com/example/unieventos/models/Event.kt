@@ -12,7 +12,7 @@ data class Event(
     val eventSite: EventSite = EventSite(),
     val imageUrl: String = "",
     val mediaUrls: List<String> = listOf(),
-    var locations: List<EventLocation> = listOf(),
+    var locations: List<EventLocation> = emptyList(),
 ) {
     fun findLocationById(locationId: Int): EventLocation? {
         return locations.find { it.id == locationId }

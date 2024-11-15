@@ -1,6 +1,9 @@
 package com.example.unieventos.ui.screens.client
 
+import com.example.unieventos.ui.components.ImageViewer
 import android.annotation.SuppressLint
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,8 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -42,6 +50,7 @@ import coil.request.ImageRequest
 import com.example.unieventos.R
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
+import com.example.unieventos.models.EventSite
 import com.example.unieventos.ui.components.MediaSection
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TransparentTopBarComponent
@@ -49,6 +58,7 @@ import com.example.unieventos.viewmodel.EventsViewModel
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -61,6 +71,9 @@ fun EventDetailScreen(
     onNavigateToTransaction: (String, String) -> Unit
 ) {
 
+    var showImagePreview by rememberSaveable { mutableStateOf(false) }
+    var previewImage by rememberSaveable { mutableStateOf("") }
+
     var event by remember { mutableStateOf<Event?>(null) }
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
@@ -72,6 +85,7 @@ fun EventDetailScreen(
     var locationName by rememberSaveable { mutableStateOf("") }
     var location by rememberSaveable { mutableStateOf("") }
     var imageUrl by rememberSaveable { mutableStateOf("") }
+    var mediaUrls by rememberSaveable { mutableStateOf( listOf<String>() ) }
     var eventLocations by remember { mutableStateOf( listOf<EventLocation>() ) }
 
     LaunchedEffect(eventId) {
@@ -88,6 +102,7 @@ fun EventDetailScreen(
                 locationName = loadedEvent.eventSite.name
                 location = loadedEvent.eventSite.location
                 imageUrl = loadedEvent.imageUrl
+                mediaUrls = loadedEvent.mediaUrls
                 eventLocations = loadedEvent.locations
             }
         }
@@ -105,8 +120,23 @@ fun EventDetailScreen(
                 }
             ) {
             }
+        },
+        floatingActionButton = {
+            Column {
+
+                FloatingActionButton(
+                    containerColor = Color.White,
+                    modifier = Modifier
+                        .padding(end = 15.dp, bottom = 13.dp)
+                        .align(Alignment.End),
+                    onClick = { onNavigateToTransaction(eventId, userId) }
+                ) {
+                    Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = null)
+                }
+            }
         }
-    ) {
+
+            ){
 
         LazyColumn {
             item {
@@ -179,12 +209,30 @@ fun EventDetailScreen(
                     Text(
                         text = description,
                         fontSize = 15.sp,
-                        color = Color.Gray,
+                        color = Color.LightGray,
                     )
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.text_multimedia),
+                        fontSize = 23.sp,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+
+                    val handlePictureClick: (String) -> Unit = { picture ->
+                        previewImage = picture
+                        showImagePreview = true
+                    }
 
                     MediaSection(
                         modifier = Modifier,
-                        imageUrl = imageUrl)
+                        imageUrls = mediaUrls,
+                        onClick = handlePictureClick)
 
                     Spacer(modifier = Modifier.size(15.dp))
 
@@ -218,23 +266,20 @@ fun EventDetailScreen(
                         Text(text = stringResource(id = R.string.placeholder_artista))
                     }
 
-                    Spacer(modifier = Modifier.size(15.dp))
-
-                    SleekButton(
-                        text = stringResource(id = R.string.btn_guardar_evento),
-                        onClickAction = { onNavigateToTransaction(eventId, userId) }
-                    )
-
-                    Spacer(modifier = Modifier.size(15.dp))
-
-                    SleekButton(
-                        text = stringResource(id = R.string.btn_comprar_tiquete),
-                        onClickAction = { onNavigateToTransaction(eventId, userId) }
-                    )
-
-                    Spacer(modifier = Modifier.size(15.dp))
+                    Spacer(modifier = Modifier.size(140.dp))
                 }
             }
        }
+
+        if (showImagePreview) {
+            ImageViewer(
+                imageUrl = previewImage,
+                onDismiss = {
+                    showImagePreview = false
+                }
+            )
+
+        }
     }
 }
+

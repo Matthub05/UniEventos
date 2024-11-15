@@ -38,47 +38,39 @@ import com.example.unieventos.models.Event
 @Composable
 fun MediaSection(
     modifier: Modifier,
-    imageUrl: String,
+    imageUrls: List<String>,
+    onClick: (String) -> Unit
 ) {
+
+    val handlePictureClick: (String) -> Unit = { picture ->
+        onClick(picture)
+    }
+
     Column(modifier = modifier) {
-        Text(
-            text = "Multimedia",
-            modifier.padding(
-                top = 16.dp,
-                bottom = 16.dp
-            ),
-            fontSize = 23.sp,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            item {
-                Picture(imageUrl)
+            items( imageUrls ) { picture ->
+                EventMedia(picture, handlePictureClick)
             }
-
-            item {
-                Picture(imageUrl)
-            }
-
-            item {
-                Picture(imageUrl)
-            }
-
         }
     }
 }
 
 @Composable
-fun Picture(
+fun EventMedia(
     mediaUrl: String,
+    onClickPicture: (String) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .clickable {
+                onClickPicture(mediaUrl)
+            }
     ) {
         val model = ImageRequest.Builder(LocalContext.current)
             .data(mediaUrl)
@@ -89,7 +81,7 @@ fun Picture(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(8))
-                .size(90.dp),
+                .size(120.dp),
             model = model,
             contentDescription = null,
             contentScale = ContentScale.Crop

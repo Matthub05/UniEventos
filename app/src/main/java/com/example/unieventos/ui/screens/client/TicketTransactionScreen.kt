@@ -3,6 +3,7 @@ package com.example.unieventos.ui.screens.client
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -50,6 +52,7 @@ import com.example.unieventos.R
 import com.example.unieventos.dto.LocationDropdownDTO
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
+import com.example.unieventos.models.EventSite
 import com.example.unieventos.models.User
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
@@ -60,7 +63,61 @@ import com.example.unieventos.viewmodel.TicketViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
+
+val EventSaver = Saver<Event, Map<String, Any?>>(
+    save = { event ->
+        mapOf(
+            "id" to event.id,
+            "title" to event.title,
+            "description" to event.description,
+            "artistId" to event.artistId,
+            "category" to event.category,
+            "date" to event.date.time,
+            "eventSite" to mapOf(
+                "name" to event.eventSite.name,
+                "capacity" to event.eventSite.capacity,
+                "location" to event.eventSite.location
+            ),
+            "imageUrl" to event.imageUrl,
+            "mediaUrls" to event.mediaUrls,
+            "locations" to event.locations.map {
+                mapOf(
+                    "id" to it.id,
+                    "name" to it.name,
+                    "places" to it.places,
+                    "price" to it.price
+                )
+            }
+        )
+    },
+    restore = { restored ->
+        Event(
+            id = restored["id"] as String,
+            title = restored["title"] as String,
+            description = restored["description"] as String,
+            artistId = restored["artistId"] as String,
+            category = restored["category"] as String,
+            date = Date(restored["date"] as Long),
+            eventSite = EventSite(
+                name = (restored["eventSite"] as Map<*, *>)["name"] as String,
+                capacity = (restored["eventSite"] as Map<*, *>)["capacity"] as Long,
+                location = (restored["eventSite"] as Map<*, *>)["location"] as String
+            ),
+            imageUrl = restored["imageUrl"] as String,
+            mediaUrls = restored["mediaUrls"] as List<String>,
+            locations = (restored["locations"] as List<Map<*, *>>).map {
+                EventLocation(
+                    id = it["id"] as Int,
+                    name = it["name"] as String,
+                    places = it["places"] as Int,
+                    price = it["price"] as Double
+                )
+            }
+        )
+    }
+)
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -87,6 +144,10 @@ fun TicketTransactionScreen(
     var location by rememberSaveable { mutableStateOf("") }
     var imageUrl by rememberSaveable { mutableStateOf("") }
     var eventLocations by remember { mutableStateOf( listOf<EventLocation>() ) }
+
+    BackHandler {
+        onNavigateToBack()
+    }
 
     LaunchedEffect(eventId) {
         if (eventId.isNotEmpty()) {

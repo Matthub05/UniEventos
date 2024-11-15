@@ -236,8 +236,8 @@ fun Navigation(
                 couponViewModel = couponViewModel,
                 eventsViewModel = eventsViewModel,
                 onNavigateToBack = {
-                    navController.popBackStack()
-                },
+                    navController.navigate(RouteScreen.UserHome)
+                    },
                 usersViewModel = usersViewModel,
                 ticketViewModel = ticketViewModel
             )
