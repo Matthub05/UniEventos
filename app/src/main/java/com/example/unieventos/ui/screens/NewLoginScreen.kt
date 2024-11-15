@@ -52,7 +52,39 @@ fun NewLoginScreen(
     onNavigateToForgotPassword: () -> Unit
 ){
 
-    Scaffold { padding ->
+    val authResult by usersViewModel.authResult.collectAsState()
+
+    Scaffold (
+        floatingActionButton = {
+            when(authResult) {
+                is RequestResult.Loading -> {  }
+                is RequestResult.Failure -> {
+                    AlertMessage(
+                        type = AlertType.ERROR,
+                        message = (authResult as RequestResult.Failure).error,
+                        modifier = Modifier.width(318.dp)
+                    )
+                    LaunchedEffect (Unit) {
+                        delay(2000)
+                        usersViewModel.resetAuthResult()
+                    }
+                }
+                is RequestResult.Success -> {
+                    AlertMessage(
+                        type = AlertType.SUCCESS,
+                        message = (authResult as RequestResult.Success).message,
+                        modifier = Modifier.width(318.dp)
+                    )
+                    LaunchedEffect (Unit) {
+                        delay(2000)
+                        onNavigateToHome()
+                        usersViewModel.resetAuthResult()
+                    }
+                }
+                null -> { }
+            }
+        }
+    ) { padding ->
         Box(
             modifier = Modifier
                 .padding(padding)
@@ -86,11 +118,10 @@ fun NewLoginScreen(
 fun LoginForm(
     padding: PaddingValues,
     usersViewModel: UsersViewModel,
+    authResult: RequestResult? = null,
     onNavigateToHome: () -> Unit,
     onNavigateToSignUp: () -> Unit
 ) {
-
-    val authResult by usersViewModel.authResult.collectAsState()
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -167,32 +198,5 @@ fun LoginForm(
             Text(text = stringResource(id = R.string.label_boton_registrarse))
         }
 
-        when(authResult) {
-            is RequestResult.Loading -> {  }
-            is RequestResult.Failure -> {
-                AlertMessage(
-                    type = AlertType.ERROR,
-                    message = (authResult as RequestResult.Failure).error,
-                    modifier = Modifier.width(318.dp)
-                )
-                LaunchedEffect (Unit) {
-                    delay(2000)
-                    usersViewModel.resetAuthResult()
-                }
-            }
-            is RequestResult.Success -> {
-                AlertMessage(
-                    type = AlertType.SUCCESS,
-                    message = (authResult as RequestResult.Success).message,
-                    modifier = Modifier.width(318.dp)
-                )
-                LaunchedEffect (Unit) {
-                    delay(2000)
-                    onNavigateToHome()
-                    usersViewModel.resetAuthResult()
-                }
-            }
-            null -> { }
-        }
     }
 }

@@ -203,6 +203,8 @@ fun CreateEventScreen(
                 title = loadedEvent.title
                 description = loadedEvent.description
                 idArtist[0] = loadedEvent.artistId
+                val artist = artists.find { it.id == idArtist[0] }
+                idArtist[1] = artist?.name ?: ""
                 category = loadedEvent.category
                 date = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(loadedEvent.date)
                 name = loadedEvent.eventSite.name

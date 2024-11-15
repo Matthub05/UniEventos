@@ -10,6 +10,7 @@ data class User(
     val password: String = "",
     val role: Role = Role.CLIENT,
     var tickets: List<Ticket> = listOf(),
+    var favoriteArtistsId: List<String> = listOf(),
 )
 
 data class UserUpdateDTO(
