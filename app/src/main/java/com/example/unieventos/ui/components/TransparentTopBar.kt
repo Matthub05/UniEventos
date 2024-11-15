@@ -19,11 +19,15 @@ import androidx.compose.ui.unit.sp
 fun TransparentTopBarComponent(
     text: String,
     onClick: () -> Unit,
+    backgroundColor: Color = Color.Transparent,
     icon: @Composable () -> Unit,
+    trailingIcon: (@Composable () -> Unit)? = null,
+    onTrailingIconClick: (() -> Unit)? = null
+
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
+            containerColor = backgroundColor,
             titleContentColor = Color.White,
             navigationIconContentColor = Color.White
         ),
@@ -42,5 +46,13 @@ fun TransparentTopBarComponent(
                 icon()
             }
         },
+
+        actions = {
+            trailingIcon?.let {
+                IconButton(onClick = { onTrailingIconClick?.invoke() }) {
+                    it()
+                }
+            }
+        }
     )
 }

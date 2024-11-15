@@ -121,9 +121,11 @@ fun TicketTransactionScreen(
         topBar = {
             TransparentTopBarComponent(
                 text = "",
-                onClick = { onNavigateToBack() }
+                onClick = { onNavigateToBack() },
+                icon = {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                }
             ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         }
     ) {

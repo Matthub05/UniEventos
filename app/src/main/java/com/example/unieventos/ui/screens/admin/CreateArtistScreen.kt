@@ -2,7 +2,13 @@ package com.example.unieventos.ui.screens.admin
 
 import AutoResizedText
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -32,6 +38,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.outlined.AddPhotoAlternate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -52,6 +59,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -60,6 +68,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -68,9 +77,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.cloudinary.Cloudinary
+import com.cloudinary.utils.ObjectUtils
 import com.example.unieventos.R
 import com.example.unieventos.models.Artist
 import com.example.unieventos.models.Event
@@ -85,7 +97,9 @@ import com.example.unieventos.ui.components.TransparentTopBarComponent
 import com.example.unieventos.utils.RequestResult
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -96,6 +110,14 @@ fun CreateArtistScreen(
 ) {
 
     val context = LocalContext.current
+
+    val config = mapOf(
+        "cloud_name" to "---",
+        "api_key" to "---",
+        "api_secret" to "---"
+    )
+
+    val cloudinary = Cloudinary(config)
 
     val titleForm = stringResource(id = R.string.placeholder_form_artista)
     val defaultImage =
@@ -110,11 +132,41 @@ fun CreateArtistScreen(
     var genere by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var imageUrl by rememberSaveable { mutableStateOf("") }
+    var textPermisoAutorizado = stringResource(id = (R.string.text_permiso_autorizado))
+    var textPermisoDenegado = stringResource(id = (R.string.text_permiso_denegado))
+    var textFotoSeleccionada = stringResource(id = (R.string.text_imagen_seleccionada))
 
     var showConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     val authResult by artistViewModel.authResult.collectAsState()
     var visible by remember {
         mutableStateOf(false)
+    }
+    val scope = rememberCoroutineScope()
+
+    val fileLauncherPrincipal = rememberLauncherForActivityResult(ActivityResultContracts.GetContent ()) { uri: Uri? ->
+        uri?.let {
+
+            scope.launch (Dispatchers.IO) {
+                val inputStream = context.contentResolver.openInputStream(uri)
+                inputStream?.use { stream ->
+                    val result = cloudinary.uploader().upload(stream, ObjectUtils.emptyMap())
+                    Log.e("URI", result.toString())
+                    imageUrl = result["secure_url"].toString()
+                }
+
+            }
+
+        }
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) {
+        if (it) {
+            Toast.makeText(context, textPermisoAutorizado, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, textPermisoDenegado, Toast.LENGTH_SHORT).show()
+        }
     }
 
     LaunchedEffect(artistId) {
@@ -131,14 +183,49 @@ fun CreateArtistScreen(
         }
     }
 
+    val errCamposVacios = stringResource(id = R.string.err_campos_vacios)
+
     Scaffold(
         topBar = {
             TransparentTopBarComponent(
                 text = "",
-                onClick = { onNavigateToBack() }
-            ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-            }
+                onClick = { onNavigateToBack() },
+                icon = {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        Icons.Outlined.AddPhotoAlternate,
+                        contentDescription = "Picture",
+                    )
+                },
+                onTrailingIconClick = {
+                    val permissionCheckResult = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            android.Manifest.permission.READ_MEDIA_IMAGES
+                        )
+                    } else {
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE
+                        )
+                    }
+
+                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                        fileLauncherPrincipal.launch("image/*")
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
+                        } else {
+                            permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                        }
+                    }
+                }
+            )
         },
         floatingActionButton = {
             Column {
@@ -153,6 +240,7 @@ fun CreateArtistScreen(
                             .padding(end = 15.dp, bottom = 13.dp)
                             .align(Alignment.End),
                         onClick = {
+
                             showConfirmationDialog = true
                         }
                     ) {
@@ -166,6 +254,18 @@ fun CreateArtistScreen(
                         .padding(end = 15.dp, bottom = 13.dp)
                         .align(Alignment.End),
                     onClick = {
+
+
+
+                        if (name.isEmpty() || genere.isEmpty() || description.isEmpty()) {
+                            Toast.makeText(context, errCamposVacios, Toast.LENGTH_SHORT).show()
+                            return@FloatingActionButton
+                        }
+
+                        if(imageUrl.isEmpty()) {
+                            imageUrl = defaultImage
+                        }
+
                         val newArtist = Artist(
                             name = name,
                             genre = genere,
@@ -345,17 +445,7 @@ fun CreateArtistScreen(
                         minLines = 5
                     )
 
-                    TextFieldForm(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = imageUrl,
-                        onValueChange = { imageUrl = it },
-                        supportingText = "",
-                        label = stringResource(id = R.string.label_url_imagen),
-                        onValidate = { it.isEmpty() },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-                    )
-
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(160.dp))
 
                 }
             }

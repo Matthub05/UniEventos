@@ -99,9 +99,11 @@ fun EventDetailScreen(
         topBar = {
             TransparentTopBarComponent(
                 text = "",
-                onClick = { onNavigateToUserHome() }
+                onClick = { onNavigateToUserHome() },
+                icon = {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                }
             ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         }
     ) {

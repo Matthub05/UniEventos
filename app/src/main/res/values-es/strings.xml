@@ -109,4 +109,9 @@
     <string name="adv_eliminar_artista">¿Desea eliminar este artista?</string>
     <string name="title_nuevo_evento">Nuevo Evento</string>
     <string name="text_cupos">Cupos</string>
+    <string name="text_imagen_seleccionada">Imagen Seleccionada</string>
+    <string name="btn_multimedia">Añadir Imagen</string>
+    <string name="text_permiso_autorizado">Permiso autorizado</string>
+    <string name="text_permiso_denegado">Permiso denegado</string>
+    <string name="err_media">Añada dos fotos como minimo</string>
 </resources>
