@@ -16,3 +16,5 @@
 .cxx
 local.properties
 google-services.json
+**/*/res/values/secrets.xml
+desktop.ini

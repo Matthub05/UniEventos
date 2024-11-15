@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.utils.loadPropertyFromResources
-import java.util.Properties
-
 
 plugins {
     alias(libs.plugins.android.application)
@@ -28,13 +25,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        val properties = Properties()
-        file("local.properties").inputStream().use { properties.load(it) }
-
-        buildConfigField("String", "CLOUDINARY_NAME", "\"${properties["CLOUDINARY_NAME"]}\"")
-        buildConfigField("String", "CLOUDINARY_API_KEY", "\"${properties["CLOUDINARY_API_KEY"]}\"")
-        buildConfigField("String", "CLOUDINARY_API_SECRET", "\"${properties["CLOUDINARY_API_SECRET"]}\"")
     }
 
     buildTypes {
