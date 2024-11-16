@@ -6,18 +6,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,42 +25,56 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavDestination.Companion.hasRoute
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.unieventos.R
 import com.example.unieventos.models.Artist
-import com.example.unieventos.ui.components.TopBarComponent
+import com.example.unieventos.models.ui.AlertType
+import com.example.unieventos.ui.components.AlertMessage
 import com.example.unieventos.ui.components.TransparentTopBarComponent
-import com.example.unieventos.ui.screens.admin.navigation.AdminRouteScreen
+import com.example.unieventos.utils.RequestResult
+import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-
 fun ArtistDetailsScreen(
     artistId: String,
     artistViewModel: ArtistViewModel,
+    usersViewModel: UsersViewModel,
     onNavigateToUserHome: () -> Unit
 ) {
+
+    val authResult by usersViewModel.authResult.collectAsState()
+
+    val userId = SharedPreferenceUtils.getCurrentUser(LocalContext.current)?.id
+    var userFavoriteArtists by remember { mutableStateOf<List<String>>(emptyList()) }
+    var refreshTrigger by remember { mutableIntStateOf(0) }
+    LaunchedEffect(userId, refreshTrigger) {
+        if (userId != null) {
+            val user = usersViewModel.getUserById(userId)
+            userFavoriteArtists = user?.favoriteArtistsId ?: emptyList()
+        }
+    }
 
     var artist by remember { mutableStateOf<Artist?>(null) }
     var name by rememberSaveable { mutableStateOf("") }
@@ -71,7 +85,7 @@ fun ArtistDetailsScreen(
     println(artistId)
 
     LaunchedEffect(artistId) {
-        if (!artistId.isNullOrEmpty()) {
+        if (artistId.isNotEmpty()) {
             artist = artistViewModel.getArtistById(artistId)
             artist?.let { loadedArtist ->
                 name = loadedArtist.name
@@ -85,15 +99,55 @@ fun ArtistDetailsScreen(
     Scaffold (
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier
-                    .padding(end = 16.dp, bottom = 16.dp),
-                onClick = { },
+                modifier = Modifier.padding(end = 16.dp, bottom = 16.dp),
+                onClick = {
+                    if (artistId.isEmpty() || userId.isNullOrEmpty()) return@FloatingActionButton
+                    usersViewModel.saveFavoriteArtist(artistId = artistId, userId = userId)
+                    refreshTrigger += 1
+                },
                 containerColor = Color.White
             ) {
-                Icon(imageVector = Icons.Default.Bookmark, contentDescription = null)
+                if (authResult is RequestResult.Loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.width(22.dp).height(22.dp),
+                        color = Color.Black
+                    )
+                } else {
+                    val imageVector = if (artistId in userFavoriteArtists) {
+                        Icons.Default.Bookmark
+                    } else {
+                        Icons.Default.BookmarkBorder
+                    }
+                    Icon(imageVector = imageVector, contentDescription = null)
+                }
+            }
+            when(authResult) {
+                is RequestResult.Loading -> {  }
+                is RequestResult.Failure -> {
+                    AlertMessage(
+                        type = AlertType.ERROR,
+                        message = (authResult as RequestResult.Failure).error,
+                        modifier = Modifier.width(318.dp)
+                    )
+                    LaunchedEffect (Unit) {
+                        delay(2000)
+                        usersViewModel.resetAuthResult()
+                    }
+                }
+                is RequestResult.Success -> {
+                    AlertMessage(
+                        type = AlertType.SUCCESS,
+                        message = (authResult as RequestResult.Success).message,
+                        modifier = Modifier.width(318.dp)
+                    )
+                    LaunchedEffect (Unit) {
+                        delay(2000)
+                        usersViewModel.resetAuthResult()
+                    }
+                }
+                null -> { }
             }
         },
-
         topBar = {
             TransparentTopBarComponent(
                 text = "",

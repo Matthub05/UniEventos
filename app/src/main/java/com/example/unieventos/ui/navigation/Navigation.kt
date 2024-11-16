@@ -197,6 +197,7 @@ fun Navigation(
             ArtistDetailsScreen(
                 artistId = artistId ?: "",
                 artistViewModel = artistViewModel,
+                usersViewModel = usersViewModel,
                 onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome){
                     popUpTo(0){
                         inclusive = true

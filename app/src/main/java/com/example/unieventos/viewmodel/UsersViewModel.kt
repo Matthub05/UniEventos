@@ -101,6 +101,39 @@ class UsersViewModel: ViewModel() {
         _currentUser.value = user
     }
 
+    fun saveFavoriteArtist(artistId: String, userId: String) {
+        viewModelScope.launch {
+            _authResult.value = RequestResult.Loading
+            _authResult.value = runCatching { saveFavoriteArtistFirebase(artistId, userId) }
+                .fold(
+                    onSuccess = { wasAdded ->
+                        val message = if (wasAdded) {
+                            "Agregado a favoritos"
+                        } else {
+                            "Eliminado de favoritos"
+                        }
+                        RequestResult.Success(message)
+                    },
+                    onFailure = { handleDbError(it) }
+                )
+        }
+    }
+
+    private suspend fun saveFavoriteArtistFirebase(artistId: String, userId: String): Boolean {
+        val user = getUserById(userId) ?: return false
+        val favoriteArtists = user.favoriteArtistsId.toMutableList()
+        val wasAdded = if (artistId !in favoriteArtists) {
+            favoriteArtists.add(artistId)
+            true
+        } else {
+            favoriteArtists.remove(artistId)
+            false
+        }
+        val updatedUser = user.copy(favoriteArtistsId = favoriteArtists)
+        db.collection(collectionPathName).document(userId).set(updatedUser).await()
+        return wasAdded
+    }
+
     fun resetAuthResult() {
         _authResult.value = null
     }
@@ -119,6 +152,18 @@ class UsersViewModel: ViewModel() {
                 }
             }
             else -> "Error al iniciar sesión"
+        }
+        return RequestResult.Failure(errorMessage)
+    }
+
+    private fun handleDbError(e: Throwable): RequestResult.Failure {
+        val errorMessage = when (e) {
+            is FirebaseAuthException -> {
+                when (e.errorCode) {
+                    else -> "Error en la base de datos: ${e.errorCode}"
+                }
+            }
+            else -> "Error"
         }
         return RequestResult.Failure(errorMessage)
     }
