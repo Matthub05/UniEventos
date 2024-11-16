@@ -65,6 +65,7 @@
     <string name="adv_generar_cupon">The coupon will only be valid until the date specified in the previously filled fields.</string>
     <string name="btn_registrar_cupon">Register coupon</string>
     <string name="label_artistas_destacados">Featured artists</string>
+    <string name="label_artistas_favoritos">Favorite artists</string>
     <string name="label_eventos_destacados">Featured events</string>
     <string name="label_vistos_anteriormente">Previously viewed</string>
     <string name="nav_Eventos">Events</string>

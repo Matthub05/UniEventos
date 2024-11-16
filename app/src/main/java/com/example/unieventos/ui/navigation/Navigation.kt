@@ -21,6 +21,7 @@ import com.example.unieventos.ui.screens.client.ArtistDetailsScreen
 import com.example.unieventos.ui.screens.SignUpScreen
 import com.example.unieventos.ui.screens.admin.CreateArtistScreen
 import com.example.unieventos.ui.screens.client.TicketTransactionScreen
+import com.example.unieventos.ui.screens.client.drawer.FavoriteArtistsScreen
 import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
@@ -113,6 +114,9 @@ fun Navigation(
                     onNavigateToArtistDetail = { artistId ->
                         navController.navigate(RouteScreen.ArtistDetailScreen(artistId))
                     },
+                    onNavigateToFavoriteArtists = {
+                        navController.navigate(RouteScreen.FavoriteArtistsScreen)
+                    },
                     ticketViewModel = ticketViewModel,
                     usersViewModel = usersViewModel
                 )
@@ -198,12 +202,7 @@ fun Navigation(
                 artistId = artistId ?: "",
                 artistViewModel = artistViewModel,
                 usersViewModel = usersViewModel,
-                onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome){
-                    popUpTo(0){
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                } }
+                onNavigateToBack = { navController.popBackStack() }
             )
         }
 
@@ -248,6 +247,18 @@ fun Navigation(
             CreateCouponScreen(
                 onNavigateToBack = { navController.popBackStack() },
                 couponViewModel = couponViewModel
+            )
+        }
+
+        composable<RouteScreen.FavoriteArtistsScreen> {
+            FavoriteArtistsScreen(
+                artistViewModel = artistViewModel,
+                onNavigateToArtistDetail = { artistId ->
+                    navController.navigate(RouteScreen.ArtistDetailScreen(artistId))
+                },
+                onNavigateToBack = {
+                    navController.popBackStack()
+                },
             )
         }
 

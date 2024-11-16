@@ -3,8 +3,7 @@ package com.example.unieventos.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unieventos.models.Artist
-import com.example.unieventos.models.Event
-import com.example.unieventos.models.EventLocation
+import com.example.unieventos.models.User
 import com.example.unieventos.utils.RequestResult
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -108,6 +107,13 @@ class ArtistViewModel: ViewModel() {
 
     fun searchArtists(query: String): List<Artist> {
         return _artist.value.filter { it.name.contains(query, ignoreCase = true) }
+    }
+
+    suspend fun getFavoriteArtists(userId: String): List<Artist> {
+        val snapshot = db.collection("users").document(userId).get().await()
+        val user:User = snapshot.toObject(User::class.java) ?: return emptyList()
+        val favoriteArtists = artist.value.filter { it.id in user.favoriteArtistsId }
+        return favoriteArtists
     }
 
     fun resetAuthResult() {

@@ -67,6 +67,7 @@
     <string name="adv_generar_cupon">El cupón tendra validez unicamente hasta la fecha especificada en los campos previamente llenados.</string>
     <string name="btn_registrar_cupon">Registrar cupón</string>
     <string name="label_artistas_destacados">Artistas Destacados</string>
+    <string name="label_artistas_favoritos">Artistas Favoritos</string>
     <string name="label_eventos_destacados">Eventos Destacados</string>
     <string name="label_vistos_anteriormente">Vistos anteriormente</string>
     <string name="nav_Eventos">Eventos</string>

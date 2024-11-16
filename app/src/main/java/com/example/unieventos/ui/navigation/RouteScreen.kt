@@ -40,4 +40,7 @@ sealed class RouteScreen {
     @Serializable
     data class TicketTransactionScreen(val eventId: String, val userId: String) : RouteScreen()
 
+    @Serializable
+    data object FavoriteArtistsScreen : RouteScreen()
+
 }

@@ -131,6 +131,7 @@ class UsersViewModel: ViewModel() {
         }
         val updatedUser = user.copy(favoriteArtistsId = favoriteArtists)
         db.collection(collectionPathName).document(userId).set(updatedUser).await()
+        _currentUser.value = updatedUser
         return wasAdded
     }
 

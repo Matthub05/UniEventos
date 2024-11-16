@@ -12,12 +12,14 @@ import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.PeopleAlt
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.StarOutline
@@ -81,7 +83,8 @@ fun HomeScreen(
     onLogout: () -> Unit,
     onNavigateToEventDetail: (String, String) -> Unit,
     onNavigateToArtistDetail: (String) -> Unit,
-    onNavigateToProfileEdit: () -> Unit
+    onNavigateToProfileEdit: () -> Unit,
+    onNavigateToFavoriteArtists: () -> Unit,
 ) {
 
     val context = LocalContext.current
@@ -104,6 +107,12 @@ fun HomeScreen(
             }
         ),
         DrawerItem(
+            title = stringResource(id = R.string.label_artistas_favoritos),
+            selectedIcon = Icons.Filled.People,
+            unselectedIcon = Icons.Outlined.PeopleAlt,
+            onClick = { onNavigateToFavoriteArtists() }
+        ),
+        DrawerItem(
             title = stringResource(id = R.string.nav_ajustes),
             selectedIcon = Icons.Filled.Settings,
             unselectedIcon = Icons.Outlined.Settings,
@@ -115,9 +124,7 @@ fun HomeScreen(
             title = stringResource(id = R.string.btn_cerrar_sesion),
             selectedIcon = Icons.AutoMirrored.Filled.Logout,
             unselectedIcon = Icons.AutoMirrored.Outlined.Logout,
-            onClick = {
-                onLogout()
-            }
+            onClick = { onLogout() }
         ),
         DrawerItem(
             title = stringResource(id = R.string.nav_acerca_de),

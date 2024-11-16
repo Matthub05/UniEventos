@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -61,18 +60,23 @@ fun ArtistDetailsScreen(
     artistId: String,
     artistViewModel: ArtistViewModel,
     usersViewModel: UsersViewModel,
-    onNavigateToUserHome: () -> Unit
+    onNavigateToBack: () -> Unit
 ) {
 
     val authResult by usersViewModel.authResult.collectAsState()
 
+    val currentUser by usersViewModel.currentUser.collectAsState()
     val userId = SharedPreferenceUtils.getCurrentUser(LocalContext.current)?.id
     var userFavoriteArtists by remember { mutableStateOf<List<String>>(emptyList()) }
-    var refreshTrigger by remember { mutableIntStateOf(0) }
-    LaunchedEffect(userId, refreshTrigger) {
+    LaunchedEffect(userId) {
         if (userId != null) {
             val user = usersViewModel.getUserById(userId)
             userFavoriteArtists = user?.favoriteArtistsId ?: emptyList()
+        }
+    }
+    LaunchedEffect(currentUser) {
+        if (currentUser != null) {
+            userFavoriteArtists = currentUser!!.favoriteArtistsId
         }
     }
 
@@ -103,13 +107,14 @@ fun ArtistDetailsScreen(
                 onClick = {
                     if (artistId.isEmpty() || userId.isNullOrEmpty()) return@FloatingActionButton
                     usersViewModel.saveFavoriteArtist(artistId = artistId, userId = userId)
-                    refreshTrigger += 1
                 },
                 containerColor = Color.White
             ) {
                 if (authResult is RequestResult.Loading) {
                     CircularProgressIndicator(
-                        modifier = Modifier.width(22.dp).height(22.dp),
+                        modifier = Modifier
+                            .width(22.dp)
+                            .height(22.dp),
                         color = Color.Black
                     )
                 } else {
@@ -151,7 +156,7 @@ fun ArtistDetailsScreen(
         topBar = {
             TransparentTopBarComponent(
                 text = "",
-                onClick = { onNavigateToUserHome() },
+                onClick = { onNavigateToBack() },
                 icon = {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
