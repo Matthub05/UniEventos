@@ -2,6 +2,7 @@ package com.example.unieventos.ui.screens.client
 
 import com.example.unieventos.ui.components.ImageViewer
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -33,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,6 +53,7 @@ import com.example.unieventos.R
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
 import com.example.unieventos.models.EventSite
+import com.example.unieventos.ui.components.EventSaver
 import com.example.unieventos.ui.components.MediaSection
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TransparentTopBarComponent
@@ -60,6 +63,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
+
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -74,7 +79,9 @@ fun EventDetailScreen(
     var showImagePreview by rememberSaveable { mutableStateOf(false) }
     var previewImage by rememberSaveable { mutableStateOf("") }
 
-    var event by remember { mutableStateOf<Event?>(null) }
+    var event by rememberSaveable(stateSaver = EventSaver) {
+        mutableStateOf(Event())
+    }
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var idArtist by rememberSaveable { mutableStateOf("") }
@@ -90,7 +97,7 @@ fun EventDetailScreen(
 
     LaunchedEffect(eventId) {
         if (!eventId.isNullOrEmpty()) {
-            event = eventsViewModel.getEventById(eventId)
+            event = eventsViewModel.getEventById(eventId)!!
             event?.let { loadedEvent ->
                 title = loadedEvent.title
                 description = loadedEvent.description

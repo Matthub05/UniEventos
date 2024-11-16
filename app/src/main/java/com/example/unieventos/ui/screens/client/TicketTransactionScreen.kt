@@ -50,10 +50,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.unieventos.R
 import com.example.unieventos.dto.LocationDropdownDTO
+import com.example.unieventos.models.Coupon
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
 import com.example.unieventos.models.EventSite
+import com.example.unieventos.models.Ticket
+import com.example.unieventos.models.TicketStatus
 import com.example.unieventos.models.User
+import com.example.unieventos.ui.components.EventSaver
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TransparentTopBarComponent
@@ -66,58 +70,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
-val EventSaver = Saver<Event, Map<String, Any?>>(
-    save = { event ->
-        mapOf(
-            "id" to event.id,
-            "title" to event.title,
-            "description" to event.description,
-            "artistId" to event.artistId,
-            "category" to event.category,
-            "date" to event.date.time,
-            "eventSite" to mapOf(
-                "name" to event.eventSite.name,
-                "capacity" to event.eventSite.capacity,
-                "location" to event.eventSite.location
-            ),
-            "imageUrl" to event.imageUrl,
-            "mediaUrls" to event.mediaUrls,
-            "locations" to event.locations.map {
-                mapOf(
-                    "id" to it.id,
-                    "name" to it.name,
-                    "places" to it.places,
-                    "price" to it.price
-                )
-            }
-        )
-    },
-    restore = { restored ->
-        Event(
-            id = restored["id"] as String,
-            title = restored["title"] as String,
-            description = restored["description"] as String,
-            artistId = restored["artistId"] as String,
-            category = restored["category"] as String,
-            date = Date(restored["date"] as Long),
-            eventSite = EventSite(
-                name = (restored["eventSite"] as Map<*, *>)["name"] as String,
-                capacity = (restored["eventSite"] as Map<*, *>)["capacity"] as Long,
-                location = (restored["eventSite"] as Map<*, *>)["location"] as String
-            ),
-            imageUrl = restored["imageUrl"] as String,
-            mediaUrls = restored["mediaUrls"] as List<String>,
-            locations = (restored["locations"] as List<Map<*, *>>).map {
-                EventLocation(
-                    id = it["id"] as Int,
-                    name = it["name"] as String,
-                    places = it["places"] as Int,
-                    price = it["price"] as Double
-                )
-            }
-        )
-    }
-)
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -130,20 +82,13 @@ fun TicketTransactionScreen(
     ticketViewModel: TicketViewModel,
     onNavigateToBack: () -> Unit
 ) {
-    val formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm")
 
-    var event by remember { mutableStateOf<Event?>(null) }
+    var event by rememberSaveable(stateSaver = EventSaver) {
+        mutableStateOf(Event())
+    }
     var title by rememberSaveable { mutableStateOf("") }
-    var description by rememberSaveable { mutableStateOf("") }
-    var idArtist by rememberSaveable { mutableStateOf("") }
-    var category by rememberSaveable { mutableStateOf("") }
     var date by rememberSaveable { mutableStateOf("") }
-    var name by rememberSaveable { mutableStateOf("") }
-    var capacity by rememberSaveable { mutableStateOf("") }
-    var locationName by rememberSaveable { mutableStateOf("") }
-    var location by rememberSaveable { mutableStateOf("") }
     var imageUrl by rememberSaveable { mutableStateOf("") }
-    var eventLocations by remember { mutableStateOf( listOf<EventLocation>() ) }
 
     BackHandler {
         onNavigateToBack()
@@ -151,19 +96,11 @@ fun TicketTransactionScreen(
 
     LaunchedEffect(eventId) {
         if (eventId.isNotEmpty()) {
-            event = eventsViewModel.getEventById(eventId)
+            event = eventsViewModel.getEventById(eventId)!!
             event?.let { loadedEvent ->
                 title = loadedEvent.title
-                description = loadedEvent.description
-                idArtist = loadedEvent.artistId
-                category = loadedEvent.category
                 date = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(loadedEvent.date)
-                name = loadedEvent.eventSite.name
-                capacity = loadedEvent.eventSite.capacity.toString()
-                locationName = loadedEvent.eventSite.name
-                location = loadedEvent.eventSite.location
                 imageUrl = loadedEvent.imageUrl
-                eventLocations = loadedEvent.locations
             }
         }
     }
@@ -334,16 +271,21 @@ fun BuyTicketForm(
         )
 
         Spacer(modifier = Modifier.height(10.dp))
-
         SleekButton(text = stringResource(id = R.string.btn_comprar), onClickAction = {
-            ticketViewModel.addTicketCart(
-                event = event!!,
-                locationId = idLocation?.idLocation ?: 0,
-                quantity = quantity.toInt(),
-                user = user!!
+            var location = idLocation?.let { event?.findLocationById(it.idLocation) }!!
+            ticketViewModel.createTicket(
+                Ticket(
+                    userId = userId,
+                    eventId = eventId,
+                    eventLocation = location,
+                    quantity = quantity.toInt(),
+                    acquisitionDate = Date(),
+                    price = location.price * quantity.toInt(),
+                    status = TicketStatus.PENDING
+                )
             )
 
-            Toast.makeText(context, context.getString(R.string.coupon_created), Toast.LENGTH_SHORT).show()
+
             onNavigateToBack()
         })
 

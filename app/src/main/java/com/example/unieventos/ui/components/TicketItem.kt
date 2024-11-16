@@ -49,7 +49,9 @@ fun TicketItem(
     eventsViewModel: EventsViewModel
 ) {
 
-    var event by rememberSaveable { mutableStateOf(Event()) }
+    var event by rememberSaveable(stateSaver = EventSaver) {
+        mutableStateOf(Event())
+    }
     LaunchedEffect (ticket.eventId) {
         event = eventsViewModel.getEventById(ticket.eventId)!!
     }
@@ -118,7 +120,9 @@ fun DetailsDialog(
     onDismiss: () -> Unit
 ) {
 
-    var event by rememberSaveable { mutableStateOf(Event()) }
+    var event by rememberSaveable(stateSaver = EventSaver) {
+        mutableStateOf(Event())
+    }
     LaunchedEffect (ticket.eventId) {
         event = eventsViewModel.getEventById(ticket.eventId)!!
     }

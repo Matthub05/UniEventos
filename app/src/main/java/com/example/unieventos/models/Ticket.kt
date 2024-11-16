@@ -9,6 +9,6 @@ data class Ticket(
     val eventLocation: EventLocation = EventLocation(),
     val quantity: Int = 0,
     val acquisitionDate: Date = Date(),
-    val price: Double = 0.0,
+    var price: Double = 0.0,
     var status: TicketStatus = TicketStatus.DEFAULT
 )

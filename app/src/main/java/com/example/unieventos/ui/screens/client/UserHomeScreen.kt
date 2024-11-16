@@ -311,7 +311,8 @@ fun NavHostUser(
             PurchasesScreen(
                 paddingValues = paddingValues,
                 ticketViewModel = ticketViewModel,
-                eventsViewModel = eventsViewModel
+                eventsViewModel = eventsViewModel,
+                userId = userId
             )
 
         }
