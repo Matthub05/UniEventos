@@ -56,7 +56,7 @@ fun PurchasesScreen(
     LaunchedEffect(userId) {
         try {
             isLoading = true
-            tickets = ticketViewModel.getUserTicketById(userId)
+            tickets = ticketViewModel.getUserCartById(userId)
         } catch (e: Exception) {
             error = e.message
             Log.e("PurchasesScreen", "Error loading tickets", e)

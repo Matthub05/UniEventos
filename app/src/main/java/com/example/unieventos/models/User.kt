@@ -11,6 +11,7 @@ data class User(
     val role: Role = Role.CLIENT,
     var tickets: List<Ticket> = listOf(),
     var favoriteArtistsId: List<String> = listOf(),
+    var visitHistory: List<String> = listOf(),
 )
 
 data class UserUpdateDTO(

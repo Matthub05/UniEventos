@@ -135,6 +135,38 @@ class UsersViewModel: ViewModel() {
         return wasAdded
     }
 
+    fun saveVisitedHistory(eventId: String, userId: String) {
+        viewModelScope.launch {
+            _authResult.value = RequestResult.Loading
+            _authResult.value = runCatching { saveVisitedHistoryFirebase(eventId, userId) }
+                .fold(
+                    onSuccess = { wasAdded ->
+                        RequestResult.Success("Done")
+                    },
+                    onFailure = { handleDbError(it) }
+                )
+        }
+    }
+
+    private suspend fun saveVisitedHistoryFirebase(eventId: String, userId: String) {
+        val user = getUserById(userId)
+        val visitedHistory = user?.visitHistory?.toMutableList()
+
+        if (visitedHistory != null) {
+            if (visitedHistory.size > 4) {
+                    visitedHistory.removeAt(visitedHistory.size - 1)
+            }
+            visitedHistory.add(0, eventId)
+        }
+
+        val updatedUser = visitedHistory?.let { user.copy(visitHistory = it) }
+        if (updatedUser != null) {
+            db.collection(collectionPathName).document(userId).set(updatedUser).await()
+        }
+        _currentUser.value = updatedUser
+    }
+
+
     fun resetAuthResult() {
         _authResult.value = null
     }

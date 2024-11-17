@@ -205,7 +205,9 @@ fun HomeScreen(
                 FloatingActionButton(
                     containerColor = Color.White,
                     onClick = {
-
+                        ticketViewModel.emptyCart(
+                            userId = session!!.id
+                        )
                     }
                 ) {
                     Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = null)
@@ -304,7 +306,8 @@ fun NavHostUser(
                 artistViewModel = artistViewModel,
                 onNavigateToEventDetail = onNavigateToEventDetail,
                 onNavigateToArtistDetail = onNavigateToArtistDetail,
-                userId = userId
+                userId = userId,
+                usersViewModel = usersViewModel
             )
         }
         composable<UserRouteScreen.TabPurchases> {

@@ -30,12 +30,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -46,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.unieventos.R
@@ -57,16 +60,21 @@ import com.example.unieventos.models.EventSite
 import com.example.unieventos.models.Ticket
 import com.example.unieventos.models.TicketStatus
 import com.example.unieventos.models.User
+import com.example.unieventos.models.ui.AlertType
+import com.example.unieventos.ui.components.AlertMessage
 import com.example.unieventos.ui.components.EventSaver
 import com.example.unieventos.ui.components.LocationDropdownDTOSaver
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TransparentTopBarComponent
 import com.example.unieventos.ui.components.UserSaver
+import com.example.unieventos.utils.RequestResult
+import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.TicketViewModel
 import com.example.unieventos.viewmodel.UsersViewModel
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -80,18 +88,21 @@ fun TicketTransactionScreen(
     userId: String,
     usersViewModel: UsersViewModel,
     eventsViewModel: EventsViewModel,
-    couponViewModel: CouponsViewModel,
+    artistViewModel: ArtistViewModel,
     ticketViewModel: TicketViewModel,
-    onNavigateToBack: () -> Unit
+    onNavigateToBack: () -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
 
     var event by rememberSaveable(stateSaver = EventSaver) {
         mutableStateOf(Event())
     }
     var user = rememberSaveable(saver = UserSaver) { User() }
+    var artistName by rememberSaveable { mutableStateOf("") }
     var title by rememberSaveable { mutableStateOf("") }
     var date by rememberSaveable { mutableStateOf("") }
     var imageUrl by rememberSaveable { mutableStateOf("") }
+    val authResult by ticketViewModel.authResult.collectAsState()
 
     LaunchedEffect(eventId) {
         if (eventId.isNotEmpty()) {
@@ -100,6 +111,7 @@ fun TicketTransactionScreen(
                 title = loadedEvent.title
                 date = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(loadedEvent.date)
                 imageUrl = loadedEvent.imageUrl
+                artistName = artistViewModel.getArtistById(loadedEvent.artistId)?.name.toString()
             }
         }
     }
@@ -114,6 +126,35 @@ fun TicketTransactionScreen(
     val context = LocalContext.current
 
     Scaffold (
+        floatingActionButton = {
+            when(authResult) {
+                is RequestResult.Loading -> {  }
+                is RequestResult.Failure -> {
+                    AlertMessage(
+                        type = AlertType.ERROR,
+                        message = (authResult as RequestResult.Failure).error,
+                        modifier = Modifier.width(318.dp)
+                    )
+                    LaunchedEffect (Unit) {
+                        delay(2000)
+                        ticketViewModel.resetAuthResult()
+                    }
+                }
+                is RequestResult.Success -> {
+                    AlertMessage(
+                        type = AlertType.SUCCESS,
+                        message = (authResult as RequestResult.Success).message,
+                        modifier = Modifier.width(318.dp)
+                    )
+                    LaunchedEffect (Unit) {
+                        delay(2000)
+                        onNavigateToHome()
+                        ticketViewModel.resetAuthResult()
+                    }
+                }
+                null -> { }
+            }
+        },
         topBar = {
             TransparentTopBarComponent(
                 text = "",
@@ -176,10 +217,10 @@ fun TicketTransactionScreen(
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
-                            text = date,
+                            text = artistName,
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.Gray,
-                            fontSize = 13.sp
+                            fontSize = 18.sp
                         )
                     }
                 }
@@ -192,7 +233,7 @@ fun TicketTransactionScreen(
                         .padding(top = 5.dp, start = 20.dp),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.label_detalles),
+                        text = stringResource(id = R.string.lbl_add_cart),
                         fontSize = 23.sp,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold

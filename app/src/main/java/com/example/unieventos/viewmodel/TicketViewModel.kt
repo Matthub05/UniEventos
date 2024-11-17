@@ -83,6 +83,37 @@ class TicketViewModel:ViewModel() {
         }
     }
 
+
+    fun emptyCart(userId: String) {
+        viewModelScope.launch {
+            _authResult.value = RequestResult.Loading
+            _authResult.value = kotlin.runCatching { emptyCartFirebase(userId) }
+                .fold(
+                    onSuccess = { RequestResult.Success("Compra exitosa") },
+                    onFailure = { RequestResult.Failure(it.message.toString()) }
+                )
+        }
+    }
+
+    private suspend fun emptyCartFirebase(userId: String) {
+        viewModelScope.launch {
+            val userTicketsQuery = db.collection(collectionPathName)
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("status", TicketStatus.PENDING)
+                .get()
+                .await()
+
+            val userTickets = userTicketsQuery.documents
+
+            userTickets.forEach { document ->
+                val ticketRef = db.collection(collectionPathName).document(document.id)
+                ticketRef.update("status", TicketStatus.BOUGHT.name).await()
+            }
+
+            _ticket.value = getTickets()
+        }
+    }
+
     suspend fun getTicketById(id: String): Event? {
         val snapshot = db.collection(collectionPathName).document(id).get().await()
         val event = snapshot.toObject(Event::class.java)
@@ -90,9 +121,10 @@ class TicketViewModel:ViewModel() {
         return event
     }
 
-    suspend fun getUserTicketById(userId: String): List<Ticket>{
+    suspend fun getUserCartById(userId: String): List<Ticket>{
         val querySnapshot = db.collection(collectionPathName)
             .whereEqualTo("userId", userId)
+            .whereEqualTo("status", TicketStatus.PENDING)
             .get()
             .await()
 

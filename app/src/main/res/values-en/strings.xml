@@ -90,7 +90,7 @@
     <string name="label_detalles">Details</string>
     <string name="label_cantidad">Quantity</string>
     <string name="err_cantidad">Quantity is not valid</string>
-    <string name="btn_comprar">Buy</string>
+    <string name="btn_comprar">Add to cart</string>
     <string name="text_precio">Price</string>
     <string name="text_unidades">units</string>
     <string name="btn_guardar_evento">Save event</string>
@@ -115,5 +115,7 @@
     <string name="text_imagen_seleccionada">Picture Selected</string>
     <string name="btn_multimedia">Add picture</string>
     <string name="err_media">Add two pictures at least</string>
+    <string name="lbl_slots">Slots:</string>
+    <string name="lbl_add_cart">Purchase Details</string>
 
 </resources>

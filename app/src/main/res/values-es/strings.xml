@@ -90,7 +90,7 @@
     <string name="label_detalles">Detalles</string>
     <string name="label_cantidad">Cantidad</string>
     <string name="err_cantidad">La cantidad no es válida</string>
-    <string name="btn_comprar">Comprar</string>
+    <string name="btn_comprar">Añadir al carrito</string>
     <string name="text_precio">Precio</string>
     <string name="text_unidades">unidades</string>
     <string name="btn_guardar_evento">Guardar evento</string>
@@ -115,4 +115,6 @@
     <string name="text_permiso_autorizado">Permiso autorizado</string>
     <string name="text_permiso_denegado">Permiso denegado</string>
     <string name="err_media">Añada dos fotos como mínimo</string>
+    <string name="lbl_slots">Cupos:</string>
+    <string name="lbl_add_cart">Detalles de compra</string>
 </resources>

@@ -216,6 +216,8 @@ fun Navigation(
                 onNavigateToTransaction = { eventIdTransaction, userIdTransaction ->
                     navController.navigate(RouteScreen.TicketTransactionScreen(eventIdTransaction, userIdTransaction))
                 },
+                artistViewModel = artistViewModel,
+                usersViewModel = usersViewModel,
                 onNavigateToUserHome = { navController.navigate(RouteScreen.UserHome){
                     popUpTo(0){
                         inclusive = true
@@ -233,14 +235,16 @@ fun Navigation(
             TicketTransactionScreen(
                 eventId = eventId ?: "",
                 userId = userId ?: "",
-                couponViewModel = couponViewModel,
                 eventsViewModel = eventsViewModel,
                 onNavigateToBack = {
                     navController.popBackStack()
-                    Log.d("Navigation", "Navigating back: ${navController.currentDestination?.route}")
                     },
                 usersViewModel = usersViewModel,
-                ticketViewModel = ticketViewModel
+                ticketViewModel = ticketViewModel,
+                artistViewModel = artistViewModel,
+                onNavigateToHome = {
+                    navController.navigate(RouteScreen.UserHome)
+                }
             )
         }
 

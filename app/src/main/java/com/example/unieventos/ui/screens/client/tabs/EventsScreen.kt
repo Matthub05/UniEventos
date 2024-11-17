@@ -37,6 +37,7 @@ import com.example.unieventos.ui.components.SectionTitle
 import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.UsersViewModel
 
 @Composable
 fun EventsScreen(
@@ -44,6 +45,7 @@ fun EventsScreen(
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
     artistViewModel: ArtistViewModel,
+    usersViewModel: UsersViewModel,
     onNavigateToEventDetail: (String, String) -> Unit,
     onNavigateToArtistDetail: (String) -> Unit
 ) {
@@ -92,13 +94,13 @@ fun EventsScreen(
 
         item {
 
-//            FeaturedSection(
-//                modifier = Modifier
-//                    .fillMaxWidth(),
-//                onSeeAllClick = {},
-//                artistViewModel = artistViewModel,
-//                events = events,
-//            )
+            FeaturedSection(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onSeeAllClick = {},
+                artistViewModel = artistViewModel,
+                events = events,
+            )
         }
 
         item {
@@ -113,7 +115,10 @@ fun EventsScreen(
             SavedSection(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onSeeAllClick = {}
+                onSeeAllClick = {},
+                eventsViewModel = eventsViewModel,
+                usersViewModel = usersViewModel,
+                userId = userId
             )
         }
 
