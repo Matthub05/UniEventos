@@ -106,7 +106,7 @@ fun EventsScreen(
         item {
             SectionTitle(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(id = R.string.label_guardados),
+                title = stringResource(id = R.string.label_vistos_anteriormente),
                 onSeeAllClick = {}
             )
         }
@@ -125,7 +125,7 @@ fun EventsScreen(
         item {
             SectionTitle(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(id = R.string.label_vistos_anteriormente),
+                title = stringResource(id = R.string.lbl_total_events),
                 onSeeAllClick = {}
             )
         }

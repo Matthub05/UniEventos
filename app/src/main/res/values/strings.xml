@@ -121,5 +121,6 @@
     <string name="err_media">Añada dos fotos como minimo</string>
     <string name="lbl_slots">Cupos:</string>
     <string name="lbl_add_cart">Detalles de compra</string>
+    <string name="lbl_total_events">Todos los eventos</string>
 
 </resources>

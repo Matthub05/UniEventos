@@ -150,14 +150,16 @@ class UsersViewModel: ViewModel() {
 
     private suspend fun saveVisitedHistoryFirebase(eventId: String, userId: String) {
         val user = getUserById(userId)
-        val visitedHistory = user?.visitHistory?.toMutableList()
+            val visitedHistory = user?.visitHistory?.toMutableList()
 
-        if (visitedHistory != null) {
-            if (visitedHistory.size > 4) {
-                    visitedHistory.removeAt(visitedHistory.size - 1)
+            if (visitedHistory != null) {
+                if (!visitedHistory.contains(eventId)) {
+                    if (visitedHistory.size > 4) {
+                        visitedHistory.removeAt(visitedHistory.size - 1)
+                    }
+                    visitedHistory.add(0, eventId)
+                }
             }
-            visitedHistory.add(0, eventId)
-        }
 
         val updatedUser = visitedHistory?.let { user.copy(visitHistory = it) }
         if (updatedUser != null) {

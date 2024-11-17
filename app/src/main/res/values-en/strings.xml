@@ -117,5 +117,6 @@
     <string name="err_media">Add two pictures at least</string>
     <string name="lbl_slots">Slots:</string>
     <string name="lbl_add_cart">Purchase Details</string>
+    <string name="lbl_total_events">Listed Events</string>
 
 </resources>
