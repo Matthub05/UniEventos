@@ -58,9 +58,11 @@ import com.example.unieventos.models.Ticket
 import com.example.unieventos.models.TicketStatus
 import com.example.unieventos.models.User
 import com.example.unieventos.ui.components.EventSaver
+import com.example.unieventos.ui.components.LocationDropdownDTOSaver
 import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TransparentTopBarComponent
+import com.example.unieventos.ui.components.UserSaver
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
 import com.example.unieventos.viewmodel.TicketViewModel
@@ -86,13 +88,10 @@ fun TicketTransactionScreen(
     var event by rememberSaveable(stateSaver = EventSaver) {
         mutableStateOf(Event())
     }
+    var user = rememberSaveable(saver = UserSaver) { User() }
     var title by rememberSaveable { mutableStateOf("") }
     var date by rememberSaveable { mutableStateOf("") }
     var imageUrl by rememberSaveable { mutableStateOf("") }
-
-    BackHandler {
-        onNavigateToBack()
-    }
 
     LaunchedEffect(eventId) {
         if (eventId.isNotEmpty()) {
@@ -105,10 +104,9 @@ fun TicketTransactionScreen(
         }
     }
 
-    var user by remember { mutableStateOf<User?>(null) }
     LaunchedEffect(userId) {
         if (userId.isNotEmpty()) {
-            user = usersViewModel.getUserById(userId)
+            user = usersViewModel.getUserById(userId)!!
         }
     }
 
@@ -230,14 +228,18 @@ fun BuyTicketForm(
 ) {
 
     var quantity by rememberSaveable { mutableStateOf("") }
-    var idLocation by rememberSaveable { mutableStateOf<LocationDropdownDTO?>(null) }
+    var idLocation = rememberSaveable(saver = LocationDropdownDTOSaver) {
+        LocationDropdownDTO(idLocation = 0, locationName = "")
+    }
+    var event by rememberSaveable(stateSaver = EventSaver) {
+        mutableStateOf(Event())
+    }
 
-    var event by rememberSaveable { mutableStateOf<Event?>(null) }
     LaunchedEffect (eventId) {
         event = eventsViewModel.getEventById(eventId)!!
     }
 
-    var user by rememberSaveable { mutableStateOf<User?>(null) }
+    var user = rememberSaveable(saver = UserSaver) { User() }
     LaunchedEffect (userId) {
         user = usersViewModel.getUserById(userId)!!
     }

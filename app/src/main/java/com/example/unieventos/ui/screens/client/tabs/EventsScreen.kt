@@ -1,5 +1,6 @@
 package com.example.unieventos.ui.screens.client.tabs
 
+import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,15 +10,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
+import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventItemDestination
+import com.example.unieventos.models.Ticket
 import com.example.unieventos.ui.components.EventItem
+import com.example.unieventos.ui.components.EventSaver
 import com.example.unieventos.ui.components.FavoriteArtistsSection
 import com.example.unieventos.ui.components.FeaturedSection
 import com.example.unieventos.ui.components.SavedSection
@@ -36,7 +48,8 @@ fun EventsScreen(
     onNavigateToArtistDetail: (String) -> Unit
 ) {
 
-    val events = eventsViewModel.event.collectAsState().value
+    val events by eventsViewModel.event.collectAsState()
+    val eventIds = events.map { it.id }
     val artists = artistViewModel.artist.collectAsState().value
 
     LazyColumn(
@@ -79,13 +92,13 @@ fun EventsScreen(
 
         item {
 
-            FeaturedSection(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onSeeAllClick = {},
-                artistViewModel = artistViewModel,
-                events = events,
-            )
+//            FeaturedSection(
+//                modifier = Modifier
+//                    .fillMaxWidth(),
+//                onSeeAllClick = {},
+//                artistViewModel = artistViewModel,
+//                events = events,
+//            )
         }
 
         item {
@@ -112,13 +125,14 @@ fun EventsScreen(
             )
         }
 
-        items( events ) { event ->
+        items( eventIds ) { eventId ->
             EventItem(
-                event = event,
+                eventId = eventId,
                 modifier = Modifier.fillMaxWidth(),
                 destination = EventItemDestination.DETAIL.name,
                 onNavigateToEventDetail = onNavigateToEventDetail,
                 artistViewModel = artistViewModel,
+                eventViewModel = eventsViewModel,
                 userId = userId
             )
         }

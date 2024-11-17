@@ -33,7 +33,7 @@ class EventsViewModel:ViewModel() {
         }
     }
 
-    private suspend fun getEvents(): List<Event> {
+    suspend fun getEvents(): List<Event> {
         val snapshot = db.collection(collectionPathName).get().await()
         return snapshot.documents.mapNotNull {
             val event = it.toObject(Event::class.java)

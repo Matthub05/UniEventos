@@ -23,6 +23,7 @@ fun AdminEventsScreen(
 ) {
 
     val events = eventsViewModel.event.collectAsState().value
+    val eventIds = events.map { it.id }
 
     LazyColumn(
         modifier = Modifier
@@ -34,14 +35,15 @@ fun AdminEventsScreen(
                 bottom = paddingValues.calculateBottomPadding()
             ),
     ) {
-        items( events ) { event ->
+        items( eventIds ) { eventId ->
             EventItem(
-                event = event,
+                eventId = eventId,
                 modifier = Modifier.fillMaxWidth(),
                 destination = EventItemDestination.CREATE.name,
                 onNavigateToCreateEvent = onNavigateToCreateEvent,
                 artistViewModel = artistViewModel,
                 onNavigateToEventDetail =  { _: String, _: String -> },
+                eventViewModel = eventsViewModel,
                 userId = "0"
             )
         }

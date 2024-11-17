@@ -34,24 +34,34 @@ import com.example.unieventos.models.Artist
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.viewmodel.ArtistViewModel
+import com.example.unieventos.viewmodel.EventsViewModel
 import java.time.format.DateTimeFormatter
 import java.time.ZoneId
 
 @Composable
 fun EventItem(
     modifier: Modifier,
-    event: Event,
+    eventId: String,
     userId: String,
     destination: String,
     artistViewModel: ArtistViewModel,
+    eventViewModel: EventsViewModel,
     onNavigateToEventDetail: (String, String) -> Unit,
     onNavigateToCreateEvent: (String) -> Unit = {}
 ) {
 
+    var event by rememberSaveable(stateSaver = EventSaver) {
+        mutableStateOf(Event())
+    }
     var artist by remember { mutableStateOf<Artist?>(null) }
     var artistName by rememberSaveable { mutableStateOf("") }
 
-    LaunchedEffect(event.artistId) {
+    LaunchedEffect(eventId) {
+
+        event = eventViewModel.getEventById(eventId)!!
+        event?.let { loadedEvent ->
+            event = loadedEvent
+        }
         if (!event.artistId.isNullOrEmpty()) {
             artist = artistViewModel.getArtistById(event.artistId)
             artist?.let { loadedArtist ->
