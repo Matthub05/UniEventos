@@ -1,6 +1,8 @@
 package com.example.unieventos.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,7 +48,8 @@ fun SavedSection(
     usersViewModel: UsersViewModel,
     eventsViewModel: EventsViewModel,
     modifier: Modifier,
-    onSeeAllClick: () -> Unit
+    onSeeAllClick: () -> Unit,
+    onNavigateToEventDetail: (String, String) -> Unit,
 ) {
 
     var user by rememberSaveable(stateSaver = UserSaver) {
@@ -71,7 +75,9 @@ fun SavedSection(
         items( eventIds ) { eventId ->
                 SavedEvent(
                     eventId = eventId,
-                    eventsViewModel = eventsViewModel)
+                    eventsViewModel = eventsViewModel,
+                    onNavigateToEventDetail = onNavigateToEventDetail,
+                    userId = userId)
             }
         }
     }
@@ -80,7 +86,9 @@ fun SavedSection(
 @Composable
 fun SavedEvent(
     eventId: String,
-    eventsViewModel: EventsViewModel
+    eventsViewModel: EventsViewModel,
+    onNavigateToEventDetail: (String, String) -> Unit,
+    userId: String
 ) {
 
     var event by rememberSaveable(stateSaver = EventSaver) {
@@ -102,6 +110,13 @@ fun SavedEvent(
     }
 
     Column(
+        modifier = Modifier
+            .clickable (
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ){
+                onNavigateToEventDetail(event.id, userId)
+            }
     ) {
         val model = ImageRequest.Builder(LocalContext.current)
             .data(mediaUrl)

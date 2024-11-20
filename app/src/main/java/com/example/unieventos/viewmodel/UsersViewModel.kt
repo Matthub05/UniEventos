@@ -24,6 +24,9 @@ class UsersViewModel: ViewModel() {
     private val _authResult = MutableStateFlow<RequestResult?>(null)
     val authResult: StateFlow<RequestResult?> = _authResult.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
 
@@ -153,12 +156,19 @@ class UsersViewModel: ViewModel() {
             val visitedHistory = user?.visitHistory?.toMutableList()
 
             if (visitedHistory != null) {
-                if (!visitedHistory.contains(eventId)) {
-                    if (visitedHistory.size > 4) {
-                        visitedHistory.removeAt(visitedHistory.size - 1)
+                if (visitedHistory.contains(eventId)) {
+                    if (visitedHistory[0] == eventId) {
+                        return
+                    } else {
+                        visitedHistory.remove(eventId)
                     }
-                    visitedHistory.add(0, eventId)
                 }
+
+                if (visitedHistory.size > 4) {
+                    visitedHistory.removeAt(visitedHistory.size - 1)
+                }
+
+                visitedHistory.add(0, eventId)
             }
 
         val updatedUser = visitedHistory?.let { user.copy(visitHistory = it) }

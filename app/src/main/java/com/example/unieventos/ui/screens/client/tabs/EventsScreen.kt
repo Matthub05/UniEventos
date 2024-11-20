@@ -2,12 +2,14 @@ package com.example.unieventos.ui.screens.client.tabs
 
 import android.os.Bundle
 import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -49,98 +51,110 @@ fun EventsScreen(
     onNavigateToEventDetail: (String, String) -> Unit,
     onNavigateToArtistDetail: (String) -> Unit
 ) {
-
     val events by eventsViewModel.event.collectAsState()
     val eventIds = events.map { it.id }
     val artists = artistViewModel.artist.collectAsState().value
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                start = 7.dp,
-                end = 7.dp,
-                top = 90.dp,
-                bottom = paddingValues.calculateBottomPadding()
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
+    val isArtistsLoading by artistViewModel.isLoading.collectAsState()
+    val isEventsLoading by eventsViewModel.isLoading.collectAsState()
+    val isLoading = isEventsLoading || isArtistsLoading
 
-        item {
-            SectionTitle(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(id = R.string.label_artistas_destacados),
-                onSeeAllClick = {
-                }
-            )
+    if (isLoading) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    start = 7.dp,
+                    end = 7.dp,
+                    top = 90.dp,
+                    bottom = paddingValues.calculateBottomPadding()
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
 
-        item {
-            FavoriteArtistsSection(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                artists = artists,
-                onNavigateToArtistDetail = onNavigateToArtistDetail
-            )
+            item {
+                SectionTitle(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(id = R.string.label_artistas_destacados),
+                    onSeeAllClick = {
+                    }
+                )
+            }
+
+            item {
+                FavoriteArtistsSection(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    artists = artists,
+                    onNavigateToArtistDetail = onNavigateToArtistDetail
+                )
+            }
+
+            item {
+                SectionTitle(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(id = R.string.label_eventos_destacados),
+                    onSeeAllClick = {}
+                )
+            }
+
+            item {
+
+                FeaturedSection(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onSeeAllClick = {},
+                    onNavigateToEventDetail = onNavigateToEventDetail,
+                    artistViewModel = artistViewModel,
+                    events = events,
+                    userId = userId
+                )
+            }
+
+            item {
+                SectionTitle(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(id = R.string.label_vistos_anteriormente),
+                    onSeeAllClick = {}
+                )
+            }
+
+            item {
+                SavedSection(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onSeeAllClick = {},
+                    eventsViewModel = eventsViewModel,
+                    usersViewModel = usersViewModel,
+                    onNavigateToEventDetail = onNavigateToEventDetail,
+                    userId = userId
+                )
+            }
+
+            item {
+                SectionTitle(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(id = R.string.lbl_total_events),
+                    onSeeAllClick = {}
+                )
+            }
+
+            items(eventIds) { eventId ->
+                EventItem(
+                    eventId = eventId,
+                    modifier = Modifier.fillMaxWidth(),
+                    destination = EventItemDestination.DETAIL.name,
+                    onNavigateToEventDetail = onNavigateToEventDetail,
+                    artistViewModel = artistViewModel,
+                    eventViewModel = eventsViewModel,
+                    userId = userId
+                )
+            }
+
         }
-
-        item {
-            SectionTitle(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(id = R.string.label_eventos_destacados),
-                onSeeAllClick = {}
-            )
-        }
-
-        item {
-
-            FeaturedSection(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onSeeAllClick = {},
-                artistViewModel = artistViewModel,
-                events = events,
-            )
-        }
-
-        item {
-            SectionTitle(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(id = R.string.label_vistos_anteriormente),
-                onSeeAllClick = {}
-            )
-        }
-
-        item {
-            SavedSection(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onSeeAllClick = {},
-                eventsViewModel = eventsViewModel,
-                usersViewModel = usersViewModel,
-                userId = userId
-            )
-        }
-
-        item {
-            SectionTitle(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(id = R.string.lbl_total_events),
-                onSeeAllClick = {}
-            )
-        }
-
-        items( eventIds ) { eventId ->
-            EventItem(
-                eventId = eventId,
-                modifier = Modifier.fillMaxWidth(),
-                destination = EventItemDestination.DETAIL.name,
-                onNavigateToEventDetail = onNavigateToEventDetail,
-                artistViewModel = artistViewModel,
-                eventViewModel = eventsViewModel,
-                userId = userId
-            )
-        }
-
     }
 }

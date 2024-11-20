@@ -20,6 +20,9 @@ class EventsViewModel:ViewModel() {
     private val _event = MutableStateFlow( emptyList<Event>() )
     val event: StateFlow< List<Event> > = _event.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     private val _authResult = MutableStateFlow<RequestResult?>(null)
     val authResult: StateFlow<RequestResult?> = _authResult.asStateFlow()
 
@@ -29,7 +32,9 @@ class EventsViewModel:ViewModel() {
 
     private fun loadEvents() {
         viewModelScope.launch {
+            _isLoading.value = true
             _event.value = getEvents()
+            _isLoading.value = false
         }
     }
 

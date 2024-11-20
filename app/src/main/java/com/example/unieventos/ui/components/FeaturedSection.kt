@@ -1,6 +1,8 @@
 package com.example.unieventos.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +41,7 @@ import coil.transform.CircleCropTransformation
 import com.example.unieventos.models.Artist
 import com.example.unieventos.models.Event
 import com.example.unieventos.viewmodel.ArtistViewModel
+import com.example.unieventos.viewmodel.EventsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +50,8 @@ fun FeaturedSection(
     onSeeAllClick: () -> Unit,
     events: List<Event>,
     artistViewModel: ArtistViewModel,
+    userId: String,
+    onNavigateToEventDetail: (String, String) -> Unit
 ) {
         LazyRow(
             modifier = Modifier
@@ -55,7 +60,7 @@ fun FeaturedSection(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items( events ) { event ->
-               FeaturedEvent(event, artistViewModel)
+               FeaturedEvent(event, userId, onNavigateToEventDetail, artistViewModel)
             }
         }
     }
@@ -63,6 +68,8 @@ fun FeaturedSection(
 @Composable
 fun FeaturedEvent(
     event: Event,
+    userId: String,
+    onNavigateToEventDetail: (String, String) -> Unit,
     artistViewModel: ArtistViewModel,
 ) {
 
@@ -79,6 +86,13 @@ fun FeaturedEvent(
     }
 
     Column(
+        modifier = Modifier
+            .clickable (
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ){
+                onNavigateToEventDetail(event.id, userId)
+            }
 
     ) {
         val model = ImageRequest.Builder(LocalContext.current)

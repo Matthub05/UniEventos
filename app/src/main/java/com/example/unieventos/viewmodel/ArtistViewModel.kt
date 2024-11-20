@@ -20,6 +20,9 @@ class ArtistViewModel: ViewModel() {
     private val _artist = MutableStateFlow( emptyList<Artist>() )
     val artist: StateFlow< List<Artist> > = _artist.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     private val _authResult = MutableStateFlow<RequestResult?>(null)
     val authResult: StateFlow<RequestResult?> = _authResult.asStateFlow()
 
@@ -30,7 +33,9 @@ class ArtistViewModel: ViewModel() {
 
     private fun loadArtists() {
         viewModelScope.launch {
+            _isLoading.value = true
             _artist.value = getArtists()
+            _isLoading.value = false
         }
     }
 
