@@ -142,10 +142,10 @@ fun Navigation(
                 },
                 onNavigateToCreateArtist = { artistId: String? ->
                     navController.navigate(RouteScreen.CreateArtistScreen(artistId))
-                                           },
-                onNavigateToCreateCoupon = {
-                    navController.navigate(RouteScreen.CreateCouponScreen)
-                                           },
+                },
+                onNavigateToCreateCoupon = { couponId: String? ->
+                    navController.navigate(RouteScreen.CreateCouponScreen(couponId))
+                },
                 couponsViewModel = couponViewModel,
                 artistViewModel = artistViewModel
             )
@@ -249,7 +249,9 @@ fun Navigation(
         }
 
         composable<RouteScreen.CreateCouponScreen> {
+            val couponId = it.arguments?.getString("couponId")
             CreateCouponScreen(
+                couponId = couponId ?: "",
                 onNavigateToBack = { navController.popBackStack() },
                 couponViewModel = couponViewModel
             )

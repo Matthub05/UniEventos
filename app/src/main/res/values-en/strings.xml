@@ -121,5 +121,6 @@
     <string name="label_buscar">Search</string>
     <string name="adv_no_resultados">No results found for</string>
     <string name="adv_ingrese_busqueda">Enter a search term</string>
+    <string name="titulo_edicion_cupon">Edit coupon</string>
 
 </resources>

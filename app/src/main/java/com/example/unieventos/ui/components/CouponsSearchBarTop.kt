@@ -43,6 +43,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CouponsSearchBarTop(
     couponsViewModel: CouponsViewModel,
+    onNavigateToCreateCoupon: (String?) -> Unit,
     drawerState: DrawerState
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -121,7 +122,8 @@ fun CouponsSearchBarTop(
             }
             CouponsResultsList(
                 paddingValues = PaddingValues(),
-                coupons = coupons
+                coupons = coupons,
+                onNavigateToCreateCoupon = onNavigateToCreateCoupon
             )
         }
     }
@@ -131,6 +133,7 @@ fun CouponsSearchBarTop(
 private fun CouponsResultsList(
     paddingValues: PaddingValues,
     coupons: List<Coupon>,
+    onNavigateToCreateCoupon: (String?) -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier
@@ -146,7 +149,8 @@ private fun CouponsResultsList(
 
         items(coupons) { coupon ->
             CouponItem(
-                coupon = coupon
+                coupon = coupon,
+                onNavigateToCreateCoupon = onNavigateToCreateCoupon
             )
             Spacer(modifier = Modifier.height(7.dp))
         }

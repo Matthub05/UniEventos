@@ -125,5 +125,9 @@
     <string name="label_buscar">Buscar</string>
     <string name="adv_no_resultados">No hay resultados para</string>
     <string name="adv_ingrese_busqueda">Ingresa un término de búsqueda</string>
+    <string name="titulo_edicion_cupon">Editar cupón</string>
+    <string name="err_fecha_inicio">La fecha inicial no es válida</string>
+    <string name="err_fecha_fin">La fecha final no es válida</string>
+    <string name="btn_actualizar_cupon">Actualizar cupón</string>
 
 </resources>

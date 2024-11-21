@@ -17,7 +17,8 @@ import com.example.unieventos.viewmodel.CouponsViewModel
 @Composable
 fun CouponsScreen(
     paddingValues: PaddingValues,
-    couponsViewModel: CouponsViewModel
+    couponsViewModel: CouponsViewModel,
+    onNavigateToCreateCoupon: (String?) -> Unit
 ) {
 
     val coupons = couponsViewModel.coupon.collectAsState().value
@@ -33,7 +34,7 @@ fun CouponsScreen(
         ),
     ) {
         items( coupons ) { coupon ->
-            CouponItem(coupon)
+            CouponItem(coupon = coupon, onNavigateToCreateCoupon = onNavigateToCreateCoupon)
         }
     }
 }

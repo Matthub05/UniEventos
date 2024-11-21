@@ -76,7 +76,7 @@ fun AdminHomeScreen(
     onLogout: () -> Unit,
     onNavigateToCreateEvent: (String?) -> Unit,
     onNavigateToCreateArtist: (String?) -> Unit,
-    onNavigateToCreateCoupon: () -> Unit
+    onNavigateToCreateCoupon: (String?) -> Unit
 ) {
 
     val navController = rememberNavController()
@@ -189,6 +189,7 @@ fun AdminHomeScreen(
                 } else if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabCoupons::class) == true) {
                     CouponsSearchBarTop(
                         couponsViewModel = couponsViewModel,
+                        onNavigateToCreateCoupon = onNavigateToCreateCoupon,
                         drawerState = drawerState
                     )
                 } else if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabArtists::class) == true) {
@@ -208,7 +209,7 @@ fun AdminHomeScreen(
                         else if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabArtists::class) == true)
                             onNavigateToCreateArtist(null)
                         else
-                            onNavigateToCreateCoupon()
+                            onNavigateToCreateCoupon(null)
                     }
                 ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = null)
@@ -252,7 +253,8 @@ fun AdminHomeScreen(
                 eventsViewModel = eventsViewModel,
                 artistViewModel = artistViewModel,
                 onNavigateToCreateEvent = onNavigateToCreateEvent,
-                onNavigateToCreateArtist = onNavigateToCreateArtist
+                onNavigateToCreateArtist = onNavigateToCreateArtist,
+                onNavigateToCreateCoupon = onNavigateToCreateCoupon
             )
 
         }
@@ -268,6 +270,7 @@ fun NavHostAdmin(
     artistViewModel: ArtistViewModel,
     onNavigateToCreateEvent: (String?) -> Unit,
     onNavigateToCreateArtist: (String?) -> Unit,
+    onNavigateToCreateCoupon: (String?) -> Unit
 ) {
 
     NavHost(
@@ -296,7 +299,8 @@ fun NavHostAdmin(
         composable<AdminRouteScreen.TabCoupons> {
             CouponsScreen(
                 paddingValues = paddingValues,
-                couponsViewModel = couponsViewModel
+                couponsViewModel = couponsViewModel,
+                onNavigateToCreateCoupon = onNavigateToCreateCoupon
             )
 
         }

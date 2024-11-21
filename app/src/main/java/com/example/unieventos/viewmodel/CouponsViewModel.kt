@@ -60,6 +60,24 @@ class CouponsViewModel:ViewModel() {
         }
     }
 
+    fun updateCoupon(coupon: Coupon) {
+        viewModelScope.launch {
+            _authResult.value = RequestResult.Loading
+            _authResult.value = kotlin.runCatching { updateCouponFirebase(coupon) }
+                .fold(
+                    onSuccess = { RequestResult.Success("Cupón Actualizado") },
+                    onFailure = { RequestResult.Failure(it.message.toString()) }
+                )
+        }
+    }
+
+    private suspend fun updateCouponFirebase(coupon: Coupon) {
+        viewModelScope.launch {
+            db.collection(collectionPathName).document(coupon.id).set(coupon).await()
+            _coupon.value = getCoupons()
+        }
+    }
+
     fun deleteCoupon(couponId: String) {
         viewModelScope.launch {
             _authResult.value = RequestResult.Loading
