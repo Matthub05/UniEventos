@@ -27,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,20 +36,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.unieventos.R
 import com.example.unieventos.models.Event
+import com.example.unieventos.models.Ticket
 import com.example.unieventos.utils.SharedPreferenceUtils
-import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
+import com.example.unieventos.viewmodel.TicketViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBarTop(
+fun PurchasesSearchBarTop(
+    ticketViewModel: TicketViewModel,
     eventsViewModel: EventsViewModel,
-    artistViewModel: ArtistViewModel,
-    destination: String,
-    onNavigateToEventDetail: (String, String) -> Unit,
-    onNavigateToCreateEvent: (String) -> Unit = {},
     drawerState: DrawerState
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -59,8 +56,8 @@ fun SearchBarTop(
     val scope = rememberCoroutineScope()
 
     val userId = SharedPreferenceUtils.getCurrentUser(LocalContext.current)?.id
-    var events by rememberSaveable { mutableStateOf< List<Event> >(emptyList()) }
-    val eventIds = events.map { it.id }
+    var tickets by remember { mutableStateOf< List<Pair<Ticket, Event?>> >( emptyList() )}
+    var filteredTickets by remember { mutableStateOf< List<Pair<Ticket, Event?>> >( emptyList() )}
 
     val searchBarLabel = stringResource(id = R.string.label_buscar)
     LaunchedEffect(key1 = Unit) {
@@ -68,8 +65,16 @@ fun SearchBarTop(
         searchTextPlaceholder = searchBarLabel
     }
 
+    LaunchedEffect (userId) {
+        if (userId !== null) {
+            tickets = ticketViewModel.getTicketsByUserId(userId)
+            filteredTickets = tickets
+        }
+    }
     LaunchedEffect(searchText) {
-        events = eventsViewModel.searchEvents(searchText)
+        filteredTickets = tickets.filter {
+            it.second?.title?.contains(searchText, ignoreCase = true) ?: false
+        }
     }
 
     val searchBarColors = SearchBarDefaults.colors(
@@ -84,7 +89,6 @@ fun SearchBarTop(
         colors = searchBarColors,
         query = searchText,
         onQueryChange = { searchText = it },
-        //onSearch = { isActive = false },
         onSearch = {  },
         active = isActive,
         onActiveChange = { isActive = it },
@@ -121,39 +125,29 @@ fun SearchBarTop(
         },
 
     ) {
-        if (searchText.isEmpty() || events.isEmpty()) {
-            val text = if (searchText.isEmpty())
-                stringResource(id = R.string.adv_ingrese_busqueda)
-            else
-                stringResource(id = R.string.adv_no_resultados) + " '$searchText'"
+        if (tickets.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize()) {
-                Text(text = text)
+                Text(text = stringResource(id = R.string.adv_no_resultados) + " '$searchText'")
             }
         } else {
-            ResultsList(
+            if (searchText.isEmpty()) {
+                Text(text = stringResource(id = R.string.adv_ingrese_busqueda))
+                Spacer(modifier = Modifier.height(7.dp))
+            }
+            PurchasesResultsList(
                 paddingValues = PaddingValues(),
                 eventsViewModel = eventsViewModel,
-                artistViewModel = artistViewModel,
-                destination = destination,
-                onNavigateToEventDetail = onNavigateToEventDetail,
-                onNavigateToCreateEvent = onNavigateToCreateEvent,
-                eventIds = eventIds,
-                userId = userId ?: ""
+                tickets = filteredTickets
             )
         }
     }
 }
 
 @Composable
-fun ResultsList(
+private fun PurchasesResultsList(
     paddingValues: PaddingValues,
     eventsViewModel: EventsViewModel,
-    artistViewModel: ArtistViewModel,
-    destination: String,
-    onNavigateToEventDetail: (String, String) -> Unit,
-    onNavigateToCreateEvent: (String) -> Unit = {},
-    eventIds: List<String>,
-    userId: String
+    tickets: List<Pair<Ticket, Event?>>,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -167,17 +161,10 @@ fun ResultsList(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        items(eventIds) { eventId ->
-            EventItem(
-                eventId = eventId,
-                modifier = Modifier.fillMaxWidth(),
-                destination = destination,
-                onNavigateToEventDetail = onNavigateToEventDetail,
-                onNavigateToCreateEvent = onNavigateToCreateEvent,
-                artistViewModel = artistViewModel,
-                eventViewModel = eventsViewModel,
-                userId = userId,
-                isResultItem = true
+        items(tickets) { ticket ->
+            TicketItem(
+                ticket = ticket.first,
+                eventsViewModel = eventsViewModel
             )
             Spacer(modifier = Modifier.height(7.dp))
         }

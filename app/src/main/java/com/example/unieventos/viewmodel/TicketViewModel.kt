@@ -6,7 +6,6 @@ import com.example.unieventos.models.Coupon
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.Ticket
 import com.example.unieventos.models.TicketStatus
-import com.example.unieventos.models.User
 import com.example.unieventos.utils.RequestResult
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -15,12 +14,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.Date
 
 class TicketViewModel:ViewModel() {
 
     private val db = Firebase.firestore
     private val collectionPathName = "tickets"
+    private val eventsCollectionPathName = "events"
     private val _ticket = MutableStateFlow( emptyList<Ticket>() )
     val ticket: StateFlow< List<Ticket> > =  _ticket.asStateFlow()
 
@@ -137,6 +136,28 @@ class TicketViewModel:ViewModel() {
 
     fun resetAuthResult() {
         _authResult.value = null
+    }
+
+    suspend fun getTicketsByUserId(userId: String): List<Pair<Ticket, Event?>> {
+        val querySnapshot = db.collection(collectionPathName)
+            .whereEqualTo("userId", userId)
+            .get()
+            .await()
+        val tickets = querySnapshot.documents.mapNotNull { document ->
+            document.toObject(Ticket::class.java)?.apply {
+                id = document.id
+            }
+        }
+        return tickets.map { ticket ->
+            val event = ticket.eventId.let { eventId ->
+                db.collection(eventsCollectionPathName)
+                    .document(eventId)
+                    .get()
+                    .await()
+                    .toObject(Event::class.java)
+            }
+            Pair(ticket, event)
+        }
     }
 
 }

@@ -124,5 +124,6 @@
     <string name="lbl_total_events">Todos los eventos</string>
     <string name="label_buscar">Buscar</string>
     <string name="adv_no_resultados">No hay resultados para</string>
+    <string name="adv_ingrese_busqueda">Ingresa un término de búsqueda</string>
 
 </resources>

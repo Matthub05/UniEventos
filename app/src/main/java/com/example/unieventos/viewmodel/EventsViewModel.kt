@@ -114,7 +114,11 @@ class EventsViewModel:ViewModel() {
     }
 
     fun searchEvents(query: String): List<Event> {
-        return _event.value.filter { it.title.contains(query, ignoreCase = true) }
+        return _event.value.filter {
+            it.title.contains(query, ignoreCase = true)
+                    || it.category.contains(query, ignoreCase = true)
+                    || it.eventSite.location.contains(query, ignoreCase = true)
+        }
     }
 
     fun resetAuthResult() {

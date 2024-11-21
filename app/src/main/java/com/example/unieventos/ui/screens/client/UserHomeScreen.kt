@@ -62,6 +62,7 @@ import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.models.ui.BottomNavigationItem
 import com.example.unieventos.models.ui.DrawerItem
 import com.example.unieventos.ui.components.NavigationBarCustom
+import com.example.unieventos.ui.components.PurchasesSearchBarTop
 import com.example.unieventos.ui.components.SearchBarTop
 import com.example.unieventos.ui.screens.client.navigation.UserRouteScreen
 import com.example.unieventos.ui.screens.client.tabs.EventsScreen
@@ -217,17 +218,23 @@ fun HomeScreen(
         },
 
         topBar = {
-            if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true
-                || navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabPurchases::class) == true)
+            if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true) {
                 return@Scaffold
-
-            SearchBarTop(
-                eventsViewModel = eventsViewModel,
-                artistViewModel = artistViewmodel,
-                destination = EventItemDestination.DETAIL.name,
-                onNavigateToEventDetail = onNavigateToEventDetail,
-                drawerState = drawerState
-            )
+            } else if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabEvents::class) == true) {
+                SearchBarTop(
+                    eventsViewModel = eventsViewModel,
+                    artistViewModel = artistViewmodel,
+                    destination = EventItemDestination.DETAIL.name,
+                    onNavigateToEventDetail = onNavigateToEventDetail,
+                    drawerState = drawerState
+                )
+            } else if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabPurchases::class) == true) {
+                PurchasesSearchBarTop(
+                    ticketViewModel = ticketViewModel,
+                    eventsViewModel = eventsViewModel,
+                    drawerState = drawerState
+                )
+            }
         },
         bottomBar = {
             NavigationBarCustom(

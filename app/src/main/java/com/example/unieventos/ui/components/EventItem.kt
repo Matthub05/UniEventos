@@ -79,9 +79,11 @@ fun EventItem(
 
     var imageSize: Dp = 120.dp
     var spaceSize: Dp = 30.dp
+    var secondaryText: String = artistName
     if (isResultItem) {
         imageSize = 80.dp
         spaceSize = 8.dp
+        secondaryText = event.category
     }
 
     Surface (
@@ -125,24 +127,24 @@ fun EventItem(
 
             Column {
                 Text(text = event.title, fontSize = 17.sp)
-                Text(text = artistName, fontSize = 13.sp, color = Color.Gray)
+                Text(text = secondaryText, fontSize = 13.sp, color = Color.Gray)
 
                 Spacer(modifier = Modifier.height(spaceSize))
 
+                Text(
+                    text = event.eventSite.name + ", " + event.eventSite.location,
+                    fontSize = 11.sp,
+                    color = Color.Gray
+                )
                 if (!isResultItem) {
                     Text(
-                        text = event.eventSite.name + ", " + event.eventSite.location,
+                        text = event.date.toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime().format(formatter),
                         fontSize = 11.sp,
                         color = Color.Gray
                     )
                 }
-                Text(
-                    text = event.date.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime().format(formatter),
-                    fontSize = 11.sp,
-                    color = Color.Gray
-                )
 
             }
 
