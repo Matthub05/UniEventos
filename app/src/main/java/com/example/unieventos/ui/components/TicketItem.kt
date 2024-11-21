@@ -41,6 +41,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.unieventos.R
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.Ticket
+import com.example.unieventos.utils.Formatters
 import com.example.unieventos.viewmodel.EventsViewModel
 
 @Composable
@@ -95,7 +96,7 @@ fun TicketItem(
                     fontSize = 13.sp,
                     color = Color.Gray
                 )
-                Text(text = stringResource(id = R.string.text_total) + ": " + ticket.price + " $",
+                Text(text = stringResource(id = R.string.text_total) + ": " + Formatters.formatPrice(ticket.price),
                     fontSize = 13.sp,
                     color = Color.Gray
                 )

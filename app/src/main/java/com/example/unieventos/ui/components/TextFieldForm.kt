@@ -2,6 +2,8 @@ package com.example.unieventos.ui.components
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -205,4 +207,51 @@ fun DatePickerForm(
         }
     }
 
+}
+
+@Composable
+fun ValidateTextFieldForm(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    successSupportingText: String,
+    oppositeSupportingText: String,
+    label: String,
+    onValidate: Boolean,
+    keyboardOptions: KeyboardOptions,
+    isPassword: Boolean = false,
+){
+
+    var isError by rememberSaveable { mutableStateOf(false) }
+
+    OutlinedTextField(
+        modifier = modifier,
+        value = value,
+        singleLine = true,
+        isError = isError,
+        supportingText = {
+            if (!value.isEmpty()) {
+                if (onValidate) {
+                    Text(text = successSupportingText)
+                } else {
+                    Text(text = oppositeSupportingText)
+                }
+            }
+        },
+        visualTransformation =VisualTransformation.None,
+        keyboardOptions = keyboardOptions,
+        label = { Text(text = label) },
+        onValueChange = {
+            onValueChange(it)
+        },
+        trailingIcon = {
+            if (!value.isEmpty()) {
+                if (onValidate) {
+                    Icon(imageVector = Icons.Filled.Check, contentDescription = "")
+                } else {
+                    Icon(imageVector = Icons.Filled.Close, contentDescription = "")
+                }
+            }
+        }
+    )
 }

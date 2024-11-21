@@ -1,8 +1,10 @@
 package com.example.unieventos.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unieventos.models.Coupon
+import com.example.unieventos.models.User
 import com.example.unieventos.utils.RequestResult
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -103,6 +105,16 @@ class CouponsViewModel:ViewModel() {
         return coupon
     }
 
+    suspend fun getCouponByCode(code: String): Coupon? {
+        val snapshot = db.collection(collectionPathName)
+            .whereEqualTo("code", code)
+            .get()
+            .await()
+
+        val coupon = snapshot.documents.firstOrNull()?.toObject(Coupon::class.java)
+        return coupon
+    }
+
     fun searchCoupons(query: String): List<Coupon> {
         return _coupon.value.filter {
             it.code.contains(query, ignoreCase = true) ||
@@ -112,6 +124,18 @@ class CouponsViewModel:ViewModel() {
 
     fun resetAuthResult() {
         _authResult.value = null
+    }
+
+    suspend fun validateCoupon(couponCode: String, user: User?): Boolean {
+        val usedList = user?.usedCouponCodes
+
+        val querySnapshot = db.collection(collectionPathName)
+            .whereEqualTo("code", couponCode)
+            .get()
+            .await()
+
+        return !(querySnapshot.isEmpty || (usedList?.contains(couponCode) == true))
+
     }
 
 }

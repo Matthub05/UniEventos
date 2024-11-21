@@ -125,4 +125,13 @@
     <string name="err_fecha_inicio">La fecha inicial no es válida</string>
     <string name="err_fecha_fin">La fecha final no es válida</string>
     <string name="btn_actualizar_cupon">Actualizar cupón</string>
+    <string name="btn_finish">Completar Compra</string>
+    <string name="lbl_total">Resumen de Orden</string>
+    <string name="txt_disclaimer">UniEventos no ofrece reembolsos por compras realizadas a través de la plataforma.</string>
+    <string name="txt_coupon">Cupón Invalido</string>
+    <string name="txt_discount">"Descuento de "</string>
+    <string name="txt_applied">% aplicado</string>
+    <string name="lbl_compras">Historial de Compras</string>
+
+
 </resources>

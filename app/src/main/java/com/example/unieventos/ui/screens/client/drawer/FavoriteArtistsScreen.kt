@@ -69,8 +69,14 @@ fun FavoriteArtistsScreen(
         }
     ) { paddingValues ->
         LazyVerticalGrid(
+
             columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .padding(
+                start = 7.dp,
+                end = 7.dp,
+                bottom = paddingValues.calculateBottomPadding()
+            ),
             contentPadding = paddingValues,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -86,12 +92,16 @@ fun FavoriteArtistsScreen(
 @Composable
 fun ArtistCard(artist: Artist, onNavigateToArtistDetail: (String) -> Unit) {
     Card(
+        colors = androidx.compose.material3.CardDefaults.cardColors(
+            containerColor = Color.Black
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp),
         //elevation = CardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(8.dp),
         onClick = { onNavigateToArtistDetail(artist.id) }
+
     ) {
         Column(
             modifier = Modifier

@@ -6,6 +6,7 @@ import com.example.unieventos.models.Coupon
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.Ticket
 import com.example.unieventos.models.TicketStatus
+import com.example.unieventos.utils.Formatters
 import com.example.unieventos.utils.RequestResult
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -82,6 +83,41 @@ class TicketViewModel:ViewModel() {
         }
     }
 
+    fun totalCart(userId: String, coupon: Coupon?) {
+        viewModelScope.launch {
+            _authResult.value = RequestResult.Loading
+            _authResult.value = kotlin.runCatching { totalCartFirebase(userId, coupon) }
+                .fold(
+                    onSuccess = { RequestResult.Success("Ticket eliminado") },
+                    onFailure = { RequestResult.Failure(it.message.toString()) }
+                )
+        }
+    }
+
+    suspend fun totalCartFirebase(userId: String, coupon: Coupon? = null): Double {
+            val userTicketsQuery = db.collection(collectionPathName)
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("status", TicketStatus.PENDING)
+                .get()
+                .await()
+
+            val userTickets = userTicketsQuery.documents.mapNotNull {
+                val ticket = it.toObject(Ticket::class.java)
+                requireNotNull(ticket)
+                ticket.id = it.id
+                ticket
+            }
+
+            if (coupon == null) {
+                return userTickets.sumOf { it.price }
+            } else {
+                return userTickets.sumOf { it.price } * coupon.discount
+            }
+
+
+        }
+
+
 
     fun emptyCart(userId: String) {
         viewModelScope.launch {
@@ -124,6 +160,19 @@ class TicketViewModel:ViewModel() {
         val querySnapshot = db.collection(collectionPathName)
             .whereEqualTo("userId", userId)
             .whereEqualTo("status", TicketStatus.PENDING)
+            .get()
+            .await()
+
+        return querySnapshot.documents.mapNotNull { document ->
+            document.toObject(Ticket::class.java)?.apply {
+                id = document.id
+            }
+        }
+    }
+    suspend fun getUserHistoryById(userId: String): List<Ticket>{
+        val querySnapshot = db.collection(collectionPathName)
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("status", TicketStatus.BOUGHT)
             .get()
             .await()
 

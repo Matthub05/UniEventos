@@ -123,4 +123,12 @@
     <string name="adv_ingrese_busqueda">Enter a search term</string>
     <string name="titulo_edicion_cupon">Edit coupon</string>
 
+    <string name="btn_finish">Complete Purchase</string>
+    <string name="lbl_total">Order Summary</string>
+    <string name="txt_disclaimer">UniEventos does not offer refunds for any purchases made through the platform.</string>
+    <string name="txt_coupon">Invalid Coupon</string>
+    <string name="txt_discount">"Discount of "</string>
+    <string name="txt_applied">% has been applied</string>
+    <string name="lbl_compras">Shopping History</string>
+
 </resources>

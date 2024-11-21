@@ -22,6 +22,7 @@ import com.example.unieventos.ui.screens.SignUpScreen
 import com.example.unieventos.ui.screens.admin.CreateArtistScreen
 import com.example.unieventos.ui.screens.client.TicketTransactionScreen
 import com.example.unieventos.ui.screens.client.drawer.FavoriteArtistsScreen
+import com.example.unieventos.ui.screens.client.drawer.ShoppingHistoryScreen
 import com.example.unieventos.utils.SharedPreferenceUtils
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
@@ -118,7 +119,14 @@ fun Navigation(
                         navController.navigate(RouteScreen.FavoriteArtistsScreen)
                     },
                     ticketViewModel = ticketViewModel,
-                    usersViewModel = usersViewModel
+                    usersViewModel = usersViewModel,
+                    couponsViewModel = couponViewModel,
+                    onNavigateToHome = {
+                       navController.navigate(RouteScreen.UserHome)
+                    },
+                    onNavigateToShoppingHistory = {
+                        navController.navigate(RouteScreen.ShoppingHistoryScreen)
+                    }
                 )
             } else {
                 Log.e("Error", "Session is null")
@@ -266,6 +274,16 @@ fun Navigation(
                 onNavigateToBack = {
                     navController.popBackStack()
                 },
+            )
+        }
+
+        composable<RouteScreen.ShoppingHistoryScreen> {
+            ShoppingHistoryScreen(
+                ticketViewModel = ticketViewModel,
+                onNavigateToBack = {
+                    navController.popBackStack()
+                },
+                eventsViewModel = eventsViewModel
             )
         }
 

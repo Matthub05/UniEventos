@@ -60,6 +60,7 @@ import com.example.unieventos.ui.components.SleekButton
 import com.example.unieventos.ui.components.TextFieldForm
 import com.example.unieventos.ui.components.TransparentTopBarComponent
 import com.example.unieventos.ui.components.UserSaver
+import com.example.unieventos.utils.Formatters
 import com.example.unieventos.utils.RequestResult
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
@@ -358,7 +359,7 @@ fun DropdownMenuLocation(
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(text = item.name) },
+                    text = { Text(text = item.name + " - " + Formatters.formatPrice(item.price)) },
                     onClick = {
                         expanded = false
                         onValueChange(LocationDropdownDTO(item.id, item.name))

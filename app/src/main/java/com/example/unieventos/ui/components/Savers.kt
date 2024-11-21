@@ -5,6 +5,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import com.example.unieventos.dto.LocationDropdownDTO
 import com.example.unieventos.models.Artist
+import com.example.unieventos.models.Coupon
 import com.example.unieventos.models.Event
 import com.example.unieventos.models.EventLocation
 import com.example.unieventos.models.EventSite
@@ -108,6 +109,30 @@ val ArtistSaver = Saver<Artist, Bundle>(
             genre = bundle.getString("genre") ?: "",
             description = bundle.getString("description") ?: "",
             imageUrl = bundle.getString("imageUrl") ?: ""
+        )
+    }
+)
+
+
+val CouponSaver = Saver<Coupon, Bundle>(
+    save = { coupon ->
+        Bundle().apply {
+            putString("id", coupon.id)
+            putString("description", coupon.description)
+            putString("code", coupon.code)
+            putSerializable("startDate", coupon.startDate)
+            putSerializable("endDate", coupon.endDate)
+            putDouble("discount", coupon.discount)
+        }
+    },
+    restore = { bundle ->
+        Coupon(
+            id = bundle.getString("id") ?: "",
+            description = bundle.getString("description") ?: "",
+            code = bundle.getString("code") ?: "",
+            startDate = bundle.getSerializable("startDate") as? Date ?: Date(),
+            endDate = bundle.getSerializable("endDate") as? Date ?: Date(),
+            discount = bundle.getDouble("discount", 0.0)
         )
     }
 )

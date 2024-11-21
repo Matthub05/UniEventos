@@ -27,3 +27,19 @@ fun SleekButton(
     }
 }
 
+@Composable
+fun SmallSleekButton(
+    text: String,
+    onClickAction: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .width(150.dp)
+            .height(50.dp),
+        shape = RoundedCornerShape(4.dp),
+        onClick = { onClickAction() }
+    ) {
+        Text(text = text)
+    }
+}
+

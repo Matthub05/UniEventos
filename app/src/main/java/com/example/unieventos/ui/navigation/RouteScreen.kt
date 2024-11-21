@@ -43,4 +43,7 @@ sealed class RouteScreen {
     @Serializable
     data object FavoriteArtistsScreen : RouteScreen()
 
+    @Serializable
+    data object ShoppingHistoryScreen : RouteScreen()
+
 }

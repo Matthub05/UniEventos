@@ -12,6 +12,7 @@ data class User(
     var tickets: List<Ticket> = listOf(),
     var favoriteArtistsId: List<String> = listOf(),
     var visitHistory: List<String> = listOf(),
+    var usedCouponCodes: List<String> = listOf(),
 )
 
 data class UserUpdateDTO(
