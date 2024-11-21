@@ -52,6 +52,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.R
+import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.models.ui.BottomNavigationItem
 import com.example.unieventos.models.ui.DrawerItem
 import com.example.unieventos.ui.components.NavigationBarCustom
@@ -60,7 +61,6 @@ import com.example.unieventos.ui.screens.admin.navigation.AdminRouteScreen
 import com.example.unieventos.ui.screens.admin.tabs.AdminEventsScreen
 import com.example.unieventos.ui.screens.admin.tabs.ArtistsScreen
 import com.example.unieventos.ui.screens.admin.tabs.CouponsScreen
-import com.example.unieventos.ui.screens.client.navigation.UserRouteScreen
 import com.example.unieventos.viewmodel.ArtistViewModel
 import com.example.unieventos.viewmodel.CouponsViewModel
 import com.example.unieventos.viewmodel.EventsViewModel
@@ -175,14 +175,17 @@ fun AdminHomeScreen(
 
         Scaffold(
             topBar = {
-                if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true)
+                if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabCoupons::class) == true
+                    || navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabArtists::class) == true)
                     return@Scaffold
 
                 SearchBarTop(
-                    onSearchTextChanged = { newText ->
-                        println("Search text: $newText")
-                    },
-                    drawerState
+                    eventsViewModel = eventsViewModel,
+                    artistViewModel = artistViewModel,
+                    destination = EventItemDestination.CREATE.name,
+                    onNavigateToEventDetail =  { _: String, _: String -> },
+                    onNavigateToCreateEvent = onNavigateToCreateEvent,
+                    drawerState = drawerState
                 )
             },
             floatingActionButton = {

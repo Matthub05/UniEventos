@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -47,7 +48,8 @@ fun EventItem(
     artistViewModel: ArtistViewModel,
     eventViewModel: EventsViewModel,
     onNavigateToEventDetail: (String, String) -> Unit,
-    onNavigateToCreateEvent: (String) -> Unit = {}
+    onNavigateToCreateEvent: (String) -> Unit = {},
+    isResultItem: Boolean = false,
 ) {
 
     var event by rememberSaveable(stateSaver = EventSaver) {
@@ -59,10 +61,10 @@ fun EventItem(
     LaunchedEffect(eventId) {
 
         event = eventViewModel.getEventById(eventId)!!
-        event?.let { loadedEvent ->
+        event.let { loadedEvent ->
             event = loadedEvent
         }
-        if (!event.artistId.isNullOrEmpty()) {
+        if (event.artistId.isNotEmpty()) {
             artist = artistViewModel.getArtistById(event.artistId)
             artist?.let { loadedArtist ->
                 artistName = loadedArtist.name
@@ -75,6 +77,13 @@ fun EventItem(
         throw Exception(stringResource(id = R.string.err_navegacion_invalida))
     }
 
+    var imageSize: Dp = 120.dp
+    var spaceSize: Dp = 30.dp
+    if (isResultItem) {
+        imageSize = 80.dp
+        spaceSize = 8.dp
+    }
+
     Surface (
         modifier = modifier,
         shadowElevation = 5.dp,
@@ -84,10 +93,10 @@ fun EventItem(
         Row (
             modifier = Modifier
                 .padding(10.dp)
-                .clickable  (
+                .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
-                ){
+                ) {
                     if (destination == EventItemDestination.DETAIL.name) {
                         onNavigateToEventDetail(event.id, userId)
                     } else if (destination == EventItemDestination.CREATE.name) {
@@ -106,7 +115,7 @@ fun EventItem(
             AsyncImage(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8))
-                    .size(120.dp),
+                    .size(imageSize),
                 model = model,
                 contentDescription = null,
                 contentScale = ContentScale.Crop
@@ -115,25 +124,25 @@ fun EventItem(
             Spacer(modifier = Modifier.width(12.dp))
 
             Column {
+                Text(text = event.title, fontSize = 17.sp)
+                Text(text = artistName, fontSize = 13.sp, color = Color.Gray)
+
+                Spacer(modifier = Modifier.height(spaceSize))
+
+                if (!isResultItem) {
+                    Text(
+                        text = event.eventSite.name + ", " + event.eventSite.location,
+                        fontSize = 11.sp,
+                        color = Color.Gray
+                    )
+                }
                 Text(
-                    text = event.title,
-                    fontSize = 17.sp,
-                )
-                Text(text = artistName ?: "",
-                    fontSize = 13.sp,
-                    color = Color.Gray)
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Text(text = event.eventSite.name + ", " + event.eventSite.location,
-                    fontSize = 11.sp,
-                    color = Color.Gray)
-
-                    Text(text = event.date.toInstant()
+                    text = event.date.toInstant()
                         .atZone(ZoneId.systemDefault())
                         .toLocalDateTime().format(formatter),
-                        fontSize = 11.sp,
-                        color = Color.Gray)
+                    fontSize = 11.sp,
+                    color = Color.Gray
+                )
 
             }
 

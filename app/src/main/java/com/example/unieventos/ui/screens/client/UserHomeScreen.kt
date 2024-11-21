@@ -58,6 +58,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.unieventos.R
+import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.models.ui.BottomNavigationItem
 import com.example.unieventos.models.ui.DrawerItem
 import com.example.unieventos.ui.components.NavigationBarCustom
@@ -216,14 +217,16 @@ fun HomeScreen(
         },
 
         topBar = {
-            if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true)
+            if (navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabInfo::class) == true
+                || navBackStackEntry?.destination?.hasRoute(UserRouteScreen.TabPurchases::class) == true)
                 return@Scaffold
 
             SearchBarTop(
-                onSearchTextChanged = { newText ->
-                    println("Search text: $newText")
-                },
-                drawerState
+                eventsViewModel = eventsViewModel,
+                artistViewModel = artistViewmodel,
+                destination = EventItemDestination.DETAIL.name,
+                onNavigateToEventDetail = onNavigateToEventDetail,
+                drawerState = drawerState
             )
         },
         bottomBar = {

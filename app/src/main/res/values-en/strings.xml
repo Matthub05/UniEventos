@@ -118,5 +118,7 @@
     <string name="lbl_slots">Slots:</string>
     <string name="lbl_add_cart">Purchase Details</string>
     <string name="lbl_total_events">Listed Events</string>
+    <string name="label_buscar">Search</string>
+    <string name="adv_no_resultados">No results found for</string>
 
 </resources>
