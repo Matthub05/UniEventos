@@ -55,6 +55,7 @@ import com.example.unieventos.R
 import com.example.unieventos.models.EventItemDestination
 import com.example.unieventos.models.ui.BottomNavigationItem
 import com.example.unieventos.models.ui.DrawerItem
+import com.example.unieventos.ui.components.ArtistsSearchBarTop
 import com.example.unieventos.ui.components.NavigationBarCustom
 import com.example.unieventos.ui.components.SearchBarTop
 import com.example.unieventos.ui.screens.admin.navigation.AdminRouteScreen
@@ -175,18 +176,24 @@ fun AdminHomeScreen(
 
         Scaffold(
             topBar = {
-                if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabCoupons::class) == true
-                    || navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabArtists::class) == true)
+                if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabEvents::class) == true) {
+                    SearchBarTop(
+                        eventsViewModel = eventsViewModel,
+                        artistViewModel = artistViewModel,
+                        destination = EventItemDestination.CREATE.name,
+                        onNavigateToEventDetail = { _: String, _: String -> },
+                        onNavigateToCreateEvent = onNavigateToCreateEvent,
+                        drawerState = drawerState
+                    )
+                } else if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabCoupons::class) == true) {
                     return@Scaffold
-
-                SearchBarTop(
-                    eventsViewModel = eventsViewModel,
-                    artistViewModel = artistViewModel,
-                    destination = EventItemDestination.CREATE.name,
-                    onNavigateToEventDetail =  { _: String, _: String -> },
-                    onNavigateToCreateEvent = onNavigateToCreateEvent,
-                    drawerState = drawerState
-                )
+                } else if (navBackStackEntry?.destination?.hasRoute(AdminRouteScreen.TabArtists::class) == true) {
+                    ArtistsSearchBarTop(
+                        artistViewModel = artistViewModel,
+                        onNavigateToCreateArtist = onNavigateToCreateArtist,
+                        drawerState = drawerState
+                    )
+                }
             },
             floatingActionButton = {
                 FloatingActionButton(

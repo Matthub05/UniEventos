@@ -111,7 +111,9 @@ class ArtistViewModel: ViewModel() {
     }
 
     fun searchArtists(query: String): List<Artist> {
-        return _artist.value.filter { it.name.contains(query, ignoreCase = true) }
+        return _artist.value.filter {
+            it.name.contains(query, ignoreCase = true) || it.genre.contains(query, ignoreCase = true)
+        }
     }
 
     suspend fun getFavoriteArtists(userId: String): List<Artist> {
