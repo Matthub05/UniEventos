@@ -3,7 +3,6 @@ package com.example.unieventos.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unieventos.models.Coupon
-import com.example.unieventos.models.Event
 import com.example.unieventos.utils.RequestResult
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.Calendar
 
 class CouponsViewModel:ViewModel() {
 
@@ -88,7 +86,10 @@ class CouponsViewModel:ViewModel() {
     }
 
     fun searchCoupons(query: String): List<Coupon> {
-        return _coupon.value.filter { it.code.contains(query, ignoreCase = true) }
+        return _coupon.value.filter {
+            it.code.contains(query, ignoreCase = true) ||
+                    it.description.contains(query, ignoreCase = true)
+        }
     }
 
     fun resetAuthResult() {
